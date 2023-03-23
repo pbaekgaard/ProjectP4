@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -126,6 +126,19 @@ namespace vBadCompiler
                         break;
                     case 'A':
                     case 'B':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if ((char)inputStream.Peek() == 'o')
+                            scannedToken.Value += (char)inputStream.Read();
+                        if ((char)inputStream.Peek() == 'o')
+                            scannedToken.Value += (char)inputStream.Read();
+                        if ((char)inputStream.Peek() == 'l')
+                            scannedToken.Value += (char)inputStream.Read();
+                        if (char.IsWhiteSpace((char)inputStream.Peek()))
+                        {
+                            scannedToken.Type = TokenType.BOOLEANDCL;
+                        }
+                        throw new UnknownTypeException();
+                        break;
                     case 'C':
                     case 'D':
                     case 'E':
@@ -216,7 +229,84 @@ namespace vBadCompiler
                             break;
                         }
                         throw new UnknownTypeException();
-
+                    case '(':
+                        scannedToken.Value += (char)inputStream.Read();
+                        scannedToken.Type = TokenType.LPAREN;
+                        break;
+                    case ')':
+                        scannedToken.Value += (char)inputStream.Read();
+                        scannedToken.Type = TokenType.RPAREN;
+                        break;
+                    case '=':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if ((char)inputStream.Peek() != '=')
+                        {
+                            scannedToken.Type = TokenType.ASSIGN;
+                        }
+                        else
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            scannedToken.Type = TokenType.CE;
+                        }
+                        break;
+                    case '<':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if ((char)inputStream.Peek() != '=')
+                        {
+                            scannedToken.Type = TokenType.LT;
+                        }
+                        else
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            scannedToken.Type = TokenType.LE;
+                        }
+                        break;
+                    case '>':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if ((char)inputStream.Peek() != '=')
+                        {
+                            scannedToken.Type = TokenType.GT;
+                        }
+                        else
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            scannedToken.Type = TokenType.GE;
+                        }
+                        break;
+                    case '*':
+                        scannedToken.Value += (char)inputStream.Read();
+                        scannedToken.Type = TokenType.MULTIPLICATION;
+                        break;
+                    case '/':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if((char)inputStream.Peek() != '*')
+                        {
+                            scannedToken.Type = TokenType.DIVISION;
+                        }
+                        else
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            bool commentEnd = false;
+                            while(commentEnd != true)
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if (scannedToken.Value[scannedToken.Value.Length - 1] == '*' && (char)inputStream.Peek() == '/')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    commentEnd = true;
+                                }
+                            }
+                            scannedToken.Type = TokenType.COMMENT;
+                        }
+                        break;
+                    case '+':
+                        scannedToken.Value += (char)inputStream.Read();
+                        scannedToken.Type = TokenType.PLUS;
+                        break;
+                    case '-':
+                        scannedToken.Value += (char)inputStream.Read();
+                        scannedToken.Type = TokenType.MINUS;
+                        break;
                     case '\n':
                     case '\r':
                     case '\t':
