@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -161,6 +161,38 @@ namespace vBadCompiler
                     case 'X':
                     case 'Y':
                     case 'Z':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if (char.IsUpper((char)inputStream.Peek()) && char.IsLetter((char)inputStream.Peek()))
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if (char.IsDigit((char)inputStream.Peek()))
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                            }
+                            while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(2)) <= 104857)
+                            {
+                                if (Int32.Parse(scannedToken.Value.Substring(2)) == 104857)
+                                {
+                                    if ((char)inputStream.Peek() <= '6')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                    else
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                }
+                                else
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                }
+                            }
+                            if (!char.IsWhiteSpace((char)inputStream.Peek()))
+                            {
+                                throw new UnknownTypeException();
+                            }
+                            break;
+                        }
                         break;
                     case 'N':
                         scannedToken.Value += (char)inputStream.Read();
