@@ -188,12 +188,14 @@ namespace vBadCompiler
                         if ((char)inputStream.Peek() == 'l')
                         {
                             scannedToken.Value += (char)inputStream.Read();
-                            if ((char)inputStream.Peek() == 's')
+                            if ((char)inputStream.Peek() == 's'){
                                 scannedToken.Value += (char)inputStream.Read();
-                            if ((char)inputStream.Peek() == 'e')
+                            }
+                            if ((char)inputStream.Peek() == 'e'){
                                 scannedToken.Value += (char)inputStream.Read();
                                 scannedToken.Type = TokenType.ELSE;
                                 break;
+                            }
                         }
                         if ((char)inputStream.Peek() == 'n')
                         {
@@ -202,23 +204,28 @@ namespace vBadCompiler
                                 scannedToken.Value += (char)inputStream.Read();
                                 if((char)inputStream.Peek() == 'i'){
                                     scannedToken.Value += (char)inputStream.Read();
-                                    if ((char)inputStream.Peek() == 'f')
+                                    if ((char)inputStream.Peek() == 'f'){
                                         scannedToken.Value += (char)inputStream.Read();
                                         scannedToken.Type = TokenType.ENDIF;
                                         break;
+                                    }
                                 }
                                 if((char)inputStream.Peek() == 'w'){
                                     scannedToken.Value += (char)inputStream.Read();
-                                    if ((char)inputStream.Peek() == 'h')
+                                    if ((char)inputStream.Peek() == 'h'){
                                         scannedToken.Value += (char)inputStream.Read();
-                                    if ((char)inputStream.Peek() == 'i')
+                                    }
+                                    if ((char)inputStream.Peek() == 'i'){
                                         scannedToken.Value += (char)inputStream.Read();
-                                    if ((char)inputStream.Peek() == 'l')
+                                    }
+                                    if ((char)inputStream.Peek() == 'l'){
                                         scannedToken.Value += (char)inputStream.Read();
-                                    if ((char)inputStream.Peek() == 'e')
+                                    }
+                                    if ((char)inputStream.Peek() == 'e'){
                                         scannedToken.Value += (char)inputStream.Read();
                                         scannedToken.Type = TokenType.ENDWHILE;
                                         break;
+                                    }
                                 }
                             }
                         }

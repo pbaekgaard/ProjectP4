@@ -1,5 +1,5 @@
 Number 123.123
 Text "This is a string of text"
-endwhile
+endw
 
 FZB1048576 
