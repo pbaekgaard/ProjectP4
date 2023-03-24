@@ -78,10 +78,7 @@ namespace vBadCompiler
         public Token Scan()
         {
             Token scannedToken = new();
-            while (inputStream.Peek() == ' ' || inputStream.Peek() == '\n' || inputStream.Peek() == '\r' || inputStream.Peek() == '\t')
-            {
-                inputStream.Read();
-            }
+
             if (inputStream.Peek() == -1)
             {
                 inputStream.Read();
@@ -786,6 +783,18 @@ namespace vBadCompiler
                         scannedToken.Value += (char)inputStream.Read();
                         scannedToken.Type = TokenType.RPAREN;
                         break;
+                    case '!':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if ((char)inputStream.Peek() == '=')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            scannedToken.Type = TokenType.NOTEQUAL;
+                        }
+                        else
+                        {
+                            throw new UnknownTypeException();
+                        }
+                        break;
                     case '=':
                         scannedToken.Value += (char)inputStream.Read();
                         if ((char)inputStream.Peek() != '=')
@@ -860,6 +869,8 @@ namespace vBadCompiler
                     case '\r':
                     case '\t':
                     case ' ':
+                        scannedToken.Value += (char)inputStream.Read();
+                        scannedToken.Type = TokenType.WHITESPACE;
                         break;
                     default:
                         throw new UnknownTypeException();
@@ -872,6 +883,12 @@ namespace vBadCompiler
             StreamReader InputFile = new("input.txt");
             Scanner scanner = new(InputFile);
             Token testToken;
+
+            while (scanner.inputStream.Peek() == ' ' || scanner.inputStream.Peek() == '\n' || scanner.inputStream.Peek() == '\r' || scanner.inputStream.Peek() == '\t')
+            {
+                scanner.inputStream.Read();
+            }
+
             do
             {
                 testToken = scanner.Scan();
