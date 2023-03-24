@@ -176,6 +176,45 @@ namespace vBadCompiler
                         }
                         throw new UnknownTypeException();
                     case 'e':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if ((char)inputStream.Peek() == 'l')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if ((char)inputStream.Peek() == 's')
+                                scannedToken.Value += (char)inputStream.Read();
+                            if ((char)inputStream.Peek() == 'e')
+                                scannedToken.Value += (char)inputStream.Read();
+                                scannedToken.Type = TokenType.ELSE;
+                                break;
+                        }
+                        if ((char)inputStream.Peek() == 'n')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if ((char)inputStream.Peek() == 'd'){
+                                scannedToken.Value += (char)inputStream.Read();
+                                if((char)inputStream.Peek() == 'i'){
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    if ((char)inputStream.Peek() == 'f')
+                                        scannedToken.Value += (char)inputStream.Read();
+                                        scannedToken.Type = TokenType.ENDIF;
+                                        break;
+                                }
+                                if((char)inputStream.Peek() == 'w'){
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    if ((char)inputStream.Peek() == 'h')
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    if ((char)inputStream.Peek() == 'i')
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    if ((char)inputStream.Peek() == 'l')
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    if ((char)inputStream.Peek() == 'e')
+                                        scannedToken.Value += (char)inputStream.Read();
+                                        scannedToken.Type = TokenType.ENDWHILE;
+                                        break;
+                                }
+                            }
+                        }
+                        throw new UnknownTypeException();
                     case 'w':
                         scannedToken.Value += (char)inputStream.Read();
                         if ((char)inputStream.Peek() == 'h') {
