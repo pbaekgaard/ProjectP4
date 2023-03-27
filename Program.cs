@@ -188,43 +188,57 @@ namespace vBadCompiler
                         if ((char)inputStream.Peek() == 'l')
                         {
                             scannedToken.Value += (char)inputStream.Read();
-                            if ((char)inputStream.Peek() == 's'){
+                            if ((char)inputStream.Peek() == 's')
+                            {
                                 scannedToken.Value += (char)inputStream.Read();
-                            }
-                            if ((char)inputStream.Peek() == 'e'){
-                                scannedToken.Value += (char)inputStream.Read();
-                                scannedToken.Type = TokenType.ELSE;
-                                break;
+
+                                if ((char)inputStream.Peek() == 'e')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    scannedToken.Type = TokenType.ELSE;
+                                    break;
+                                }
                             }
                         }
                         if ((char)inputStream.Peek() == 'n')
                         {
                             scannedToken.Value += (char)inputStream.Read();
-                            if ((char)inputStream.Peek() == 'd'){
+                            if ((char)inputStream.Peek() == 'd')
+                            {
                                 scannedToken.Value += (char)inputStream.Read();
-                                if((char)inputStream.Peek() == 'i'){
+                                if ((char)inputStream.Peek() == 'i')
+                                {
                                     scannedToken.Value += (char)inputStream.Read();
-                                    if ((char)inputStream.Peek() == 'f'){
+                                    if ((char)inputStream.Peek() == 'f')
+                                    {
                                         scannedToken.Value += (char)inputStream.Read();
                                         scannedToken.Type = TokenType.ENDIF;
                                         break;
                                     }
                                 }
-                                if((char)inputStream.Peek() == 'w'){
+                                if ((char)inputStream.Peek() == 'w')
+                                {
                                     scannedToken.Value += (char)inputStream.Read();
-                                    if ((char)inputStream.Peek() == 'h'){
+                                    if ((char)inputStream.Peek() == 'h')
+                                    {
                                         scannedToken.Value += (char)inputStream.Read();
-                                    }
-                                    if ((char)inputStream.Peek() == 'i'){
-                                        scannedToken.Value += (char)inputStream.Read();
-                                    }
-                                    if ((char)inputStream.Peek() == 'l'){
-                                        scannedToken.Value += (char)inputStream.Read();
-                                    }
-                                    if ((char)inputStream.Peek() == 'e'){
-                                        scannedToken.Value += (char)inputStream.Read();
-                                        scannedToken.Type = TokenType.ENDWHILE;
-                                        break;
+
+                                        if ((char)inputStream.Peek() == 'i')
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+
+                                            if ((char)inputStream.Peek() == 'l')
+                                            {
+                                                scannedToken.Value += (char)inputStream.Read();
+
+                                                if ((char)inputStream.Peek() == 'e')
+                                                {
+                                                    scannedToken.Value += (char)inputStream.Read();
+                                                    scannedToken.Type = TokenType.ENDWHILE;
+                                                    break;
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -670,17 +684,25 @@ namespace vBadCompiler
                         {
                             scannedToken.Value += (char)inputStream.Read();
                             if ((char)inputStream.Peek() == 'm')
-                                scannedToken.Value += (char)inputStream.Read();
-                            if ((char)inputStream.Peek() == 'b')
-                                scannedToken.Value += (char)inputStream.Read();
-                            if ((char)inputStream.Peek() == 'e')
-                                scannedToken.Value += (char)inputStream.Read();
-                            if ((char)inputStream.Peek() == 'r')
-                                scannedToken.Value += (char)inputStream.Read();
-                            if (char.IsWhiteSpace((char)inputStream.Peek()))
                             {
-                                scannedToken.Type = TokenType.NUMBERDCL;
-                                break;
+                                scannedToken.Value += (char)inputStream.Read();
+                                if ((char)inputStream.Peek() == 'b')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    if ((char)inputStream.Peek() == 'e')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                        if ((char)inputStream.Peek() == 'r')
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                            if (char.IsWhiteSpace((char)inputStream.Peek()))
+                                            {
+                                                scannedToken.Type = TokenType.NUMBERDCL;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
                             }
                             throw new UnknownTypeException();
                         }

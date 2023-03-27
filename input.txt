@@ -1,5 +1,2 @@
-Number 123.123
-Text "This is a string of text"
-endw
-
-FZB1048576 
+else
+Number
