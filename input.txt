@@ -1,2 +1,6 @@
-else
-Number
+AVE5
+SUM5
+EAQ7
+COU4
+COUNT
+CUNTTT
