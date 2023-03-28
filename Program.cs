@@ -270,9 +270,11 @@ namespace vBadCompiler
                         if ((char)inputStream.Peek() == 'o')
                         {
                             scannedToken.Value += (char)inputStream.Read();
-                            scannedToken.Type = TokenType.DO;
-                            break;
-
+                            if (char.IsWhiteSpace((char)inputStream.Peek()))
+                            {
+                                scannedToken.Type = TokenType.DO;
+                                break;
+                            }
                         }
                         throw new UnknownTypeException();
                     case 'B':
