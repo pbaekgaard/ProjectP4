@@ -3,38 +3,39 @@ program: declarations;
 declarations: declaration declarations | <EOF> ;
 declaration:
 	controlstructure
+	| NUMBERDCL var ASSIGN num
+	| TEXTDCL var ASSIGN string
+	| BOOLEANDCL bool
 	| expression
 	| sum
 	| average
 	| min
 	| max
 	| count;
+NUMBERDCL: 'Number';
+TEXTDCL: 'Text';
+BOOLEANDCL: 'Bool';
 expression: var | expression operator expression;
 sum: 'sum' '(' 'var' ':' 'var' ')';
-average: 'average' '(' 'var' ':' 'var' ')';
+average: 'average' '(' var ':' var ')';
 min: 'min' '(' 'var' ':' 'var' ')';
 max: 'max' '(' 'var' ':' 'var' ')';
 count: 'count' '(' 'var' ':' 'var' ')';
-operator:
-	'+'
-	| '-'
-	| '*'
-	| '/'
-	| '<'
-	| '>'
-	| '<='
-	| '>='
-	| '='
-	| '!=';
 controlstructure: ifstmt | whilestmt;
 ifstmt:
-	'if' expression 'then' declaration 'else' declaration
-	| 'if' expression 'then' declaration;
-whilestmt: 'while' expression 'do' declaration;
+	'if' expression 'then' declaration 'else' declaration 'endif'
+	| 'if' expression 'then' declaration 'endif';
+whilestmt: 'while' expression 'do' declaration 'endwhile';
 var:
-	letters numberswithoutzero
-	| letters numberswithoutzero num
-	| letters var;
+	upperCaseLetters numberswithoutzero
+	| upperCaseLetters numberswithoutzero num
+	| upperCaseLetters var;
+num: numbers | numbers num;
+string: '"' text '"';
+text:
+ 	(upperCaseLetters|lowercaseLetters|num)*
+	| .*?
+;
 numbers:
 	'0'
 	| '1'
@@ -56,8 +57,23 @@ numberswithoutzero:
 	| '7'
 	| '8'
 	| '9';
-num: numbers | numbers num;
-letters:
+operator:
+	'+'
+	| '-'
+	| '*'
+	| '/'
+	| '<'
+	| '>'
+	| '<='
+	| '>='
+	| '='
+	| '!=';
+ASSIGN:
+	'=';
+bool:
+	'false'
+	|'true';
+upperCaseLetters:
 	'A'
 	| 'B'
 	| 'C'
@@ -84,4 +100,32 @@ letters:
 	| 'X'
 	| 'Y'
 	| 'Z';
+lowercaseLetters:
+	'a'
+	| 'b'
+	| 'c'
+	| 'd'
+	| 'e'
+	| 'f'
+	| 'g'
+	| 'h'
+	| 'i'
+	| 'j'
+	| 'k'
+	| 'l'
+	| 'm'
+	| 'n'
+	| 'o'
+	| 'p'
+	| 'q'
+	| 'r'
+	| 's'
+	| 't'
+	| 'u'
+	| 'v'
+	| 'w'
+	| 'x'
+	| 'y'
+	| 'z';
+Comment: '/*' .*? '*/' -> channel(HIDDEN);
 WS: [ \t\r\n]+ -> skip;
