@@ -1,3 +1,6 @@
-Number 123.123
-Text "This is a string of text"
-ZZ1048576
+AVE5
+SUM5
+EAQ7
+COU4
+COUNT
+CUNTTT

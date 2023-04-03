@@ -49,12 +49,12 @@ namespace vBadCompiler
         ENDWHILE,
         DO,
         ASSIGN,
-        LT,
-        GT,
-        CE,
-        LE,
-        GE,
-        NE,
+        LESSTHAN,
+        GREATERTHAN,
+        COMPAREEQUAL,
+        LESSEQUAL,
+        GREATEREQUAL,
+        NOTEQUAL,
         PLUS,
         MINUS,
         MULTIPLICATION,
@@ -62,7 +62,13 @@ namespace vBadCompiler
         LPAREN,
         RPAREN,
         COMMENT,
-        EOF
+        CELL,
+        EOF,
+        SUM,
+        AVERAGE,
+        MIN,
+        MAX,
+        COUNT
     }
 
     public class Scanner
@@ -77,10 +83,7 @@ namespace vBadCompiler
         public Token Scan()
         {
             Token scannedToken = new();
-            while (inputStream.Peek() == ' ' || inputStream.Peek() == '\n' || inputStream.Peek() == '\r' || inputStream.Peek() == '\t')
-            {
-                inputStream.Read();
-            }
+
             if (inputStream.Peek() == -1)
             {
                 inputStream.Read();
@@ -124,22 +127,286 @@ namespace vBadCompiler
                         scannedToken.Value += (char)inputStream.Read();
                         scannedToken.Type = TokenType.TEXT;
                         break;
-                    case 'A':
+                    case 'f':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if ((char)inputStream.Peek() == 'a')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if ((char)inputStream.Peek() == 'l')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if ((char)inputStream.Peek() == 's')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    if ((char)inputStream.Peek() == 'e')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                        scannedToken.Type = TokenType.BOOLEAN;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        throw new UnknownTypeException();
+                    case 't':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if ((char)inputStream.Peek() == 'r')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if ((char)inputStream.Peek() == 'u')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if ((char)inputStream.Peek() == 'e')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    scannedToken.Type = TokenType.BOOLEAN;
+                                    break;
+                                }
+                            }
+                        }
+                        else if ((char)inputStream.Peek() == 'h')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if ((char)inputStream.Peek() == 'e')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if ((char)inputStream.Peek() == 'n')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    scannedToken.Type = TokenType.BOOLEAN;
+                                    break;
+                                }
+                            }
+                        }
+                        throw new UnknownTypeException();
+                    case 'i':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if ((char)inputStream.Peek() == 'f')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            scannedToken.Type = TokenType.IF;
+                            break;
+                        }
+                        throw new UnknownTypeException();
+                    case 'e':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if ((char)inputStream.Peek() == 'l')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if ((char)inputStream.Peek() == 's')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+
+                                if ((char)inputStream.Peek() == 'e')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    scannedToken.Type = TokenType.ELSE;
+                                    break;
+                                }
+                            }
+                        }
+                        if ((char)inputStream.Peek() == 'n')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if ((char)inputStream.Peek() == 'd')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if ((char)inputStream.Peek() == 'i')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    if ((char)inputStream.Peek() == 'f')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                        scannedToken.Type = TokenType.ENDIF;
+                                        break;
+                                    }
+                                }
+                                if ((char)inputStream.Peek() == 'w')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    if ((char)inputStream.Peek() == 'h')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+
+                                        if ((char)inputStream.Peek() == 'i')
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+
+                                            if ((char)inputStream.Peek() == 'l')
+                                            {
+                                                scannedToken.Value += (char)inputStream.Read();
+
+                                                if ((char)inputStream.Peek() == 'e')
+                                                {
+                                                    scannedToken.Value += (char)inputStream.Read();
+                                                    scannedToken.Type = TokenType.ENDWHILE;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        throw new UnknownTypeException();
+                    case 'w':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if ((char)inputStream.Peek() == 'h')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if ((char)inputStream.Peek() == 'i')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if ((char)inputStream.Peek() == 'l')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    if ((char)inputStream.Peek() == 'e')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                        scannedToken.Type = TokenType.WHILE;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        throw new UnknownTypeException();
+                    case 'd':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if ((char)inputStream.Peek() == 'o')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if (char.IsWhiteSpace((char)inputStream.Peek()))
+                            {
+                                scannedToken.Type = TokenType.DO;
+                                break;
+                            }
+                        }
+                        throw new UnknownTypeException();
                     case 'B':
                         scannedToken.Value += (char)inputStream.Read();
                         if ((char)inputStream.Peek() == 'o')
-                            scannedToken.Value += (char)inputStream.Read();
-                        if ((char)inputStream.Peek() == 'o')
-                            scannedToken.Value += (char)inputStream.Read();
-                        if ((char)inputStream.Peek() == 'l')
-                            scannedToken.Value += (char)inputStream.Read();
-                        if (char.IsWhiteSpace((char)inputStream.Peek()))
                         {
-                            scannedToken.Type = TokenType.BOOLEANDCL;
+                            scannedToken.Value += (char)inputStream.Read();
+                            if ((char)inputStream.Peek() == 'o')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if ((char)inputStream.Peek() == 'l')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    if ((char)inputStream.Peek() == 'e')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                        if ((char)inputStream.Peek() == 'a')
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                            if ((char)inputStream.Peek() == 'n')
+                                            {
+                                                scannedToken.Value += (char)inputStream.Read();
+                                                if (char.IsWhiteSpace((char)inputStream.Peek()))
+                                                {
+                                                    scannedToken.Type = TokenType.BOOLEANDCL;
+                                                    break;
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(1)) <= 104857)
+                            {
+                                if (Int32.Parse(scannedToken.Value.Substring(1)) == 104857)
+                                {
+                                    if ((char)inputStream.Peek() <= '6')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                    else
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                }
+                                else
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                }
+                            }
+                            if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                            {
+                                throw new UnknownTypeException();
+                            }
+                            scannedToken.Type = TokenType.CELL;
+                            break;
+                        }
+                        else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(2)) <= 104857)
+                                {
+                                    if (Int32.Parse(scannedToken.Value.Substring(2)) == 104857)
+                                    {
+                                        if ((char)inputStream.Peek() <= '6')
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                        else
+                                        {
+                                            throw new UnknownTypeException();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                }
+                                if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                {
+                                    throw new UnknownTypeException();
+                                }
+                                scannedToken.Type = TokenType.CELL;
+                                break;
+                            }
+                            else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(3)) <= 104857)
+                                    {
+                                        if (Int32.Parse(scannedToken.Value.Substring(3)) == 104857)
+                                        {
+                                            if ((char)inputStream.Peek() <= '6')
+                                            {
+                                                scannedToken.Value += (char)inputStream.Read();
+                                            }
+                                            else
+                                            {
+                                                throw new UnknownTypeException();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                    }
+                                    if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                    scannedToken.Type = TokenType.CELL;
+                                    break;
+                                }
+                            }
                         }
                         throw new UnknownTypeException();
-                        break;
-                    case 'C':
                     case 'D':
                     case 'E':
                     case 'F':
@@ -149,25 +416,635 @@ namespace vBadCompiler
                     case 'J':
                     case 'K':
                     case 'L':
-                    case 'M':
                     case 'O':
                     case 'P':
                     case 'Q':
                     case 'R':
-                    case 'S':
                     case 'U':
                     case 'V':
                     case 'W':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(1)) <= 104857)
+                            {
+                                if (Int32.Parse(scannedToken.Value.Substring(1)) == 104857)
+                                {
+                                    if ((char)inputStream.Peek() <= '6')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                    else
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                }
+                                else
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                }
+                            }
+                            if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                            {
+                                throw new UnknownTypeException();
+                            }
+                            scannedToken.Type = TokenType.CELL;
+                            break;
+                        }
+                        else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(2)) <= 104857)
+                                {
+                                    if (Int32.Parse(scannedToken.Value.Substring(2)) == 104857)
+                                    {
+                                        if ((char)inputStream.Peek() <= '6')
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                        else
+                                        {
+                                            throw new UnknownTypeException();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                }
+                                if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                {
+                                    throw new UnknownTypeException();
+                                }
+                                scannedToken.Type = TokenType.CELL;
+                                break;
+                            }
+                            else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(3)) <= 104857)
+                                    {
+                                        if (Int32.Parse(scannedToken.Value.Substring(3)) == 104857)
+                                        {
+                                            if ((char)inputStream.Peek() <= '6')
+                                            {
+                                                scannedToken.Value += (char)inputStream.Read();
+                                            }
+                                            else
+                                            {
+                                                throw new UnknownTypeException();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                    }
+                                    if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                    scannedToken.Type = TokenType.CELL;
+                                    break;
+                                }
+                            }
+                        }
+                        throw new UnknownTypeException();
+                    case 'A':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(1)) <= 104857)
+                            {
+                                if (Int32.Parse(scannedToken.Value.Substring(1)) == 104857)
+                                {
+                                    if ((char)inputStream.Peek() <= '6')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                    else
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                }
+                                else
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                }
+                            }
+                            if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                            {
+                                throw new UnknownTypeException();
+                            }
+                            scannedToken.Type = TokenType.CELL;
+                            break;
+                        }
+                        else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(2)) <= 104857)
+                                {
+                                    if (Int32.Parse(scannedToken.Value.Substring(2)) == 104857)
+                                    {
+                                        if ((char)inputStream.Peek() <= '6')
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                        else
+                                        {
+                                            throw new UnknownTypeException();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                }
+                                if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                {
+                                    throw new UnknownTypeException();
+                                }
+                                scannedToken.Type = TokenType.CELL;
+                                break;
+                            }
+                            else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if(scannedToken.Value == "AVE" && (char)inputStream.Peek() == 'R'){
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    if(char.IsUpper((char)inputStream.Peek()) && (char)inputStream.Peek() == 'A'){
+                                        scannedToken.Value += (char)inputStream.Read();
+                                        if(char.IsUpper((char)inputStream.Peek()) && (char)inputStream.Peek() == 'G'){
+                                            scannedToken.Value += (char)inputStream.Read();
+                                            if(char.IsUpper((char)inputStream.Peek()) && (char)inputStream.Peek() == 'E'){
+                                                scannedToken.Value += (char)inputStream.Read();
+                                                scannedToken.Type = TokenType.AVERAGE;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(3)) <= 104857)
+                                    {
+                                        if (Int32.Parse(scannedToken.Value.Substring(3)) == 104857)
+                                        {
+                                            if ((char)inputStream.Peek() <= '6')
+                                            {
+                                                scannedToken.Value += (char)inputStream.Read();
+                                            }
+                                            else
+                                            {
+                                                throw new UnknownTypeException();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                    }
+                                    if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                    scannedToken.Type = TokenType.CELL;
+                                    break;
+                                }
+                            }
+                        }
+                        throw new UnknownTypeException();
+                    case 'C':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(1)) <= 104857)
+                            {
+                                if (Int32.Parse(scannedToken.Value.Substring(1)) == 104857)
+                                {
+                                    if ((char)inputStream.Peek() <= '6')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                    else
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                }
+                                else
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                }
+                            }
+                            if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                            {
+                                throw new UnknownTypeException();
+                            }
+                            scannedToken.Type = TokenType.CELL;
+                            break;
+                        }
+                        else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(2)) <= 104857)
+                                {
+                                    if (Int32.Parse(scannedToken.Value.Substring(2)) == 104857)
+                                    {
+                                        if ((char)inputStream.Peek() <= '6')
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                        else
+                                        {
+                                            throw new UnknownTypeException();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                }
+                                if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                {
+                                    throw new UnknownTypeException();
+                                }
+                                scannedToken.Type = TokenType.CELL;
+                                break;
+                            }
+                            else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if(scannedToken.Value == "COU" && (char)inputStream.Peek() == 'N'){
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    if(char.IsUpper((char)inputStream.Peek()) && (char)inputStream.Peek() == 'T'){
+                                        scannedToken.Value += (char)inputStream.Read();
+                                        scannedToken.Type = TokenType.COUNT;
+                                        break;
+                                    }
+                                }
+                                else if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(3)) <= 104857)
+                                    {
+                                        if (Int32.Parse(scannedToken.Value.Substring(3)) == 104857)
+                                        {
+                                            if ((char)inputStream.Peek() <= '6')
+                                            {
+                                                scannedToken.Value += (char)inputStream.Read();
+                                            }
+                                            else
+                                            {
+                                                throw new UnknownTypeException();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                    }
+                                    if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                    scannedToken.Type = TokenType.CELL;
+                                    break;
+                                }
+                            }
+                        }
+                        throw new UnknownTypeException();
+                    case 'M':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(1)) <= 104857)
+                            {
+                                if (Int32.Parse(scannedToken.Value.Substring(1)) == 104857)
+                                {
+                                    if ((char)inputStream.Peek() <= '6')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                    else
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                }
+                                else
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                }
+                            }
+                            if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                            {
+                                throw new UnknownTypeException();
+                            }
+                            scannedToken.Type = TokenType.CELL;
+                            break;
+                        }
+                        else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(2)) <= 104857)
+                                {
+                                    if (Int32.Parse(scannedToken.Value.Substring(2)) == 104857)
+                                    {
+                                        if ((char)inputStream.Peek() <= '6')
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                        else
+                                        {
+                                            throw new UnknownTypeException();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                }
+                                if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                {
+                                    throw new UnknownTypeException();
+                                }
+                                scannedToken.Type = TokenType.CELL;
+                                break;
+                            }
+                            else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if(scannedToken.Value == "MIN"){
+                                    if(!char.IsDigit((char)inputStream.Peek())){
+                                        scannedToken.Type = TokenType.MIN;
+                                        break;
+                                    }
+                                }
+                                if(scannedToken.Value == "MAX"){
+                                    if(!char.IsDigit((char)inputStream.Peek())){
+                                        scannedToken.Type = TokenType.MAX;
+                                        break;
+                                    }
+                                }
+                                if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(3)) <= 104857)
+                                    {
+                                        if (Int32.Parse(scannedToken.Value.Substring(3)) == 104857)
+                                        {
+                                            if ((char)inputStream.Peek() <= '6')
+                                            {
+                                                scannedToken.Value += (char)inputStream.Read();
+                                            }
+                                            else
+                                            {
+                                                throw new UnknownTypeException();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                    }
+                                    if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                    scannedToken.Type = TokenType.CELL;
+                                    break;
+                                }
+                            }
+                        }
+                        throw new UnknownTypeException();
+                    case 'S':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(1)) <= 104857)
+                            {
+                                if (Int32.Parse(scannedToken.Value.Substring(1)) == 104857)
+                                {
+                                    if ((char)inputStream.Peek() <= '6')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                    else
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                }
+                                else
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                }
+                            }
+                            if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                            {
+                                throw new UnknownTypeException();
+                            }
+                            scannedToken.Type = TokenType.CELL;
+                            break;
+                        }
+                        else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(2)) <= 104857)
+                                {
+                                    if (Int32.Parse(scannedToken.Value.Substring(2)) == 104857)
+                                    {
+                                        if ((char)inputStream.Peek() <= '6')
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                        else
+                                        {
+                                            throw new UnknownTypeException();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                }
+                                if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                {
+                                    throw new UnknownTypeException();
+                                }
+                                scannedToken.Type = TokenType.CELL;
+                                break;
+                            }
+                            else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if(scannedToken.Value == "SUM"){
+                                    if(!char.IsDigit((char)inputStream.Peek())){
+                                        scannedToken.Type = TokenType.SUM;
+                                        break;
+                                    }
+                                }
+                                if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(3)) <= 104857)
+                                    {
+                                        if (Int32.Parse(scannedToken.Value.Substring(3)) == 104857)
+                                        {
+                                            if ((char)inputStream.Peek() <= '6')
+                                            {
+                                                scannedToken.Value += (char)inputStream.Read();
+                                            }
+                                            else
+                                            {
+                                                throw new UnknownTypeException();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                    }
+                                    if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                    scannedToken.Type = TokenType.CELL;
+                                    break;
+                                }
+                            }
+                        }
+                        throw new UnknownTypeException();
                     case 'X':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(1)) <= 104857)
+                            {
+                                if (Int32.Parse(scannedToken.Value.Substring(1)) == 104857)
+                                {
+                                    if ((char)inputStream.Peek() <= '6')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                    else
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                }
+                                else
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                }
+                            }
+                            if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                            {
+                                throw new UnknownTypeException();
+                            }
+                            scannedToken.Type = TokenType.CELL;
+                            break;
+                        }
+                        else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(2)) <= 104857)
+                                {
+                                    if (Int32.Parse(scannedToken.Value.Substring(2)) == 104857)
+                                    {
+                                        if ((char)inputStream.Peek() <= '6')
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                        else
+                                        {
+                                            throw new UnknownTypeException();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                }
+                                if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                {
+                                    throw new UnknownTypeException();
+                                }
+                                scannedToken.Type = TokenType.CELL;
+                                break;
+                            }
+                            else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()) && (char)scannedToken.Value[1] <= 'F' && (char)inputStream.Peek() <= 'D')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(3)) <= 104857)
+                                    {
+                                        if (Int32.Parse(scannedToken.Value.Substring(3)) == 104857)
+                                        {
+                                            if ((char)inputStream.Peek() <= '6')
+                                            {
+                                                scannedToken.Value += (char)inputStream.Read();
+                                            }
+                                            else
+                                            {
+                                                throw new UnknownTypeException();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                    }
+                                    if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                    scannedToken.Type = TokenType.CELL;
+                                    break;
+                                }
+                            }
+                        }
+                        throw new UnknownTypeException();
                     case 'Y':
                     case 'Z':
                         scannedToken.Value += (char)inputStream.Read();
                         if (char.IsUpper((char)inputStream.Peek()) && char.IsLetter((char)inputStream.Peek()))
                         {
                             scannedToken.Value += (char)inputStream.Read();
-                            if (char.IsDigit((char)inputStream.Peek()))
+                            if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
                             {
                                 scannedToken.Value += (char)inputStream.Read();
+                            }
+                            else
+                            {
+                                throw new Exception();
                             }
                             while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(2)) <= 104857)
                             {
@@ -187,46 +1064,274 @@ namespace vBadCompiler
                                     scannedToken.Value += (char)inputStream.Read();
                                 }
                             }
-                            if (!char.IsWhiteSpace((char)inputStream.Peek()))
+                            if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
                             {
                                 throw new UnknownTypeException();
                             }
+                            scannedToken.Type = TokenType.CELL;
                             break;
                         }
-                        break;
+                        else if (char.IsDigit((char)inputStream.Peek()))
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(1)) <= 104857)
+                            {
+                                if (Int32.Parse(scannedToken.Value.Substring(1)) == 104857)
+                                {
+                                    if ((char)inputStream.Peek() <= '6')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                    else
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                }
+                                else
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                }
+                            }
+                            if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                            {
+                                throw new UnknownTypeException();
+                            }
+                            scannedToken.Type = TokenType.CELL;
+                            break;
+                        }
+                        throw new UnknownTypeException();
+
                     case 'N':
                         scannedToken.Value += (char)inputStream.Read();
                         if ((char)inputStream.Peek() == 'u')
                         {
                             scannedToken.Value += (char)inputStream.Read();
                             if ((char)inputStream.Peek() == 'm')
-                                scannedToken.Value += (char)inputStream.Read();
-                            if ((char)inputStream.Peek() == 'b')
-                                scannedToken.Value += (char)inputStream.Read();
-                            if ((char)inputStream.Peek() == 'e')
-                                scannedToken.Value += (char)inputStream.Read();
-                            if ((char)inputStream.Peek() == 'r')
-                                scannedToken.Value += (char)inputStream.Read();
-                            if (char.IsWhiteSpace((char)inputStream.Peek()))
                             {
-                                scannedToken.Type = TokenType.NUMBERDCL;
-                                break;
+                                scannedToken.Value += (char)inputStream.Read();
+                                if ((char)inputStream.Peek() == 'b')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    if ((char)inputStream.Peek() == 'e')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                        if ((char)inputStream.Peek() == 'r')
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                            if (char.IsWhiteSpace((char)inputStream.Peek()))
+                                            {
+                                                scannedToken.Type = TokenType.NUMBERDCL;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
                             }
                             throw new UnknownTypeException();
+                        }
+                        else if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(1)) <= 104857)
+                            {
+                                if (Int32.Parse(scannedToken.Value.Substring(1)) == 104857)
+                                {
+                                    if ((char)inputStream.Peek() <= '6')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                    else
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                }
+                                else
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                }
+                            }
+                            if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                            {
+                                throw new UnknownTypeException();
+                            }
+                            scannedToken.Type = TokenType.CELL;
+                            break;
+                        }
+                        else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(2)) <= 104857)
+                                {
+                                    if (Int32.Parse(scannedToken.Value.Substring(2)) == 104857)
+                                    {
+                                        if ((char)inputStream.Peek() <= '6')
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                        else
+                                        {
+                                            throw new UnknownTypeException();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                }
+                                if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                {
+                                    throw new UnknownTypeException();
+                                }
+                                scannedToken.Type = TokenType.CELL;
+                                break;
+                            }
+                            else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(3)) <= 104857)
+                                    {
+                                        if (Int32.Parse(scannedToken.Value.Substring(3)) == 104857)
+                                        {
+                                            if ((char)inputStream.Peek() <= '6')
+                                            {
+                                                scannedToken.Value += (char)inputStream.Read();
+                                            }
+                                            else
+                                            {
+                                                throw new UnknownTypeException();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                    }
+                                    if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                    scannedToken.Type = TokenType.CELL;
+                                    break;
+                                }
+                            }
                         }
                         throw new Exception();
                     case 'T':
                         scannedToken.Value += (char)inputStream.Read();
                         if ((char)inputStream.Peek() == 'e')
-                            scannedToken.Value += (char)inputStream.Read();
-                        if ((char)inputStream.Peek() == 'x')
-                            scannedToken.Value += (char)inputStream.Read();
-                        if ((char)inputStream.Peek() == 't')
-                            scannedToken.Value += (char)inputStream.Read();
-                        if (char.IsWhiteSpace((char)inputStream.Peek()))
                         {
-                            scannedToken.Type = TokenType.TEXTDCL;
+                            scannedToken.Value += (char)inputStream.Read();
+                            if ((char)inputStream.Peek() == 'x')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if ((char)inputStream.Peek() == 't')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    if (char.IsWhiteSpace((char)inputStream.Peek()))
+                                    {
+                                        scannedToken.Type = TokenType.TEXTDCL;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        else if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(1)) <= 104857)
+                            {
+                                if (Int32.Parse(scannedToken.Value.Substring(1)) == 104857)
+                                {
+                                    if ((char)inputStream.Peek() <= '6')
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                    else
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                }
+                                else
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                }
+                            }
+                            if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                            {
+                                throw new UnknownTypeException();
+                            }
+                            scannedToken.Type = TokenType.CELL;
                             break;
+                        }
+                        else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(2)) <= 104857)
+                                {
+                                    if (Int32.Parse(scannedToken.Value.Substring(2)) == 104857)
+                                    {
+                                        if ((char)inputStream.Peek() <= '6')
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                        else
+                                        {
+                                            throw new UnknownTypeException();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        scannedToken.Value += (char)inputStream.Read();
+                                    }
+                                }
+                                if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                {
+                                    throw new UnknownTypeException();
+                                }
+                                scannedToken.Type = TokenType.CELL;
+                                break;
+                            }
+                            else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
+                            {
+                                scannedToken.Value += (char)inputStream.Read();
+                                if (char.IsDigit((char)inputStream.Peek()) && (char)inputStream.Peek() > '0')
+                                {
+                                    scannedToken.Value += (char)inputStream.Read();
+                                    while (char.IsDigit((char)inputStream.Peek()) && Int32.Parse(scannedToken.Value.Substring(3)) <= 104857)
+                                    {
+                                        if (Int32.Parse(scannedToken.Value.Substring(3)) == 104857)
+                                        {
+                                            if ((char)inputStream.Peek() <= '6')
+                                            {
+                                                scannedToken.Value += (char)inputStream.Read();
+                                            }
+                                            else
+                                            {
+                                                throw new UnknownTypeException();
+                                            }
+                                        }
+                                        else
+                                        {
+                                            scannedToken.Value += (char)inputStream.Read();
+                                        }
+                                    }
+                                    if (char.IsDigit((char)inputStream.Peek()) || char.IsLetter((char)inputStream.Peek()))
+                                    {
+                                        throw new UnknownTypeException();
+                                    }
+                                    scannedToken.Type = TokenType.CELL;
+                                    break;
+                                }
+                            }
                         }
                         throw new UnknownTypeException();
                     case '(':
@@ -237,6 +1342,18 @@ namespace vBadCompiler
                         scannedToken.Value += (char)inputStream.Read();
                         scannedToken.Type = TokenType.RPAREN;
                         break;
+                    case '!':
+                        scannedToken.Value += (char)inputStream.Read();
+                        if ((char)inputStream.Peek() == '=')
+                        {
+                            scannedToken.Value += (char)inputStream.Read();
+                            scannedToken.Type = TokenType.NOTEQUAL;
+                        }
+                        else
+                        {
+                            throw new UnknownTypeException();
+                        }
+                        break;
                     case '=':
                         scannedToken.Value += (char)inputStream.Read();
                         if ((char)inputStream.Peek() != '=')
@@ -246,31 +1363,31 @@ namespace vBadCompiler
                         else
                         {
                             scannedToken.Value += (char)inputStream.Read();
-                            scannedToken.Type = TokenType.CE;
+                            scannedToken.Type = TokenType.COMPAREEQUAL;
                         }
                         break;
                     case '<':
                         scannedToken.Value += (char)inputStream.Read();
                         if ((char)inputStream.Peek() != '=')
                         {
-                            scannedToken.Type = TokenType.LT;
+                            scannedToken.Type = TokenType.LESSTHAN;
                         }
                         else
                         {
                             scannedToken.Value += (char)inputStream.Read();
-                            scannedToken.Type = TokenType.LE;
+                            scannedToken.Type = TokenType.LESSEQUAL;
                         }
                         break;
                     case '>':
                         scannedToken.Value += (char)inputStream.Read();
                         if ((char)inputStream.Peek() != '=')
                         {
-                            scannedToken.Type = TokenType.GT;
+                            scannedToken.Type = TokenType.GREATERTHAN;
                         }
                         else
                         {
                             scannedToken.Value += (char)inputStream.Read();
-                            scannedToken.Type = TokenType.GE;
+                            scannedToken.Type = TokenType.GREATEREQUAL;
                         }
                         break;
                     case '*':
@@ -279,7 +1396,7 @@ namespace vBadCompiler
                         break;
                     case '/':
                         scannedToken.Value += (char)inputStream.Read();
-                        if((char)inputStream.Peek() != '*')
+                        if ((char)inputStream.Peek() != '*')
                         {
                             scannedToken.Type = TokenType.DIVISION;
                         }
@@ -287,7 +1404,7 @@ namespace vBadCompiler
                         {
                             scannedToken.Value += (char)inputStream.Read();
                             bool commentEnd = false;
-                            while(commentEnd != true)
+                            while (commentEnd != true)
                             {
                                 scannedToken.Value += (char)inputStream.Read();
                                 if (scannedToken.Value[scannedToken.Value.Length - 1] == '*' && (char)inputStream.Peek() == '/')
@@ -311,6 +1428,8 @@ namespace vBadCompiler
                     case '\r':
                     case '\t':
                     case ' ':
+                        scannedToken.Value += (char)inputStream.Read();
+                        scannedToken.Type = TokenType.WHITESPACE;
                         break;
                     default:
                         throw new UnknownTypeException();
@@ -323,6 +1442,12 @@ namespace vBadCompiler
             StreamReader InputFile = new("input.txt");
             Scanner scanner = new(InputFile);
             Token testToken;
+
+            while (scanner.inputStream.Peek() == ' ' || scanner.inputStream.Peek() == '\n' || scanner.inputStream.Peek() == '\r' || scanner.inputStream.Peek() == '\t')
+            {
+                scanner.inputStream.Read();
+            }
+
             do
             {
                 testToken = scanner.Scan();
