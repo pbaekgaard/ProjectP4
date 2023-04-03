@@ -128,14 +128,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_program; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterProgram(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitProgram(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitProgram(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -174,14 +170,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_declarations; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterDeclarations(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitDeclarations(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitDeclarations(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -301,14 +293,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_declaration; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterDeclaration(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitDeclaration(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitDeclaration(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -468,14 +456,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_expression; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterExpression(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitExpression(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitExpression(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -551,14 +535,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_sum; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterSum(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitSum(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitSum(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -607,14 +587,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_average; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterAverage(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitAverage(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitAverage(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -663,14 +639,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_min; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterMin(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitMin(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitMin(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -719,14 +691,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_max; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterMax(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitMax(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitMax(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -775,14 +743,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_count; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterCount(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitCount(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitCount(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -831,14 +795,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_controlstructure; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterControlstructure(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitControlstructure(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitControlstructure(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -895,14 +855,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_ifstmt; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterIfstmt(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitIfstmt(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitIfstmt(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -974,14 +930,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_whilestmt; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterWhilestmt(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitWhilestmt(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitWhilestmt(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -1034,14 +986,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_var; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterVar(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitVar(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitVar(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -1108,14 +1056,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_num; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterNum(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitNum(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitNum(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -1166,14 +1110,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_string; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterString(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitString(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitString(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -1228,14 +1168,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_text; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterText(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitText(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitText(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -1388,14 +1324,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_numbers; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterNumbers(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitNumbers(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitNumbers(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -1436,14 +1368,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_numberswithoutzero; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterNumberswithoutzero(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitNumberswithoutzero(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitNumberswithoutzero(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -1485,14 +1413,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_operator; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterOperator(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitOperator(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitOperator(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -1533,14 +1457,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_bool; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterBool(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitBool(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitBool(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -1581,14 +1501,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_upperCaseLetters; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterUpperCaseLetters(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitUpperCaseLetters(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitUpperCaseLetters(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
@@ -1629,14 +1545,10 @@ public partial class GrammarParser : Parser {
 		}
 		public override int RuleIndex { get { return RULE_lowercaseLetters; } }
 		[System.Diagnostics.DebuggerNonUserCode]
-		public override void EnterRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.EnterLowercaseLetters(this);
-		}
-		[System.Diagnostics.DebuggerNonUserCode]
-		public override void ExitRule(IParseTreeListener listener) {
-			IGrammarListener typedListener = listener as IGrammarListener;
-			if (typedListener != null) typedListener.ExitLowercaseLetters(this);
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IGrammarVisitor<TResult> typedVisitor = visitor as IGrammarVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitLowercaseLetters(this);
+			else return visitor.VisitChildren(this);
 		}
 	}
 
