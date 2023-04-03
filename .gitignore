@@ -7,6 +7,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+ANTLR/**/*
+!ANTLR/Grammar.g4
+
 # User-specific files
 *.rsuser
 *.suo
