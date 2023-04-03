@@ -5,22 +5,22 @@ declaration:
 	controlstructure
 	| NUMBERDCL var ASSIGN num
 	| TEXTDCL var ASSIGN string
-	| BOOLEANDCL bool
+	| BOOLEANDCL var ASSIGN bool
 	| expression
 	| sum
 	| average
 	| min
 	| max
 	| count;
-NUMBERDCL: 'Number';
-TEXTDCL: 'Text';
-BOOLEANDCL: 'Bool';
+NUMBERDCL: 'number';
+TEXTDCL: 'text';
+BOOLEANDCL: 'bool';
 expression: var | expression operator expression;
-sum: 'sum' '(' 'var' ':' 'var' ')';
+sum: 'sum' '(' var ':' var ')';
 average: 'average' '(' var ':' var ')';
-min: 'min' '(' 'var' ':' 'var' ')';
-max: 'max' '(' 'var' ':' 'var' ')';
-count: 'count' '(' 'var' ':' 'var' ')';
+min: 'min' '(' var ':' var ')';
+max: 'max' '(' var ':' var ')';
+count: 'count' '(' var ':' var ')';
 controlstructure: ifstmt | whilestmt;
 ifstmt:
 	'if' expression 'then' declaration 'else' declaration 'endif'
