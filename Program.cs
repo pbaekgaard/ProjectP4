@@ -1,7 +1,9 @@
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
-
+using Antlr4.Runtime;
+using Antlr4.Runtime.Tree;
+using vBadCompiler.CustomParser;
 namespace vBadCompiler
 {
     public class UnknownTypeException : Exception
@@ -581,13 +583,17 @@ namespace vBadCompiler
                             else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
                             {
                                 scannedToken.Value += (char)inputStream.Read();
-                                if(scannedToken.Value == "AVE" && (char)inputStream.Peek() == 'R'){
+                                if (scannedToken.Value == "AVE" && (char)inputStream.Peek() == 'R')
+                                {
                                     scannedToken.Value += (char)inputStream.Read();
-                                    if(char.IsUpper((char)inputStream.Peek()) && (char)inputStream.Peek() == 'A'){
+                                    if (char.IsUpper((char)inputStream.Peek()) && (char)inputStream.Peek() == 'A')
+                                    {
                                         scannedToken.Value += (char)inputStream.Read();
-                                        if(char.IsUpper((char)inputStream.Peek()) && (char)inputStream.Peek() == 'G'){
+                                        if (char.IsUpper((char)inputStream.Peek()) && (char)inputStream.Peek() == 'G')
+                                        {
                                             scannedToken.Value += (char)inputStream.Read();
-                                            if(char.IsUpper((char)inputStream.Peek()) && (char)inputStream.Peek() == 'E'){
+                                            if (char.IsUpper((char)inputStream.Peek()) && (char)inputStream.Peek() == 'E')
+                                            {
                                                 scannedToken.Value += (char)inputStream.Read();
                                                 scannedToken.Type = TokenType.AVERAGE;
                                                 break;
@@ -690,9 +696,11 @@ namespace vBadCompiler
                             else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
                             {
                                 scannedToken.Value += (char)inputStream.Read();
-                                if(scannedToken.Value == "COU" && (char)inputStream.Peek() == 'N'){
+                                if (scannedToken.Value == "COU" && (char)inputStream.Peek() == 'N')
+                                {
                                     scannedToken.Value += (char)inputStream.Read();
-                                    if(char.IsUpper((char)inputStream.Peek()) && (char)inputStream.Peek() == 'T'){
+                                    if (char.IsUpper((char)inputStream.Peek()) && (char)inputStream.Peek() == 'T')
+                                    {
                                         scannedToken.Value += (char)inputStream.Read();
                                         scannedToken.Type = TokenType.COUNT;
                                         break;
@@ -793,14 +801,18 @@ namespace vBadCompiler
                             else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
                             {
                                 scannedToken.Value += (char)inputStream.Read();
-                                if(scannedToken.Value == "MIN"){
-                                    if(!char.IsDigit((char)inputStream.Peek())){
+                                if (scannedToken.Value == "MIN")
+                                {
+                                    if (!char.IsDigit((char)inputStream.Peek()))
+                                    {
                                         scannedToken.Type = TokenType.MIN;
                                         break;
                                     }
                                 }
-                                if(scannedToken.Value == "MAX"){
-                                    if(!char.IsDigit((char)inputStream.Peek())){
+                                if (scannedToken.Value == "MAX")
+                                {
+                                    if (!char.IsDigit((char)inputStream.Peek()))
+                                    {
                                         scannedToken.Type = TokenType.MAX;
                                         break;
                                     }
@@ -900,8 +912,10 @@ namespace vBadCompiler
                             else if (char.IsLetter((char)inputStream.Peek()) && char.IsUpper((char)inputStream.Peek()))
                             {
                                 scannedToken.Value += (char)inputStream.Read();
-                                if(scannedToken.Value == "SUM"){
-                                    if(!char.IsDigit((char)inputStream.Peek())){
+                                if (scannedToken.Value == "SUM")
+                                {
+                                    if (!char.IsDigit((char)inputStream.Peek()))
+                                    {
                                         scannedToken.Type = TokenType.SUM;
                                         break;
                                     }
@@ -1441,18 +1455,11 @@ namespace vBadCompiler
         {
             StreamReader InputFile = new("input.txt");
             Scanner scanner = new(InputFile);
-            Token testToken;
-
-            while (scanner.inputStream.Peek() == ' ' || scanner.inputStream.Peek() == '\n' || scanner.inputStream.Peek() == '\r' || scanner.inputStream.Peek() == '\t')
-            {
-                scanner.inputStream.Read();
-            }
-
-            do
-            {
-                testToken = scanner.Scan();
-                Console.WriteLine("TokenType: " + testToken.Type + "\n" + "TokenValue: " + testToken.Value);
-            } while (testToken.Type != TokenType.EOF);
+            ICharStream stream = CharStreams.fromstring(InputFile.ReadToEnd());
+            ITokenSource lexer = new GrammarLexer(stream);
+            ITokenStream tokens = new CommonTokenStream(lexer);
+            GrammarParser parser = new GrammarParser(tokens);
+            IParseTree tree = parser.program();
         }
     }
 }

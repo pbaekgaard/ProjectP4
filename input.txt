@@ -1,6 +1,3 @@
-AVE5
-SUM5
-EAQ7
-COU4
-COUNT
-CUNTTT
+bool A22 = false
+bool P23 = true
+number A53 = 1

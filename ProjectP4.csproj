@@ -7,4 +7,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.7.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Antlr4 Include="ANTLR/Grammar.g4" />
+  </ItemGroup>
+
 </Project>
