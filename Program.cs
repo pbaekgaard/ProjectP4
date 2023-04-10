@@ -3,7 +3,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using vBadCompiler.CustomParser;
+//using vBadCompiler.CustomParser;
+using ProjectP4;
 namespace vBadCompiler
 {
     public class UnknownTypeException : Exception
@@ -1455,11 +1456,13 @@ namespace vBadCompiler
         {
             StreamReader InputFile = new("input.txt");
             Scanner scanner = new(InputFile);
-            ICharStream stream = CharStreams.fromstring(InputFile.ReadToEnd());
+            ICharStream stream = CharStreams.fromString(InputFile.ReadToEnd());
             ITokenSource lexer = new GrammarLexer(stream);
             ITokenStream tokens = new CommonTokenStream(lexer);
             GrammarParser parser = new GrammarParser(tokens);
-            IParseTree tree = parser.program();
+            var visitor = new Visitors();
+            visitor.Visit(parser.program());
+            //IParseTree tree = parser.program();
         }
     }
 }
