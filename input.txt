@@ -1,1 +1,4 @@
-number A53 = 1
+bool J53 = true
+number A53 = 1 + 1
+number DD212 = 1.53213 + 2.2543
+number B444433 = 2 - 1

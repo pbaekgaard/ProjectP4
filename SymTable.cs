@@ -4,47 +4,86 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace ProjectP4
 {
-    public class SymTable
+    public class Symbol
     {
         public enum symbolType
         {
-            Number,
-            Text,
-            Bool
+            text,
+            number,
+            @bool
         }
+        public symbolType type { get; set; }
+        public object? value { get; set; }
 
-        public Dictionary<string, symbolType> SymbolTable;
+    }
+    public class SymTable
+    {
+        
+        public int scope { get; set; }
+        public List<Dictionary<string, Symbol>> scopedSymbolTable { get; set; }
+        
 
         public SymTable()
         {
-            SymbolTable = new Dictionary<string, symbolType>();
+            this.scope = 0;
+            this.scopedSymbolTable = new();
+            this.scopedSymbolTable.Insert(this.scope,new Dictionary<string, Symbol> { });
         }
-        
-        public bool addSymbol(symbolType type,string name) 
+        public void openScope()
         {
-            if (SymbolTable.ContainsKey(name))
+            this.scopedSymbolTable.Insert(this.scope, new Dictionary<string, Symbol> { });
+        }
+
+        public void closeScope()
+        {
+            if (this.scopedSymbolTable.Count == 1)
             {
-                return false;
-            }
-            else
+                throw new Exception("Can't remove global scope");
+            } else
             {
-                this.SymbolTable.Add(name, type);
-                return true;
+                this.scopedSymbolTable.RemoveAt(this.scope);
             }
         }
 
-        public symbolType? getSymbol(string name)
+        public void addSymbol(string name, Symbol type)
         {
-            if (SymbolTable.ContainsKey(name))
+            if (this.scopedSymbolTable[this.scope].ContainsKey(name))
             {
-                return SymbolTable[name];
+                throw new Exception(string.Format("symbol {0} already exists in the table", name));
             } else
             {
-                return null;
+                this.scopedSymbolTable[this.scope].Add(name, type);
             }
+        }
+
+        public Symbol getSymbol(string name)
+        {
+            foreach (var item in this.scopedSymbolTable)
+            {
+                if (item.ContainsKey(name))
+                {
+                    Symbol value;
+                    item.TryGetValue(name,out value);
+                    return value;
+                }
+            }
+            throw new Exception(String.Format("{} does not exist", name));
+        }
+
+        public void updateSymbol(string name, Symbol type)
+        {
+            foreach (var item in this.scopedSymbolTable)
+            {
+                if (item.ContainsKey(name))
+                {
+                    item[name] = type;
+                }
+            }
+            throw new Exception(String.Format("{} does not exist", name));
         }
 
     }

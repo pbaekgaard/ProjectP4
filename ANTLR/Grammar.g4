@@ -5,7 +5,7 @@ declaration:
 	| whilestmt
 	| assignment;
 
-assignment: NUMBERDCL VAR '=' expression;
+assignment: types VAR '=' expression ;
 
 ifstmt:
 	'if' expression 'then' declaration 'else' declaration 'endif'
@@ -14,11 +14,11 @@ ifstmt:
 whilestmt: 'while' expression 'do' declaration 'endwhile';
 
 expression: 
-	constant
-	| expression operator expression;
+	constant #constantexpression
+	| expression operator expression #operatorexpression;
 
-constant: INTEGER | FLOAT | BOOL | NULL;
-
+constant: INTEGER | FLOAT | BOOL | STRING | NULL;
+types: NUMBERDCL | BOOLDCL | TEXTDCL;
 operator:
 	'+'
 	| '-'
@@ -32,7 +32,10 @@ operator:
 	| '!=';
 
 NUMBERDCL: 'number';
+BOOLDCL: 'bool';
+TEXTDCL: 'text';
 
+STRING: '"' [a-zA-Z0-9]* '"';
 INTEGER : [0-9]+;
 FLOAT : [0-9]+ '.' [0-9]+;
 BOOL: 'true' | 'false';
