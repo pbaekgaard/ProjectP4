@@ -1,4 +1,8 @@
-bool J53 = true
-number A53 = 1 + 1
-number DD212 = 1.53213 + 2.2543
-number B444433 = 2 - 1
+bool A65 = "test" == "test"
+number A1 = 12.5324 % "10.123"
+number A2 = 1 + 1.1
+number A3 = 2 * 2
+number A4 = 10 / 2
+number A5 = 5 < 8
+number A6 = 5 > 6
+number A7 = 8 <= 8

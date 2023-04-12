@@ -71,7 +71,7 @@ namespace ProjectP4
                     return value;
                 }
             }
-            throw new Exception(String.Format("{} does not exist", name));
+            throw new Exception(String.Format("{0} does not exist", name));
         }
 
         public void updateSymbol(string name, Symbol type)
@@ -83,7 +83,7 @@ namespace ProjectP4
                     item[name] = type;
                 }
             }
-            throw new Exception(String.Format("{} does not exist", name));
+            throw new Exception(String.Format("{0} does not exist", name));
         }
 
     }

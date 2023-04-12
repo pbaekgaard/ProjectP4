@@ -54,7 +54,9 @@ namespace ProjectP4
             }
             if (context.STRING() != null)
             {
-                return context.STRING().GetText();
+                var input = context.STRING().GetText();
+                input = input.Trim(new char[] { '"' });
+                return input;
             }
             return null;
         }
@@ -62,52 +64,31 @@ namespace ProjectP4
         {
             var operatorValue = context.@operator().GetText();
 
-            var leftValue = Visit(context.expression(0));
-            var rightValue = Visit(context.expression(1));
+            dynamic leftValue = Visit(context.expression(0));
+            dynamic rightValue = Visit(context.expression(1));
+
 
             switch (operatorValue)
             {
-                case "+": return Plus(leftValue,rightValue);
-                case "-": return Minus(leftValue,rightValue);
+                case "+": return leftValue + rightValue;
+                case "-": return leftValue - rightValue;
+                case "*": return leftValue * rightValue;
+                case "/": return leftValue / rightValue;
+                case "<": return leftValue < rightValue;
+                case ">": return leftValue > rightValue;
+                case "<=": return leftValue <= rightValue;
+                case ">=": return leftValue <= rightValue;
+                case "%": return leftValue % rightValue;
+                case "==": return leftValue == rightValue;
 
                 default:
+                    throw new Exception("Does not fungo");
                     break;
             }
 
             return null;
         }
 
-
-        private object Plus(object? left, object? right)
-        {
-            if (left is int l && right is int r)
-            {
-                return l + r;
-            }
-            else if (left is float fl && right is float fr)
-            {
-                return fl + fr;
-            }
-
-            throw new Exception("Values can not be added together");
-        }
-        private object Minus(object? left, object? right)
-        {
-            if (left is int l && right is int r)
-            {
-                return l - r;
-            }
-            else if (left is float fl && right is float fr)
-            {
-                return fl - fr;
-            }
-
-            throw new Exception("Values can not be subtracted together");
-        }
-
-
     }
-
-
 
 }

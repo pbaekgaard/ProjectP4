@@ -21,6 +21,8 @@ constant: INTEGER | FLOAT | BOOL | STRING | NULL;
 types: NUMBERDCL | BOOLDCL | TEXTDCL;
 operator:
 	'+'
+	| '=='
+	| '%'
 	| '-'
 	| '*'
 	| '/'
@@ -35,7 +37,7 @@ NUMBERDCL: 'number';
 BOOLDCL: 'bool';
 TEXTDCL: 'text';
 
-STRING: '"' [a-zA-Z0-9]* '"';
+STRING: '"' .*? '"';
 INTEGER : [0-9]+;
 FLOAT : [0-9]+ '.' [0-9]+;
 BOOL: 'true' | 'false';
