@@ -2,7 +2,7 @@ NUMBERDCL: 'number';
 BOOLDCL: 'bool';
 TEXTDCL: 'text';
 
-STRING: '"' [a-zA-Z0-9]* '"';
+STRING: '"' .*? '"';
 INTEGER: [0-9]+;
 FLOAT: [0-9]+ '.' [0-9]+;
 BOOL: 'true' | 'false';
@@ -36,4 +36,4 @@ LSQUAREP: '[';
 RSQUAREP: ']'; 
 LBRACKET: '{'; 
 RBRACKET: '}';
-COMMENT: '/*' [.*?] '*/';
+COMMENT: '/*' .*? '*/';
