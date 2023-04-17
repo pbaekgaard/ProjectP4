@@ -9,6 +9,7 @@
 
 ANTLR/**/*
 !ANTLR/Grammar.g4
+!ANTLR/Tokens.g4
 
 # User-specific files
 *.rsuser
