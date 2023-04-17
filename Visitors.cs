@@ -2,10 +2,12 @@
 using Antlr4.Runtime.Misc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ProjectP4.Symbol;
 using static ProjectP4.SymTable;
 
 namespace ProjectP4
@@ -19,7 +21,7 @@ namespace ProjectP4
 
             var type = context.types().GetText();
 
-            var value = Visit(context.expression());
+            dynamic value = Visit(context.expression());
 
             Symbol symbol = new();
 
@@ -37,7 +39,6 @@ namespace ProjectP4
 
             return null;
         }
-
         public override object? VisitConstant([NotNull] GrammarParser.ConstantContext context)
         {
             if (context.INTEGER() != null)
@@ -77,6 +78,8 @@ namespace ProjectP4
                 case "<": return leftValue < rightValue;
                 case ">": return leftValue > rightValue;
                 case "<=": return leftValue <= rightValue;
+                case "AND": return leftValue && rightValue;
+                case "OR": return leftValue || rightValue;
                 case ">=": return leftValue <= rightValue;
                 case "%": return leftValue % rightValue;
                 case "==": return leftValue == rightValue;
@@ -88,6 +91,34 @@ namespace ProjectP4
 
             return null;
         }
+
+        public override object VisitVarexpression([NotNull] GrammarParser.VarexpressionContext context)
+        {
+            var operatorValue = context.@operator().GetText();
+
+
+            Symbol leftValue = symbolTable.getSymbol(context.VAR(0).GetText());
+            Symbol rightValue = symbolTable.getSymbol(context.VAR(1).GetText());
+
+            Console.WriteLine(leftValue.type);
+            Console.WriteLine(rightValue.type);
+
+            switch(leftValue.type,rightValue.type)
+            {
+                case (symbolType.number, symbolType.number):
+                    
+                    break;
+            }
+
+            return null;
+        }
+
+        public override object VisitIfstmt([NotNull] GrammarParser.IfstmtContext context)
+        {
+            Console.WriteLine(context.expression().GetText());
+            return null;
+        }
+
 
     }
 

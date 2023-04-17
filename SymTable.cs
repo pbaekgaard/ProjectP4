@@ -17,7 +17,7 @@ namespace ProjectP4
             @bool
         }
         public symbolType type { get; set; }
-        public object? value { get; set; }
+        public dynamic value { get; set; }
 
     }
     public class SymTable
@@ -54,7 +54,8 @@ namespace ProjectP4
             if (this.scopedSymbolTable[this.scope].ContainsKey(name))
             {
                 throw new Exception(string.Format("symbol {0} already exists in the table", name));
-            } else
+            } 
+            else
             {
                 this.scopedSymbolTable[this.scope].Add(name, type);
             }

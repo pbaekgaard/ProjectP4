@@ -1,47 +1,43 @@
 grammar Grammar;
+
+options {
+    tokenVocab = GLexer;
+}
+
 program: declaration* EOF;
 declaration:
 	ifstmt 
 	| whilestmt
 	| assignment;
 
-assignment: types VAR '=' expression ;
+assignment: types VAR ASSIGN expression ;
 
 ifstmt:
-	'if' expression 'then' declaration 'else' declaration 'endif'
-	| 'if' expression 'then' declaration 'endif';
+	IF expression THEN declaration ELSE declaration ENDIF
+	| IF expression THEN declaration ENDIF;
 
-whilestmt: 'while' expression 'do' declaration 'endwhile';
+whilestmt: WHILE expression DO declaration ENDWHILE;
 
 expression: 
 	constant #constantexpression
-	| expression operator expression #operatorexpression;
+	| expression operator expression #operatorexpression
+	| VAR operator VAR #varexpression;
 
 constant: INTEGER | FLOAT | BOOL | STRING | NULL;
 types: NUMBERDCL | BOOLDCL | TEXTDCL;
 operator:
-	'+'
-	| '=='
-	| '%'
-	| '-'
-	| '*'
-	| '/'
-	| '<'
-	| '>'
-	| '<='
-	| '>='
-	| '='
-	| '!=';
+	ASSIGN
+	| PLUS
+	| MINUS
+	| MULTIPLICATION
+	| DIVISON
+	| LESSTHAN
+	| GREATERTHAN
+	| COMPEQUAL
+	| LESSEQUAL
+	| GREATEREQUAL
+	| NOTEQUAL
+	| MODULO
+	| AND
+	| OR;
 
-NUMBERDCL: 'number';
-BOOLDCL: 'bool';
-TEXTDCL: 'text';
-
-STRING: '"' .*? '"';
-INTEGER : [0-9]+;
-FLOAT : [0-9]+ '.' [0-9]+;
-BOOL: 'true' | 'false';
-NULL: 'null';
-
-VAR: [A-Z]+[1-9][0-9]*;
-WS: [ \t\r\n]+ -> skip;

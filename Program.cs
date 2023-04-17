@@ -3,7 +3,6 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-//using vBadCompiler.CustomParser;
 using ProjectP4;
 namespace vBadCompiler
 {
@@ -12,9 +11,11 @@ namespace vBadCompiler
         public static void Main(string[] args)
         {
             StreamReader InputFile = new("input.txt");
-            ICharStream stream = CharStreams.fromString(InputFile.ReadToEnd());
-            ITokenSource lexer = new GrammarLexer(stream);
-            ITokenStream tokens = new CommonTokenStream(lexer);
+            AntlrInputStream inputStream = new AntlrInputStream(InputFile.ReadToEnd());
+            
+            //ICharStream stream = CharStreams.fromString(InputFile.ReadToEnd());
+            GLexer lexer = new GLexer(inputStream);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
             GrammarParser parser = new GrammarParser(tokens);
             var visitor = new Visitors();
             visitor.Visit(parser.program());
