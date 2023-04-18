@@ -63,7 +63,17 @@ namespace ProjectP4
 
         public Symbol getSymbol(string name)
         {
-            foreach (var item in this.scopedSymbolTable)
+            for (int i = 0; i <= this.scope; i++)
+            {
+                var item = this.scopedSymbolTable[i];
+                if (item.ContainsKey(name))
+                {
+                    Symbol value;
+                    item.TryGetValue(name, out value);
+                    return value;
+                }
+            }
+            /*foreach (var item in this.scopedSymbolTable)
             {
                 if (item.ContainsKey(name))
                 {
@@ -71,20 +81,21 @@ namespace ProjectP4
                     item.TryGetValue(name,out value);
                     return value;
                 }
-            }
-            throw new Exception(String.Format("{0} does not exist", name));
+            }*/
+            throw new Exception(String.Format("{0} is not declared", name));
         }
 
-        public void updateSymbol(string name, Symbol type)
+        public bool updateSymbol(string name, Symbol type)
         {
             foreach (var item in this.scopedSymbolTable)
             {
                 if (item.ContainsKey(name))
                 {
                     item[name] = type;
+                    return true;
                 }
             }
-            throw new Exception(String.Format("{0} does not exist", name));
+            throw new Exception(String.Format("{0} is not declared", name));
         }
 
     }

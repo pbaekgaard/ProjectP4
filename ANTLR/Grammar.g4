@@ -10,18 +10,19 @@ declaration:
 	| whilestmt
 	| assignment;
 
-assignment: types VAR ASSIGN expression ;
+assignment: types VAR ASSIGN expression #assignnew
+	| VAR ASSIGN expression #assigndec;
 
 ifstmt:
-	IF expression THEN declaration ELSE declaration ENDIF
-	| IF expression THEN declaration ENDIF;
+	IF expression THEN declaration ELSE declaration ENDIF #ifelse
+	| IF expression THEN declaration ENDIF #ifthen;
 
 whilestmt: WHILE expression DO declaration ENDWHILE;
 
 expression: 
 	constant #constantexpression
-	| expression operator expression #operatorexpression
-	| VAR operator VAR #varexpression;
+	| VAR #varexpression
+	| expression operator expression #operatorexpression;
 
 constant: INTEGER | FLOAT | BOOL | STRING | NULL;
 types: NUMBERDCL | BOOLDCL | TEXTDCL;

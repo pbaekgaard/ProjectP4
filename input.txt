@@ -1,3 +1,4 @@
-number B2 = 1
-number B3 = 2
-number A12 = B2 + B3
+number B2 = 3
+number B3 = 4
+if B2 < B3 then number B4 = 10 endif
+B4 = B3

@@ -15,7 +15,7 @@ namespace ProjectP4
     public class Visitors : GrammarBaseVisitor<object?>
     {
         public SymTable symbolTable = new();
-        public override object? VisitAssignment([NotNull] GrammarParser.AssignmentContext context)
+        public override object VisitAssignnew([NotNull] GrammarParser.AssignnewContext context)
         {
             var name = context.VAR().GetText();
 
@@ -32,10 +32,26 @@ namespace ProjectP4
                 symbol.type = sym;
                 symbol.value = value;
                 symbolTable.addSymbol(name, symbol);
-            } else
+            }
+            else
             {
                 throw new Exception("type is not valid");
             }
+
+            return null;
+        }
+        public override object VisitAssigndec([NotNull] GrammarParser.AssigndecContext context)
+        {
+            dynamic value = Visit(context.expression());
+
+            dynamic varname = context.VAR().GetText();
+
+            Symbol var = symbolTable.getSymbol(varname);
+
+            var.value = value;
+
+            symbolTable.updateSymbol(varname, var);
+            
 
             return null;
         }
@@ -68,58 +84,63 @@ namespace ProjectP4
             dynamic leftValue = Visit(context.expression(0));
             dynamic rightValue = Visit(context.expression(1));
 
+            return Op(operatorValue, leftValue, rightValue);
 
-            switch (operatorValue)
-            {
-                case "+": return leftValue + rightValue;
-                case "-": return leftValue - rightValue;
-                case "*": return leftValue * rightValue;
-                case "/": return leftValue / rightValue;
-                case "<": return leftValue < rightValue;
-                case ">": return leftValue > rightValue;
-                case "<=": return leftValue <= rightValue;
-                case "AND": return leftValue && rightValue;
-                case "OR": return leftValue || rightValue;
-                case ">=": return leftValue <= rightValue;
-                case "%": return leftValue % rightValue;
-                case "==": return leftValue == rightValue;
-
-                default:
-                    throw new Exception("Does not fungo");
-                    break;
-            }
-
-            return null;
         }
 
         public override object VisitVarexpression([NotNull] GrammarParser.VarexpressionContext context)
         {
-            var operatorValue = context.@operator().GetText();
+            Symbol var = symbolTable.getSymbol(context.VAR().GetText());
 
+            return var.value;
 
-            Symbol leftValue = symbolTable.getSymbol(context.VAR(0).GetText());
-            Symbol rightValue = symbolTable.getSymbol(context.VAR(1).GetText());
-
-            Console.WriteLine(leftValue.type);
-            Console.WriteLine(rightValue.type);
-
-            switch(leftValue.type,rightValue.type)
+        }
+        public override object VisitIfthen([NotNull] GrammarParser.IfthenContext context)
+        {
+            dynamic? compare = Visit(context.expression());
+            if (compare)
             {
-                case (symbolType.number, symbolType.number):
-                    
+                symbolTable.scope++;
+                symbolTable.openScope();
+                Visit(context.declaration());
+                symbolTable.scope--;
+            }
+            return null;
+        }
+        public override object VisitIfelse([NotNull] GrammarParser.IfelseContext context)
+        {
+            dynamic compare = Visit(context.expression());
+
+            if (compare)
+            {
+                var dec1 = Visit(context.declaration(0));
+                var dec2 = Visit(context.declaration(1));
+            }
+            return null;
+        }
+
+        private dynamic Op(string opr,dynamic lv,dynamic rv)
+        {
+            switch (opr)
+            {
+                case "+": return lv + rv;
+                case "-": return lv - rv;
+                case "*": return lv * rv;
+                case "/": return lv / rv;
+                case "<": return lv < rv;
+                case ">": return lv > rv;
+                case "<=": return lv <= rv;
+                case "AND": return lv && rv;
+                case "OR": return lv || rv;
+                case ">=": return lv <= rv;
+                case "%": return lv % rv;
+                case "==": return lv == rv;
+                default:
+                    throw new Exception("Does not fungo");
                     break;
             }
-
-            return null;
         }
-
-        public override object VisitIfstmt([NotNull] GrammarParser.IfstmtContext context)
-        {
-            Console.WriteLine(context.expression().GetText());
-            return null;
-        }
-
-
     }
+    
 
 }
