@@ -1,15 +1,6 @@
-﻿using Antlr4.Runtime.Atn;
-using Antlr4.Runtime.Misc;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
+﻿using Antlr4.Runtime.Misc;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using static ProjectP4.Symbol;
-using static ProjectP4.SymTable;
 
 namespace ProjectP4
 {
@@ -145,6 +136,22 @@ namespace ProjectP4
             }
             return null;
         }
+
+        public override object VisitWhilestmt([NotNull] GrammarParser.WhilestmtContext context)
+        {
+            dynamic? compare = Visit(context.expression());
+            while (compare)
+            {
+                symbolTable.scope++;
+                symbolTable.openScope();
+                Visit(context.declaration());
+                symbolTable.closeScope();
+                symbolTable.scope--;
+                compare = Visit(context.expression());
+            }
+            return null;
+        }
+
         public override object VisitIfelse([NotNull] GrammarParser.IfelseContext context)
         {
             dynamic compare = Visit(context.expression());
@@ -174,20 +181,179 @@ namespace ProjectP4
             var endVar = context.VAR(1).GetText();
 
             var startVarNumber = Regex.Replace(startVar, "[^0-9]", "");
-            var startVarLetter = Regex.Replace(startVar, "[^A-Z]", "");
-            int startVarLetterUnicode = char.ConvertToUtf32(startVarLetter, 0);
+            int startVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(startVar, "[^A-Z]", ""), 0);
 
             var endVarNumber = Regex.Replace(endVar, "[^0-9]", "");
-            var endVarLetter = Regex.Replace(endVar, "[^A-Z]", "");
-            int endVarLetterUnicode = char.ConvertToUtf32(endVarLetter, 0);
+            int endVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(endVar, "[^A-Z]", ""), 0);
 
-            for (int i = int.Parse(startVarNumber); i <= int.Parse(endVarNumber); i++)
+
+            dynamic result = 0;
+            for (int j = startVarLetterUnicode; j <= endVarLetterUnicode; j++)
             {
-
+                for (int i = int.Parse(startVarNumber); i <= int.Parse(endVarNumber); i++)
+                {
+                    dynamic val = symbolTable.getSymbol(char.ConvertFromUtf32(j) + i);
+                    if (val.value is int k)
+                    {
+                        result = result + k;
+                    }
+                    else if (val.value is float kf)
+                    {
+                        result = result + kf;
+                    }
+                }
             }
-
-            return null;
+            return result;
         }
+
+        public override object VisitAverage([NotNull] GrammarParser.AverageContext context)
+        {
+            var startVar = context.VAR(0).GetText();
+            var endVar = context.VAR(1).GetText();
+
+            var startVarNumber = Regex.Replace(startVar, "[^0-9]", "");
+            int startVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(startVar, "[^A-Z]", ""), 0);
+
+            var endVarNumber = Regex.Replace(endVar, "[^0-9]", "");
+            int endVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(endVar, "[^A-Z]", ""), 0);
+
+
+            dynamic result = 0;
+            int index = 0;
+            for (int j = startVarLetterUnicode; j <= endVarLetterUnicode; j++)
+            {
+                for (int i = int.Parse(startVarNumber); i <= int.Parse(endVarNumber); i++)
+                {
+                    dynamic val = symbolTable.getSymbol(char.ConvertFromUtf32(j) + i);
+
+                    if ((object)val == null)
+                    {
+                        continue;
+                    }
+                    if (val.value is int k)
+                    {
+                        index++;
+                        result = result + k;
+                    }
+                    else if (val.value is float kf)
+                    {
+                        index++;
+                        result = result + kf;
+                    }
+                }
+            }
+            result = result / index;
+            return result;
+        }
+
+        public override object VisitMin([NotNull] GrammarParser.MinContext context)
+        {
+            var startVar = context.VAR(0).GetText();
+            var endVar = context.VAR(1).GetText();
+
+            var startVarNumber = Regex.Replace(startVar, "[^0-9]", "");
+            int startVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(startVar, "[^A-Z]", ""), 0);
+
+            var endVarNumber = Regex.Replace(endVar, "[^0-9]", "");
+            int endVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(endVar, "[^A-Z]", ""), 0);
+
+
+            dynamic result = 0;
+            for (int j = startVarLetterUnicode; j <= endVarLetterUnicode; j++)
+            {
+                for (int i = int.Parse(startVarNumber); i <= int.Parse(endVarNumber); i++)
+                {
+                    dynamic val = symbolTable.getSymbol(char.ConvertFromUtf32(j) + i);
+
+                    if ((object)val == null)
+                    {
+                        continue;
+                    }
+                    if (result == 0)
+                    {
+                        result = val.value;
+                    }
+                    if (val.value < result)
+                    {
+                        result = val.value;
+                    }
+                }
+            }
+            return result;
+        }
+
+        public override object VisitMax([NotNull] GrammarParser.MaxContext context)
+        {
+            var startVar = context.VAR(0).GetText();
+            var endVar = context.VAR(1).GetText();
+
+            var startVarNumber = Regex.Replace(startVar, "[^0-9]", "");
+            int startVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(startVar, "[^A-Z]", ""), 0);
+
+            var endVarNumber = Regex.Replace(endVar, "[^0-9]", "");
+            int endVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(endVar, "[^A-Z]", ""), 0);
+
+
+            dynamic result = 0;
+            for (int j = startVarLetterUnicode; j <= endVarLetterUnicode; j++)
+            {
+                for (int i = int.Parse(startVarNumber); i <= int.Parse(endVarNumber); i++)
+                {
+                    dynamic val = symbolTable.getSymbol(char.ConvertFromUtf32(j) + i);
+
+                    if ((object)val == null)
+                    {
+                        continue;
+                    }
+                    if (result == 0)
+                    {
+                        result = val.value;
+                    }
+                    if (val.value > result)
+                    {
+                        result = val.value;
+                    }
+                }
+            }
+            return result;
+        }
+
+        public override object VisitCount([NotNull] GrammarParser.CountContext context)
+        {
+            var startVar = context.VAR(0).GetText();
+            var endVar = context.VAR(1).GetText();
+
+            var startVarNumber = Regex.Replace(startVar, "[^0-9]", "");
+            int startVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(startVar, "[^A-Z]", ""), 0);
+
+            var endVarNumber = Regex.Replace(endVar, "[^0-9]", "");
+            int endVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(endVar, "[^A-Z]", ""), 0);
+
+
+            dynamic index = 0;
+            for (int j = startVarLetterUnicode; j <= endVarLetterUnicode; j++)
+            {
+                for (int i = int.Parse(startVarNumber); i <= int.Parse(endVarNumber); i++)
+                {
+                    dynamic val = symbolTable.getSymbol(char.ConvertFromUtf32(j) + i);
+
+                    if ((object)val == null)
+                    {
+                        continue;
+                    }
+                    if (val.value is int k)
+                    {
+                        index++;
+                    }
+                    else if (val.value is float kf)
+                    {
+                        index++;
+                    }
+                }
+            }
+            return index;
+        }
+
 
         private dynamic Op(string opr,dynamic lv,dynamic rv)
         {

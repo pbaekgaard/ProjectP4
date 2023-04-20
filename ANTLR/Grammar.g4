@@ -22,10 +22,18 @@ whilestmt: WHILE expression DO declaration ENDWHILE;
 expression: 
 	constant #constantexpression
 	| sum #sumexpression
+	| average #averageexpression
+	| min #minexpression
+	| max #maxexpression
+	| count #countexpression
 	| VAR #varexpression
 	| expression operator expression #operatorexpression;
 
 sum: SUM LPARENTHESIS VAR COLON VAR RPARENTHESIS;
+average: AVERAGE LPARENTHESIS VAR COLON VAR RPARENTHESIS;
+min: MIN LPARENTHESIS VAR COLON VAR RPARENTHESIS;
+max: MAX LPARENTHESIS VAR COLON VAR RPARENTHESIS;
+count: COUNT LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 
 constant: INTEGER | FLOAT | BOOL | STRING | NULL;
 types: NUMBERDCL | BOOLDCL | TEXTDCL;

@@ -1,10 +1,3 @@
-using Antlr4.Runtime.Misc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace ProjectP4
 {
@@ -82,7 +75,8 @@ namespace ProjectP4
                     return value;
                 }
             }*/
-            throw new Exception(String.Format("{0} is not declared", name));
+            return null;
+            //throw new Exception(String.Format("{0} is not declared", name));
         }
 
         public bool updateSymbol(string name, Symbol type)
