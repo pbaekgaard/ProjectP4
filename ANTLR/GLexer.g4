@@ -19,6 +19,7 @@ WHILE: 'while';
 ENDWHILE: 'endwhile';
 DO: 'do';
 AND: 'AND';
+SUM: 'SUM';
 OR: 'OR';
 ASSIGN: '=';
 LESSTHAN: '<';
@@ -38,6 +39,7 @@ LSQUAREP: '[';
 RSQUAREP: ']'; 
 LBRACKET: '{'; 
 RBRACKET: '}';
+COLON: ':';
 COMMENT: '/*' .*? '*/';
 
 

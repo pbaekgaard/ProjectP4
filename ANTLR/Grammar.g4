@@ -21,8 +21,11 @@ whilestmt: WHILE expression DO declaration ENDWHILE;
 
 expression: 
 	constant #constantexpression
+	| sum #sumexpression
 	| VAR #varexpression
 	| expression operator expression #operatorexpression;
+
+sum: SUM LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 
 constant: INTEGER | FLOAT | BOOL | STRING | NULL;
 types: NUMBERDCL | BOOLDCL | TEXTDCL;
