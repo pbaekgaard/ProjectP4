@@ -1,5 +1,9 @@
-number A1 = 15
-
-A1 = 22
-
-number C1 = COUNT ( A1 : A3 )
+bool A4 = true
+text B1 = "Payment"
+text B2 = "2"
+if B1 == "Payment" then 
+B2 = "Success"
+A3 = A1 + A2
+else
+A3 = AVERAGE ( A1 : A2 )
+endif

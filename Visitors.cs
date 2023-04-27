@@ -15,6 +15,45 @@ namespace ProjectP4
 
             dynamic value = Visit(context.expression());
 
+            switch (type)
+            {
+                case "number":
+                    if (value is int)
+                    {
+                        break;
+                    } else if (value is float)
+                    {
+                        break;
+                    } else
+                    {
+                        throw new Exception(String.Format("{0} is not a number", name));
+                        break;
+                    }
+                case "text":
+                    if (value is string)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        throw new Exception(String.Format("{0} is not a text (remember \" around the text", name));
+                        break;
+                    }
+                case "bool":
+                    if (value is bool)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        throw new Exception(String.Format("{0} is not a boolean", name));
+                        break;
+                    }
+                default:
+                    break;
+            }
+
+
             if (value is string s)
             {
                 if (s.Contains('"'))
@@ -46,9 +85,22 @@ namespace ProjectP4
         }
         public override object VisitAssigndec([NotNull] GrammarParser.AssigndecContext context)
         {
+            Console.WriteLine(context.GetText());
+            dynamic varname = context.VAR().GetText();
+
             dynamic value = Visit(context.expression());
 
-            dynamic varname = context.VAR().GetText();
+            if (value is string s)
+            {
+                if (s.Contains('"'))
+                {
+                    value = s.Trim(new char[] { '"' });
+                }
+                else
+                {
+                    value = symbolTable.getSymbol(s).value;
+                }
+            }
 
             Symbol var = symbolTable.getSymbol(varname);
 
@@ -130,7 +182,7 @@ namespace ProjectP4
             {
                 symbolTable.scope++;
                 symbolTable.openScope();
-                Visit(context.declaration());
+                Visit(context.block());
                 symbolTable.closeScope();
                 symbolTable.scope--;
             }
@@ -160,7 +212,7 @@ namespace ProjectP4
             {
                 symbolTable.scope++;
                 symbolTable.openScope();
-                Visit(context.declaration(0));
+                Visit(context.block(0));
                 symbolTable.closeScope();
                 symbolTable.scope--;
 
@@ -168,7 +220,7 @@ namespace ProjectP4
             {
                 symbolTable.scope++;
                 symbolTable.openScope();
-                Visit(context.declaration(1));
+                Visit(context.block(1));
                 symbolTable.closeScope();
                 symbolTable.scope--;
             }

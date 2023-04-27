@@ -14,20 +14,22 @@ assignment: types VAR ASSIGN expression #assignnew
 	| VAR ASSIGN expression #assigndec;
 
 ifstmt:
-	IF expression THEN declaration ELSE declaration ENDIF #ifelse
-	| IF expression THEN declaration ENDIF #ifthen;
+	IF expression THEN block ELSE block ENDIF #ifelse
+	| IF expression THEN block ENDIF #ifthen;
 
 whilestmt: WHILE expression DO declaration ENDWHILE;
 
+block: declaration*;
+
 expression: 
-	constant #constantexpression
-	| sum #sumexpression
+	sum #sumexpression
 	| average #averageexpression
 	| min #minexpression
 	| max #maxexpression
 	| count #countexpression
 	| VAR #varexpression
-	| expression operator expression #operatorexpression;
+	| expression operator expression #operatorexpression
+	| constant #constantexpression;
 
 sum: SUM LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 average: AVERAGE LPARENTHESIS VAR COLON VAR RPARENTHESIS;
