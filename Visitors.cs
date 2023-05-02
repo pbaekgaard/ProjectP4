@@ -406,6 +406,39 @@ namespace ProjectP4
             return index;
         }
 
+        public override List<object> VisitSort([NotNull] GrammarParser.SortContext context)
+        {
+            var startVar = context.VAR(0).GetText();
+            var endVar = context.VAR(1).GetText();
+
+            var startVarNumber = Regex.Replace(startVar, "[^0-9]", "");
+            int startVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(startVar, "[^A-Z]", ""), 0);
+
+            var endVarNumber = Regex.Replace(endVar, "[^0-9]", "");
+            int endVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(endVar, "[^A-Z]", ""), 0);
+
+            List<dynamic> sortArray = new List<dynamic>();
+            dynamic index = 0;
+            for (int j = startVarLetterUnicode; j <= endVarLetterUnicode; j++)
+            {
+                for (int i = int.Parse(startVarNumber); i <= int.Parse(endVarNumber); i++)
+                {
+                    Symbol? val = symbolTable.getSymbol(char.ConvertFromUtf32(j) + i);
+
+                    if (val == null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        sortArray.Add(val.value);
+                    }
+                }
+            }
+            sortArray.Sort();
+            return sortArray;
+        }
+
 
         private dynamic Op(string opr,dynamic lv,dynamic rv)
         {

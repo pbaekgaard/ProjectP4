@@ -1,7 +1,7 @@
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using ProjectP4;
-namespace vBadCompiler
+namespace vGutCompiler
 {
     public class Program
     {

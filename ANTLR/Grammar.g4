@@ -27,6 +27,7 @@ expression:
 	| min #minexpression
 	| max #maxexpression
 	| count #countexpression
+	| sort #sortexpression
 	| VAR #varexpression
 	| expression operator expression #operatorexpression
 	| constant #constantexpression;
@@ -36,6 +37,7 @@ average: AVERAGE LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 min: MIN LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 max: MAX LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 count: COUNT LPARENTHESIS VAR COLON VAR RPARENTHESIS;
+sort: SORT LPARENTHESIS VAR COLON VAR COMMA VAR RPARENTHESIS;
 
 constant: INTEGER | FLOAT | BOOL | STRING | NULL;
 types: NUMBERDCL | BOOLDCL | TEXTDCL;

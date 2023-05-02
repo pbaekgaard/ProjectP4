@@ -23,6 +23,7 @@ SUM: 'SUM';
 AVERAGE: 'AVERAGE';
 MIN: 'MIN';
 MAX: 'MAX';
+SORT : 'SORT';
 COUNT: 'COUNT';
 OR: 'OR';
 ASSIGN: '=';
@@ -44,6 +45,7 @@ RSQUAREP: ']';
 LBRACKET: '{'; 
 RBRACKET: '}';
 COLON: ':';
+COMMA: ',';
 COMMENT: '/*' .*? '*/';
 
 
