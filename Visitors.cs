@@ -27,7 +27,6 @@ namespace ProjectP4
                     } else
                     {
                         throw new Exception(String.Format("{0} is not a number", name));
-                        break;
                     }
                 case "text":
                     if (value is string)
@@ -37,7 +36,6 @@ namespace ProjectP4
                     else
                     {
                         throw new Exception(String.Format("{0} is not a text (remember \" around the text", name));
-                        break;
                     }
                 case "bool":
                     if (value is bool)
@@ -47,7 +45,6 @@ namespace ProjectP4
                     else
                     {
                         throw new Exception(String.Format("{0} is not a boolean", name));
-                        break;
                     }
                 default:
                     break;
@@ -406,10 +403,12 @@ namespace ProjectP4
             return index;
         }
 
-        public override List<object> VisitSort([NotNull] GrammarParser.SortContext context)
+        public override object VisitSort([NotNull] GrammarParser.SortContext context)
         {
             var startVar = context.VAR(0).GetText();
             var endVar = context.VAR(1).GetText();
+
+            var result = symbolTable.getSymbol(context.VAR(2).GetText());
 
             var startVarNumber = Regex.Replace(startVar, "[^0-9]", "");
             int startVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(startVar, "[^A-Z]", ""), 0);
@@ -418,7 +417,6 @@ namespace ProjectP4
             int endVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(endVar, "[^A-Z]", ""), 0);
 
             List<dynamic> sortArray = new List<dynamic>();
-            dynamic index = 0;
             for (int j = startVarLetterUnicode; j <= endVarLetterUnicode; j++)
             {
                 for (int i = int.Parse(startVarNumber); i <= int.Parse(endVarNumber); i++)
@@ -436,7 +434,19 @@ namespace ProjectP4
                 }
             }
             sortArray.Sort();
-            return sortArray;
+            if (result == null)
+            {
+                result = new Symbol();
+                result.value = sortArray.ToArray();
+                symbolTable.addSymbol(context.VAR(2).GetText(), result);
+                return true;
+            } else
+            {
+                result.value = sortArray.ToArray();
+                symbolTable.addSymbol(context.VAR(2).GetText(), result);
+                return true;
+            }
+
         }
 
 

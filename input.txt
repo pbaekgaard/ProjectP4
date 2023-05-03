@@ -1,5 +1,2 @@
 number A1 = 10
-number A2 = 5
-number A3 = 8
-number A4 = 3
-SORT(A1:A4,A5)
+number A2 = A1 + 5

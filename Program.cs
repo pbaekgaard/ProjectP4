@@ -26,6 +26,7 @@ namespace vGutCompiler
             Console.ReadLine();
 
             IParseTree tree = parser.program();
+            
         }
     }
 }
