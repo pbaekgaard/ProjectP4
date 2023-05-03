@@ -23,6 +23,7 @@ namespace vGutCompiler
                     Console.WriteLine("Symbol: {0} - Type: {1} - Value: {2}", symbol.Key.ToString(), symbol.Value.type.ToString(), symbol.Value.value.ToString());
                 }
             }
+            Console.WriteLine(visitor.codeG.Code);
             Console.ReadLine();
 
             IParseTree tree = parser.program();

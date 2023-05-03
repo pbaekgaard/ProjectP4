@@ -7,6 +7,9 @@ namespace ProjectP4
     public class Visitors : GrammarBaseVisitor<object?>
     {
         public SymTable symbolTable = new();
+
+        public CodeGenerator codeG = new();
+
         public override object VisitAssignnew([NotNull] GrammarParser.AssignnewContext context)
         {
             var name = context.VAR().GetText();
@@ -77,6 +80,8 @@ namespace ProjectP4
             {
                 throw new Exception("type is not valid");
             }
+
+            codeG.AssignVariable(name,value);
 
             return null;
         }
