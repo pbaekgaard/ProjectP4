@@ -1,5 +1,15 @@
 # ProjectP4
 
+
+0. pip install antlr4-tools
+
+1. open antlr build.bat in the project folder
+
+if you are experiencing bugs try to solutions here
+# https://github.com/antlr/antlr4-tools
+
+
+
 # How to use ANTLR to generate the parse tree
 
 0. Download antlr-4.12.0-complete.jar https://www.antlr.org/download.html

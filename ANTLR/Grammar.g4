@@ -1,131 +1,59 @@
 grammar Grammar;
-program: declarations;
-declarations: declaration declarations | <EOF> ;
+
+options {
+    tokenVocab = GLexer;
+}
+
+program: declaration* EOF;
 declaration:
-	controlstructure
-	| NUMBERDCL var ASSIGN num
-	| TEXTDCL var ASSIGN string
-	| BOOLEANDCL var ASSIGN bool
-	| expression
-	| sum
-	| average
-	| min
-	| max
-	| count;
-NUMBERDCL: 'number';
-TEXTDCL: 'text';
-BOOLEANDCL: 'bool';
-expression: var | expression operator expression;
-sum: 'sum' '(' var ':' var ')';
-average: 'average' '(' var ':' var ')';
-min: 'min' '(' var ':' var ')';
-max: 'max' '(' var ':' var ')';
-count: 'count' '(' var ':' var ')';
-controlstructure: ifstmt | whilestmt;
+	ifstmt 
+	| whilestmt
+	| assignment;
+
+assignment: types VAR ASSIGN expression #assignnew
+	| VAR ASSIGN expression #assigndec;
+
 ifstmt:
-	'if' expression 'then' declaration 'else' declaration 'endif'
-	| 'if' expression 'then' declaration 'endif';
-whilestmt: 'while' expression 'do' declaration 'endwhile';
-var:
-	upperCaseLetters numberswithoutzero
-	| upperCaseLetters numberswithoutzero num
-	| upperCaseLetters var;
-num: numbers | numbers num;
-string: '"' text '"';
-text:
- 	(upperCaseLetters|lowercaseLetters|num)*
-	| .*?
-;
-numbers:
-	'0'
-	| '1'
-	| '2'
-	| '3'
-	| '4'
-	| '5'
-	| '6'
-	| '7'
-	| '8'
-	| '9';
-numberswithoutzero:
-	'1'
-	| '2'
-	| '3'
-	| '4'
-	| '5'
-	| '6'
-	| '7'
-	| '8'
-	| '9';
+	IF expression THEN block ELSE block ENDIF #ifelse
+	| IF expression THEN block ENDIF #ifthen;
+
+whilestmt: WHILE expression DO declaration ENDWHILE;
+
+block: declaration*;
+
+expression: 
+	sum #sumexpression
+	| average #averageexpression
+	| min #minexpression
+	| max #maxexpression
+	| count #countexpression
+	| sort #sortexpression
+	| VAR #varexpression
+	| expression operator expression #operatorexpression
+	| constant #constantexpression;
+
+sum: SUM LPARENTHESIS VAR COLON VAR RPARENTHESIS;
+average: AVERAGE LPARENTHESIS VAR COLON VAR RPARENTHESIS;
+min: MIN LPARENTHESIS VAR COLON VAR RPARENTHESIS;
+max: MAX LPARENTHESIS VAR COLON VAR RPARENTHESIS;
+count: COUNT LPARENTHESIS VAR COLON VAR RPARENTHESIS;
+sort: SORT LPARENTHESIS VAR COLON VAR COMMA VAR RPARENTHESIS;
+
+constant: INTEGER | FLOAT | BOOL | STRING | NULL;
+types: NUMBERDCL | BOOLDCL | TEXTDCL;
 operator:
-	'+'
-	| '-'
-	| '*'
-	| '/'
-	| '<'
-	| '>'
-	| '<='
-	| '>='
-	| '='
-	| '!=';
-ASSIGN:
-	'=';
-bool:
-	'false'
-	|'true';
-upperCaseLetters:
-	'A'
-	| 'B'
-	| 'C'
-	| 'D'
-	| 'E'
-	| 'F'
-	| 'G'
-	| 'H'
-	| 'I'
-	| 'J'
-	| 'K'
-	| 'L'
-	| 'M'
-	| 'N'
-	| 'O'
-	| 'P'
-	| 'Q'
-	| 'R'
-	| 'S'
-	| 'T'
-	| 'U'
-	| 'V'
-	| 'W'
-	| 'X'
-	| 'Y'
-	| 'Z';
-lowercaseLetters:
-	'a'
-	| 'b'
-	| 'c'
-	| 'd'
-	| 'e'
-	| 'f'
-	| 'g'
-	| 'h'
-	| 'i'
-	| 'j'
-	| 'k'
-	| 'l'
-	| 'm'
-	| 'n'
-	| 'o'
-	| 'p'
-	| 'q'
-	| 'r'
-	| 's'
-	| 't'
-	| 'u'
-	| 'v'
-	| 'w'
-	| 'x'
-	| 'y'
-	| 'z';
-Comment: '/*' .*? '*/' -> channel(HIDDEN);
-WS: [ \t\r\n]+ -> skip;
+	ASSIGN
+	| PLUS
+	| MINUS
+	| MULTIPLICATION
+	| DIVISON
+	| LESSTHAN
+	| GREATERTHAN
+	| COMPEQUAL
+	| LESSEQUAL
+	| GREATEREQUAL
+	| NOTEQUAL
+	| MODULO
+	| AND
+	| OR;
+

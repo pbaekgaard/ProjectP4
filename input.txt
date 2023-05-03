@@ -1,3 +1,2 @@
-bool A22 = false
-bool P23 = true
-number A53 = 1
+number A1 = 10
+number A2 = A1 + 5
