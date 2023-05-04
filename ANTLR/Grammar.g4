@@ -11,13 +11,13 @@ declaration:
 	| assignment;
 
 assignment: types VAR ASSIGN expression #assignnew
-	| VAR ASSIGN expression #assigndec;
+            | VAR ASSIGN expression #assigndec;
 
 ifstmt:
-	IF expression THEN block ELSE block ENDIF #ifelse
-	| IF expression THEN block ENDIF #ifthen;
+	IF conditionalexpression THEN block ELSE block ENDIF #ifelse
+	| IF conditionalexpression THEN block ENDIF #ifthen;
 
-whilestmt: WHILE expression DO declaration ENDWHILE;
+whilestmt: WHILE conditionalexpression DO declaration ENDWHILE;
 
 block: declaration*;
 
@@ -26,11 +26,16 @@ expression:
 	| average #averageexpression
 	| min #minexpression
 	| max #maxexpression
-	| count #countexpression
 	| sort #sortexpression
-	| VAR #varexpression
 	| expression operator expression #operatorexpression
-	| constant #constantexpression;
+  | boolexpression #booleanexpression
+	| count #countexpression
+	| constant #constantexpression
+  | VAR #varexpression;
+  
+
+conditionalexpression:
+  expression booleanoperator expression #condexpression;
 
 sum: SUM LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 average: AVERAGE LPARENTHESIS VAR COLON VAR RPARENTHESIS;
@@ -42,18 +47,29 @@ sort: SORT LPARENTHESIS VAR COLON VAR COMMA VAR RPARENTHESIS;
 constant: INTEGER | FLOAT | BOOL | STRING | NULL;
 types: NUMBERDCL | BOOLDCL | TEXTDCL;
 operator:
-	ASSIGN
-	| PLUS
+  ASSIGN
+  | PLUS
 	| MINUS
 	| MULTIPLICATION
 	| DIVISON
-	| LESSTHAN
+	| MODULO;
+
+booleanoperator:
+  LESSTHAN
 	| GREATERTHAN
 	| COMPEQUAL
 	| LESSEQUAL
 	| GREATEREQUAL
 	| NOTEQUAL
-	| MODULO
-	| AND
-	| OR;
+  | AND
+  | OR;
 
+boolexpression:
+  expression LESSTHAN expression
+  | expression GREATERTHAN expression
+  | expression COMPEQUAL expression
+  | expression LESSEQUAL expression
+  | expression GREATEREQUAL expression
+  | expression NOTEQUAL expression
+  | expression AND expression
+  | expression OR expression;

@@ -16,16 +16,16 @@ namespace ProjectP4
             Code = string.Empty;
         }
 
-        public void AssignVariable(string name, dynamic value)
+        public void DeclareVariable(string name, dynamic value)
         {
             if (value is int i)
             {
-                this.Code += string.Format("Dim {0} As Integer\n", name);
-                this.Code += string.Format("{0} = {1}\n", name, i);
+                this.Code += string.Format("Dim {0} As Double\n", name);
+                this.Code += string.Format("{0} = {1}.0\n", name, i);
             }
             else if (value is float f)
             {
-                this.Code += string.Format("Dim {0} As Single\n", name);
+                this.Code += string.Format("Dim {0} As Double\n", name);
                 this.Code += string.Format("{0} = {1}\n", name, f);
             }
             else if (value is bool b)
@@ -39,5 +39,29 @@ namespace ProjectP4
                 this.Code += string.Format("{0} = {1}\n", name, s);
             }
         }
+
+        public void AssignVariable(string name, dynamic value) {
+            if (value is int i)
+            {
+                this.Code += string.Format("{0} = {1}.0\n", name, i);
+            }
+            else if (value is float f)
+            {
+                this.Code += string.Format("{0} = {1}\n", name, f);
+            }
+            else if (value is bool b)
+            {
+                this.Code += string.Format("{0} = {1}\n", name, b);
+            }
+            else if (value is string s)
+            {
+                this.Code += string.Format("{0} = {1}\n", name, s);
+            }
+        }
+
+        public void stringCompare(string leftValue, string rightValue, string compOperator) {
+
+        }
+        
     }
 }

@@ -1,2 +1,4 @@
 number A1 = 10
-number A2 = A1 + 5
+number A2 = 20
+
+bool A3 = A1 < A2 AND A2 == A2
