@@ -24,10 +24,12 @@ namespace ProjectP4
                     if (value is int)
                     {
                         break;
-                    } else if (value is float)
+                    }
+                    else if (value is float)
                     {
                         break;
-                    } else
+                    }
+                    else
                     {
                         throw new Exception(String.Format("{0} is not a number", name));
                     }
@@ -81,7 +83,7 @@ namespace ProjectP4
                 throw new Exception("type is not valid");
             }
 
-            codeG.DeclareVariable(name,value);
+            codeG.DeclareVariable(name, value);
 
             return null;
         }
@@ -109,8 +111,8 @@ namespace ProjectP4
             var.value = value;
 
             symbolTable.updateSymbol(varname, var);
-          
-            codeG.AssignVariable(varname,value);
+
+            codeG.AssignVariable(varname, value);
             return null;
         }
         public override object? VisitConstant([NotNull] GrammarParser.ConstantContext context)
@@ -164,7 +166,7 @@ namespace ProjectP4
                     rightValue = symbolTable.getSymbol(s2).value;
                 }
             }
-            
+
 
             return EvaluateOperation(operatorValue, leftValue, rightValue);
 
@@ -172,7 +174,7 @@ namespace ProjectP4
 
         public override object VisitBooleanexpression([NotNull] GrammarParser.BooleanexpressionContext context)
         {
-            var operatorValue = context.booleanoperator().GetText();
+            dynamic operatorValue = context.op.Text;
             dynamic leftValue = Visit(context.expression(0));
             dynamic rightValue = Visit(context.expression(1));
             Console.WriteLine("Left Value: {0}\nOperator: {1}\nRight Value: {2}", leftValue, operatorValue, rightValue);
@@ -198,70 +200,24 @@ namespace ProjectP4
                     rightValue = symbolTable.getSymbol(s2).value;
                 }
             }
-            if(leftValue is int) {
-              leftValue = (float) Convert.ToDouble(leftValue);
-            }
-            if (rightValue is int) {
-              rightValue = (float) Convert.ToDouble(rightValue);
-            }
-
-            if(leftValue is string && rightValue.GetType() == leftValue.GetType() && (operatorValue is "==" or "!="))
-              return EvaluateOperation(operatorValue, leftValue, rightValue);
-            else if(leftValue is bool && rightValue.GetType() == leftValue.GetType() && (operatorValue is "AND" or "OR" or "==" or "!="))
-              return EvaluateOperation(operatorValue, leftValue, rightValue);
-            else if((leftValue is int || leftValue is float) && (rightValue is int || rightValue is float) && (operatorValue is "<" or ">" or "<=" or ">=" or "==" or "!="))
-              return EvaluateOperation(operatorValue, leftValue, rightValue);
-            else 
-              throw new Exception("Invalid Comparison");
-        }
-
-        public override object VisitLogicalexpression([NotNull] GrammarParser.LogicalexpressionContext context)
-        {
-            dynamic leftValue = Visit(context.expression(0));
-            dynamic operatorValue = context.logicaloperator().GetText();
-            dynamic rightValue = Visit(context.expression(0));
-            
-            Console.WriteLine("Left Value: {0}\nOperator: {1}\nRight Value: {2}", leftValue, operatorValue, rightValue);
-            if (leftValue is string s)
+            if (leftValue is int)
             {
-                if (s.Contains('"'))
-                {
-                    leftValue = s.Trim(new char[] { '"' });
-                }
-                else
-                {
-                    leftValue = symbolTable.getSymbol(s).value;
-                }
+                leftValue = (float)Convert.ToDouble(leftValue);
             }
-            if (rightValue is string s2)
+            if (rightValue is int)
             {
-                if (s2.Contains('"'))
-                {
-                    rightValue = s2.Trim(new char[] { '"' });
-                }
-                else
-                {
-                    rightValue = symbolTable.getSymbol(s2).value;
-                }
-            }
-            if(leftValue is int) {
-              leftValue = (float) Convert.ToDouble(leftValue);
-            }
-            if (rightValue is int) {
-              rightValue = (float) Convert.ToDouble(rightValue);
+                rightValue = (float)Convert.ToDouble(rightValue);
             }
 
-            if(leftValue is string && rightValue.GetType() == leftValue.GetType() && (operatorValue is "==" or "!="))
-              return EvaluateOperation(operatorValue, leftValue, rightValue);
-            else if(leftValue is bool && rightValue.GetType() == leftValue.GetType() && (operatorValue is "AND" or "OR" or "==" or "!="))
-              return EvaluateOperation(operatorValue, leftValue, rightValue);
-            else if((leftValue is int || leftValue is float) && (rightValue is int || rightValue is float) && (operatorValue is "<" or ">" or "<=" or ">=" or "==" or "!="))
-              return EvaluateOperation(operatorValue, leftValue, rightValue);
-            else 
-              throw new Exception("Invalid Comparison");
+            if (leftValue is string && rightValue.GetType() == leftValue.GetType() && (operatorValue is "==" or "!="))
+                return EvaluateOperation(operatorValue, leftValue, rightValue);
+            else if (leftValue is bool && rightValue.GetType() == leftValue.GetType() && (operatorValue is "AND" or "OR" or "==" or "!="))
+                return EvaluateOperation(operatorValue, leftValue, rightValue);
+            else if ((leftValue is int || leftValue is float) && (rightValue is int || rightValue is float) && (operatorValue is "<" or ">" or "<=" or ">=" or "==" or "!="))
+                return EvaluateOperation(operatorValue, leftValue, rightValue);
+            else
+                throw new Exception("Invalid Comparison");
         }
-
-
 
         public override object VisitVarexpression([NotNull] GrammarParser.VarexpressionContext context)
         {
@@ -311,7 +267,8 @@ namespace ProjectP4
                 symbolTable.closeScope();
                 symbolTable.scope--;
 
-            } else
+            }
+            else
             {
                 symbolTable.scope++;
                 symbolTable.openScope();
@@ -538,7 +495,8 @@ namespace ProjectP4
                 result.value = sortArray.ToArray();
                 symbolTable.addSymbol(context.VAR(2).GetText(), result);
                 return true;
-            } else
+            }
+            else
             {
                 result.value = sortArray.ToArray();
                 symbolTable.addSymbol(context.VAR(2).GetText(), result);
@@ -548,7 +506,7 @@ namespace ProjectP4
         }
 
 
-        private dynamic EvaluateOperation(string opr,dynamic lv,dynamic rv)
+        private dynamic EvaluateOperation(string opr, dynamic lv, dynamic rv)
         {
             switch (opr)
             {
@@ -571,6 +529,6 @@ namespace ProjectP4
             }
         }
     }
-    
+
 
 }

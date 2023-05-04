@@ -28,11 +28,17 @@ expression:
 	| max #maxexpression
 	| sort #sortexpression
 	| expression operator expression #operatorexpression
-  | boolexpression #booleanexpression
+  | expression op=LESSTHAN expression #booleanexpression
+  | expression op=GREATERTHAN expression #booleanexpression
+  | expression op=COMPEQUAL expression #booleanexpression
+  | expression op=LESSEQUAL expression #booleanexpression
+  | expression op=GREATEREQUAL expression #booleanexpression
+  | expression op=NOTEQUAL expression #booleanexpression
+  | expression op=AND expression #booleanexpression
+  | expression op=OR expression #booleanexpression
 	| count #countexpression
 	| constant #constantexpression
   | VAR #varexpression;
-  
 
 conditionalexpression:
   expression booleanoperator expression #condexpression;
