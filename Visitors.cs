@@ -43,8 +43,9 @@ namespace ProjectP4
                         throw new Exception(String.Format("{0} is not a text (remember \" around the text", name));
                     }
                 case "bool":
-                    if (value is bool)
+                    if (EvaluateOperation(value.Item1, value.Item2, value.Item3) is bool val)
                     {
+                        value = val;
                         break;
                     }
                     else
@@ -550,7 +551,7 @@ namespace ProjectP4
         }
 
 
-        private dynamic EvaluateOperation(string opr, dynamic lv, dynamic rv)
+        private dynamic EvaluateOperation(dynamic lv, string opr, dynamic rv)
         {
             switch (opr)
             {
