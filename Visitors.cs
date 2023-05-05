@@ -89,7 +89,6 @@ namespace ProjectP4
         }
         public override object VisitAssigndec([NotNull] GrammarParser.AssigndecContext context)
         {
-            Console.WriteLine(context.GetText());
             dynamic varname = context.VAR().GetText();
 
             dynamic value = Visit(context.expression());
@@ -177,7 +176,6 @@ namespace ProjectP4
             dynamic operatorValue = context.op.Text;
             dynamic leftValue = Visit(context.expression(0));
             dynamic rightValue = Visit(context.expression(1));
-            Console.WriteLine("Left Value: {0}\nOperator: {1}\nRight Value: {2}", leftValue, operatorValue, rightValue);
             if (leftValue is string s)
             {
                 if (s.Contains('"'))
@@ -210,14 +208,61 @@ namespace ProjectP4
             }
 
             if (leftValue is string && rightValue.GetType() == leftValue.GetType() && (operatorValue is "==" or "!="))
-                return EvaluateOperation(operatorValue, leftValue, rightValue);
+              return (leftValue, operatorValue, rightValue);
             else if (leftValue is bool && rightValue.GetType() == leftValue.GetType() && (operatorValue is "AND" or "OR" or "==" or "!="))
-                return EvaluateOperation(operatorValue, leftValue, rightValue);
+              return (leftValue, operatorValue, rightValue);
             else if ((leftValue is int || leftValue is float) && (rightValue is int || rightValue is float) && (operatorValue is "<" or ">" or "<=" or ">=" or "==" or "!="))
-                return EvaluateOperation(operatorValue, leftValue, rightValue);
+              return (leftValue, operatorValue, rightValue);
             else
                 throw new Exception("Invalid Comparison");
         }
+
+            public override object VisitCondexpression([NotNull] GrammarParser.CondexpressionContext context)
+            {
+            dynamic operatorValue = context.op.Text;
+            dynamic leftValue = Visit(context.expression(0));
+            dynamic rightValue = Visit(context.expression(1));
+            if (leftValue is string s)
+            {
+                if (s.Contains('"'))
+                {
+                    leftValue = s.Trim(new char[] { '"' });
+                }
+                else
+                {
+                    leftValue = symbolTable.getSymbol(s).value;
+                }
+            }
+            if (rightValue is string s2)
+            {
+                if (s2.Contains('"'))
+                {
+                    rightValue = s2.Trim(new char[] { '"' });
+                }
+                else
+                {
+                    rightValue = symbolTable.getSymbol(s2).value;
+                }
+            }
+            if (leftValue is int)
+            {
+                leftValue = (float)Convert.ToDouble(leftValue);
+            }
+            if (rightValue is int)
+            {
+                rightValue = (float)Convert.ToDouble(rightValue);
+            }
+
+            if (leftValue is string && rightValue.GetType() == leftValue.GetType() && (operatorValue is "==" or "!="))
+              return (leftValue, operatorValue, rightValue);
+            else if (leftValue is bool && rightValue.GetType() == leftValue.GetType() && (operatorValue is "AND" or "OR" or "==" or "!="))
+              return (leftValue, operatorValue, rightValue);
+            else if ((leftValue is int || leftValue is float) && (rightValue is int || rightValue is float) && (operatorValue is "<" or ">" or "<=" or ">=" or "==" or "!="))
+              return (leftValue, operatorValue, rightValue);
+            else
+                throw new Exception("Invalid Comparison");
+        }
+
 
         public override object VisitVarexpression([NotNull] GrammarParser.VarexpressionContext context)
         {
@@ -228,21 +273,21 @@ namespace ProjectP4
         }
         public override object VisitIfthen([NotNull] GrammarParser.IfthenContext context)
         {
-            dynamic? compare = Visit(context.conditionalexpression());
-            if (compare)
-            {
+            dynamic compare = Visit(context.conditionalexpression());
+              codeG.startIf(compare);
                 symbolTable.scope++;
                 symbolTable.openScope();
                 Visit(context.block());
                 symbolTable.closeScope();
                 symbolTable.scope--;
-            }
+              codeG.endIf();
+            
             return null;
         }
 
         public override object VisitWhilestmt([NotNull] GrammarParser.WhilestmtContext context)
         {
-            dynamic? compare = Visit(context.conditionalexpression());
+            dynamic compare = Visit(context.conditionalexpression());
             while (compare)
             {
                 symbolTable.scope++;
@@ -259,23 +304,22 @@ namespace ProjectP4
         {
             dynamic compare = Visit(context.conditionalexpression());
 
-            if (compare)
-            {
+            codeG.startIf(compare);
                 symbolTable.scope++;
                 symbolTable.openScope();
                 Visit(context.block(0));
                 symbolTable.closeScope();
                 symbolTable.scope--;
 
-            }
-            else
-            {
+            
+            
+            codeG.elseStatement(); 
                 symbolTable.scope++;
                 symbolTable.openScope();
                 Visit(context.block(1));
                 symbolTable.closeScope();
                 symbolTable.scope--;
-            }
+            codeG.endIf();
             return null;
         }
 

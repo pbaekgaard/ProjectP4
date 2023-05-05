@@ -40,8 +40,15 @@ expression:
 	| constant #constantexpression
   | VAR #varexpression;
 
-conditionalexpression:
-  expression booleanoperator expression #condexpression;
+conditionalexpression: 
+  expression op=LESSTHAN expression #condexpression
+  | expression op=GREATERTHAN expression #condexpression
+  | expression op=COMPEQUAL expression #condexpression
+  | expression op=LESSEQUAL expression #condexpression
+  | expression op=GREATEREQUAL expression #condexpression
+  | expression op=NOTEQUAL expression #condexpression
+  | expression op=AND expression #condexpression
+  | expression op=OR expression #condexpression;
 
 sum: SUM LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 average: AVERAGE LPARENTHESIS VAR COLON VAR RPARENTHESIS;
@@ -59,23 +66,3 @@ operator:
 	| MULTIPLICATION
 	| DIVISON
 	| MODULO;
-
-booleanoperator:
-  LESSTHAN
-	| GREATERTHAN
-	| COMPEQUAL
-	| LESSEQUAL
-	| GREATEREQUAL
-	| NOTEQUAL
-  | AND
-  | OR;
-
-boolexpression:
-  expression LESSTHAN expression
-  | expression GREATERTHAN expression
-  | expression COMPEQUAL expression
-  | expression LESSEQUAL expression
-  | expression GREATEREQUAL expression
-  | expression NOTEQUAL expression
-  | expression AND expression
-  | expression OR expression;

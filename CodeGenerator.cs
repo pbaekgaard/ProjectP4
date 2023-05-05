@@ -59,9 +59,17 @@ namespace ProjectP4
             }
         }
 
-        public void stringCompare(string leftValue, string rightValue, string compOperator) {
-
+        public void startIf(dynamic compare) {
+          this.Code += string.Format("If {0} {1} {2} Then\n", compare.Item1, compare.Item2, compare.Item3);
         }
-        
+
+        public void elseStatement() {
+          this.Code += string.Format("Else\n");
+        }
+
+        public void endIf() {
+          this.Code += string.Format("End If");
+        }
+
     }
 }
