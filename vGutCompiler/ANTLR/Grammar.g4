@@ -17,7 +17,7 @@ ifstmt:
 	IF conditionalexpression THEN block ELSE block ENDIF #ifelse
 	| IF conditionalexpression THEN block ENDIF #ifthen;
 
-whilestmt: WHILE conditionalexpression DO declaration ENDWHILE;
+whilestmt: WHILE conditionalexpression DO declaration* ENDWHILE;
 
 block: declaration*;
 

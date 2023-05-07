@@ -1,2 +1,8 @@
 number A2 = 10
-bool A3 = A2 < 20
+number A3 = 0
+while A2 > 5
+do 
+A2 = A2 - 1
+A3 = A3 + 3
+A3 = A3 + 2
+endwhile

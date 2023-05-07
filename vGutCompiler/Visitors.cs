@@ -289,15 +289,22 @@ namespace ProjectP4
         public override object VisitWhilestmt([NotNull] GrammarParser.WhilestmtContext context)
         {
             dynamic compare = Visit(context.conditionalexpression());
+
+            codeG.While(context.conditionalexpression().GetText(), context.declaration());
+
             while (compare)
             {
                 symbolTable.scope++;
                 symbolTable.openScope();
-                Visit(context.declaration());
+                foreach (var declaration in context.declaration())
+                {
+                    Visit(declaration);
+                }
                 symbolTable.closeScope();
                 symbolTable.scope--;
                 compare = Visit(context.conditionalexpression());
             }
+
             return null;
         }
 

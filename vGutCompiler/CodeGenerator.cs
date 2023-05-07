@@ -71,5 +71,18 @@ namespace ProjectP4
           this.Code += string.Format("End If");
         }
 
+        //Bare et eksempel
+        public void While(dynamic compare, dynamic declation)
+        {
+            this.Code += string.Format("Do while {0}\n",compare);
+
+            foreach (dynamic decl in declation)
+            {
+                this.Code += string.Format("{0}\n", decl.GetText());
+            }
+
+            this.Code += string.Format("Loop\n");
+        }
+
     }
 }
