@@ -1,2 +1,0 @@
-number A2 = 10
-bool A3 = A2 < 20
