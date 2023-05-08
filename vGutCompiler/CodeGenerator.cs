@@ -72,7 +72,7 @@ namespace ProjectP4
         }
 
         public void average(dynamic start, dynamic end) {
-            this.Code += string.Format("Application.WorksheetFunction.Average(Range(\"{1}:{2}\"))\n", start, end);
+            this.Code += string.Format("Application.WorksheetFunction.Average(Range(\"{0}:{1}\"))\n", start, end);
         }
     }
 }
