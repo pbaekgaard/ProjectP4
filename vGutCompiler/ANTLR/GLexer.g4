@@ -50,4 +50,4 @@ COMMENT: '/*' .*? '*/';
 
 
 VAR: [A-Z]+[1-9][0-9]*;
-WS: [ \t\r\n]+ -> skip;
+WS: [\t\r\n]+ -> skip;

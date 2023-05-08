@@ -40,7 +40,8 @@ namespace ProjectP4
             }
         }
 
-        public void AssignVariable(string name, dynamic value) {
+        public void AssignVariable(string name, dynamic value)
+        {
             if (value is int i)
             {
                 this.Code += string.Format("{0} = {1}.0\n", name, i);
@@ -59,16 +60,19 @@ namespace ProjectP4
             }
         }
 
-        public void startIf(dynamic compare) {
-          this.Code += string.Format("If {0} {1} {2} Then\n", compare.Item1, compare.Item2, compare.Item3);
+        public void startIf(dynamic compare)
+        {
+            this.Code += string.Format("If {0} Then\n", compare);
         }
 
-        public void elseStatement() {
-          this.Code += string.Format("Else\n");
+        public void elseStatement()
+        {
+            this.Code += string.Format("Else\n");
         }
 
-        public void endIf() {
-          this.Code += string.Format("End If");
+        public void endIf()
+        {
+            this.Code += string.Format("End If");
         }
 
     }
