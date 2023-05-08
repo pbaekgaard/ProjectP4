@@ -392,6 +392,7 @@ namespace ProjectP4
                 }
             }
             result = result / index;
+            codeG.average(startVar, endVar);
             return result;
         }
 
