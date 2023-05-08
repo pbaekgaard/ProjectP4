@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Antlr4.Runtime.Tree;
 
 namespace ProjectP4
 {
@@ -60,9 +61,21 @@ namespace ProjectP4
             }
         }
 
-        public void startIf(dynamic compare)
+        public void startIf(GrammarParser.ConditionalexpressionContext compare)
         {
-            this.Code += string.Format("If {0} Then\n", compare);
+            string condition = "";
+            List<IParseTree> conditions = new();
+            GetChildrenFromConditional(compare, conditions);
+            foreach (IParseTree cond in conditions)
+            {
+                if (cond.GetText() == "AND")
+                {
+                    condition += string.Format("And ");
+                }
+                else
+                    condition += string.Format("{0} ", cond.GetText());
+            }
+            this.Code += string.Format("If {0}Then\n", condition);
         }
 
         public void elseStatement()
@@ -75,5 +88,23 @@ namespace ProjectP4
             this.Code += string.Format("End If");
         }
 
+        public void GetChildrenFromConditional(IParseTree child, List<IParseTree> childlist)
+        {
+            if (child.ChildCount == 1)
+            {
+                childlist.Add(child.GetChild(0));
+            }
+            else if (child.ChildCount == 0)
+            {
+                childlist.Add(child);
+            }
+            else
+            {
+                for (int i = 0; i < child.ChildCount; i++)
+                {
+                    GetChildrenFromConditional(child.GetChild(i), childlist);
+                }
+            }
+        }
     }
 }

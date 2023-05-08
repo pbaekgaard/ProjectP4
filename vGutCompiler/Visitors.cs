@@ -272,7 +272,7 @@ namespace ProjectP4
         }
         public override object VisitIfthen([NotNull] GrammarParser.IfthenContext context)
         {
-            codeG.startIf(context.conditionalexpression().GetText());
+            codeG.startIf(context.conditionalexpression());
             symbolTable.scope++;
             symbolTable.openScope();
             Visit(context.block());
