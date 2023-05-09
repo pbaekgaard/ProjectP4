@@ -47,6 +47,9 @@ namespace ProjectP4
         }
 
         public void AssignValue(dynamic value) {
+          if (value is int) {
+            this.Code+= string.Format("{0}.0\n", value);
+          } else
           this.Code += string.Format("{0}\n", value);
         }
         public void startIf(GrammarParser.ConditionalexpressionContext compare)
@@ -83,7 +86,7 @@ namespace ProjectP4
         } 
      
         public void average(dynamic start, dynamic end) {
-            this.Code += string.Format("Application.WorksheetFunction.Average(Range(\"{0}:{1}\"))\n", start, end);
+            this.Code += string.Format("Application.WorksheetFunction.AVERAGE(Range(\"{0}:{1}\"))\n", start, end);
         }
         //Bare et eksempel
         public void While(dynamic compare, dynamic context)
