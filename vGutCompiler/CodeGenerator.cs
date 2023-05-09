@@ -85,7 +85,6 @@ namespace ProjectP4
             {
                 this.Code += string.Format("{0}\n", context.Start.InputStream.GetText(Interval.Of(decl.Start.StartIndex, decl.Stop.StopIndex)));
             }
-
             this.Code += string.Format("Loop\n");
         }
 
@@ -109,7 +108,7 @@ namespace ProjectP4
         }
 
         public void MaxFunction(string first, string last){
-          this.Code += string.Format("Test");
+          this.Code += string.Format("MAX({0}:{1})",first,last);
         }
     }
 }

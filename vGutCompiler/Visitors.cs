@@ -96,7 +96,21 @@ namespace ProjectP4
 
             dynamic varname = context.VAR().GetText();
 
-            dynamic value = Visit(context.expression());
+            Symbol var = symbolTable.getSymbol(varname);
+
+            dynamic value;
+
+            if (context.expression().GetType().FullName == "GrammarParser+ConstantexpressionContext")
+            {
+                codeG.SetCell(varname);
+                value = Visit(context.expression());
+                codeG.AssignValue(value);
+            }
+            else
+            {
+                codeG.SetCell(varname);
+                value = Visit(context.expression());
+            }
 
             if (value is string s)
             {
@@ -110,9 +124,6 @@ namespace ProjectP4
                 }
             }
 
-
-            Symbol var = symbolTable.getSymbol(varname);
-
             var.value = value;
 
             symbolTable.updateSymbol(varname, var);
@@ -121,10 +132,7 @@ namespace ProjectP4
             {
                 return null;
             }
-            if(context.expression().GetType().FullName == "GrammarParser+ConstantexpressionContext")
-            {
-                codeG.AssignVariable(varname, value);
-            }
+            
 
             //codeG.AssignVariable(varname, value);
 
