@@ -98,7 +98,7 @@ namespace ProjectP4
 
         public void sum(string start, string end)
         {
-            this.Code += string.Format("Application.WorksheetFunction.SUM(\"{0}:{1}\")\n", start, end);
+            this.Code += string.Format("Application.WorksheetFunction.SUM(Range(\"{0}:{1}\"))\n", start, end);
         }
 
         public void GetChildrenFromConditional(IParseTree child, List<IParseTree> childlist)
