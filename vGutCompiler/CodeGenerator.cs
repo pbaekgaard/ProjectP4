@@ -22,53 +22,32 @@ namespace ProjectP4
             if (value is int i)
             {
                 this.Code += string.Format("Dim {0} As Double\n", name);
-                this.Code += string.Format("{0} = {1}.0\n", name, i);
-                this.Code += string.Format("Range(\"{0}\").Value = {1}\n", name, i);
-            }
-            else if (value is float f)
-            {
-                this.Code += string.Format("Dim {0} As Double\n", name);
-                this.Code += string.Format("{0} = {1}\n", name, f);
-                this.Code += string.Format("Range(\"{0}\").Value = {1}\n", name, f);
+                this.Code += string.Format("{0} = ", name);
             }
             else if (value is bool b)
             {
                 this.Code += string.Format("Dim {0} As Boolean\n", name);
-                this.Code += string.Format("{0} = {1}\n", name, b);
-                this.Code += string.Format("Range(\"{0}\").Value = {1}\n", name, b);
+                this.Code += string.Format("{0} = ", name);
             }
             else if (value is string s)
             {
                 this.Code += string.Format("Dim {0} As String\n", name);
-                this.Code += string.Format("{0} = {1}\n", name, s);
-                this.Code += string.Format("Range(\"{0}\").Value = {1}\n", name, s);
+                this.Code += string.Format("{0} = ", name);
             }
         }
 
-        public void AssignVariable(string name, dynamic value)
+        public void SetCell(string variable) {
+          this.Code += string.Format("Range(\"{0}\").Value = ", variable);
+        }
+
+        public void AssignVariable(string name)
         {
-            if (value is int i)
-            {
-                this.Code += string.Format("{0} = {1}.0\n", name, i);
-                this.Code += string.Format("Range(\"{0}\").Value = {1}\n", name, i);
-            }
-            else if (value is float f)
-            {
-                this.Code += string.Format("{0} = {1}\n", name, f);
-                this.Code += string.Format("Range(\"{0}\").Value = {1}\n", name,f);
-            }
-            else if (value is bool b)
-            {
-                this.Code += string.Format("{0} = {1}\n", name, b);
-                this.Code += string.Format("Range(\"{0}\").Value = {1}\n", name, b);
-            }
-            else if (value is string s)
-            {
-                this.Code += string.Format("{0} = {1}\n", name, s);
-                this.Code += string.Format("Range(\"{0}\").Value = {1}\n", name, s);
-            }
+                this.Code += string.Format("{0} = ", name);
         }
 
+        public void AssignValue(dynamic value) {
+          this.Code += string.Format("{0}\n", value);
+        }
         public void startIf(GrammarParser.ConditionalexpressionContext compare)
         {
             string condition = "";
@@ -113,6 +92,10 @@ namespace ProjectP4
                     GetChildrenFromConditional(child.GetChild(i), childlist);
                 }
             }
+        }
+
+        public void MaxFunction(string first, string last){
+          this.Code += string.Format("Test");
         }
     }
 }

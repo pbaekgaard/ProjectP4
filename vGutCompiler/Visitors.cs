@@ -85,6 +85,9 @@ namespace ProjectP4
             }
 
             codeG.DeclareVariable(name, value);
+            codeG.AssignValue(value);
+            codeG.SetCell(name);
+            codeG.AssignValue(value);
 
             return null;
         }
@@ -112,7 +115,7 @@ namespace ProjectP4
 
             symbolTable.updateSymbol(varname, var);
 
-            codeG.AssignVariable(varname, value);
+            codeG.AssignVariable(varname);
             return null;
         }
         public override object? VisitConstant([NotNull] GrammarParser.ConstantContext context)
@@ -461,6 +464,7 @@ namespace ProjectP4
                     }
                 }
             }
+            codeG.MaxFunction(startVar, endVar);
             return result;
         }
 
