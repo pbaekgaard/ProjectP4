@@ -372,6 +372,9 @@ namespace ProjectP4
                     }
                 }
             }
+
+            codeG.sum(startVar, endVar);
+
             return result;
         }
 
