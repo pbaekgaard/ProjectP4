@@ -1,3 +1,7 @@
 number A2 = 10
 number A3 = 0
-number A4 = SUM(A2:A3)
+while A2 > 5
+do
+A2 = A2 - 1
+A3 = A3 + 5
+endwhile

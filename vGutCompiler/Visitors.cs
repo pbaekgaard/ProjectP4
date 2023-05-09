@@ -1,5 +1,4 @@
-﻿using Antlr4.Runtime;
-using Antlr4.Runtime.Misc;
+﻿using Antlr4.Runtime.Misc;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -108,13 +107,19 @@ namespace ProjectP4
                 }
             }
 
+
             Symbol var = symbolTable.getSymbol(varname);
 
             var.value = value;
 
             symbolTable.updateSymbol(varname, var);
 
-            //codeG.AssignVariable(varname, value);
+            if (context.Parent.Parent.GetType().FullName == "GrammarParser+WhilestmtContext")
+            {
+                return null;
+            }
+
+            codeG.AssignVariable(varname, value);
             return null;
         }
         public override object? VisitConstant([NotNull] GrammarParser.ConstantContext context)
