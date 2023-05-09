@@ -85,6 +85,9 @@ namespace ProjectP4
             }
 
             codeG.DeclareVariable(name, value);
+            codeG.AssignValue(value);
+            codeG.SetCell(name);
+            codeG.AssignValue(value);
 
             return null;
         }
@@ -93,7 +96,24 @@ namespace ProjectP4
 
             dynamic varname = context.VAR().GetText();
 
-            dynamic value = Visit(context.expression());
+            Symbol var = symbolTable.getSymbol(varname);
+
+            dynamic value;
+
+            if (context.expression().GetType().FullName == "GrammarParser+ConstantexpressionContext" && context.Parent.Parent.GetType().FullName != "GrammarParser+WhilestmtContext")
+            {
+                codeG.SetCell(varname);
+                value = Visit(context.expression());
+                codeG.AssignValue(value);
+            }
+            else if (context.Parent.Parent.GetType().FullName != "GrammarParser+WhilestmtContext")
+            {
+                codeG.SetCell(varname);
+                value = Visit(context.expression());
+            } else
+            {
+                value = Visit(context.expression());
+            }
 
             if (value is string s)
             {
@@ -107,23 +127,9 @@ namespace ProjectP4
                 }
             }
 
-
-            Symbol var = symbolTable.getSymbol(varname);
-
             var.value = value;
 
             symbolTable.updateSymbol(varname, var);
-
-            if (context.Parent.Parent.GetType().FullName == "GrammarParser+WhilestmtContext")
-            {
-                return null;
-            }
-            if(context.expression().GetType().FullName == "GrammarParser+ConstantexpressionContext")
-            {
-                codeG.AssignVariable(varname, value);
-            }
-
-            //codeG.AssignVariable(varname, value);
 
             return null;
         }
@@ -488,6 +494,7 @@ namespace ProjectP4
                     }
                 }
             }
+            codeG.MaxFunction(startVar, endVar);
             return result;
         }
 
