@@ -1,4 +1,5 @@
-﻿using System;
+using Antlr4.Runtime.Misc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -73,6 +74,19 @@ namespace ProjectP4
         public void endIf()
         {
             this.Code += string.Format("End If");
+        }
+
+        //Bare et eksempel
+        public void While(dynamic compare, dynamic context)
+        {
+            this.Code += string.Format("Do while {0}\n",compare);
+
+            foreach (dynamic decl in context.declaration())
+            {
+                this.Code += string.Format("{0}\n", context.Start.InputStream.GetText(Interval.Of(decl.Start.StartIndex, decl.Stop.StopIndex)));
+            }
+
+            this.Code += string.Format("Loop\n");
         }
 
         public void GetChildrenFromConditional(IParseTree child, List<IParseTree> childlist)
