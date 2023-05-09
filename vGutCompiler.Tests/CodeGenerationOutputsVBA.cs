@@ -43,22 +43,22 @@ namespace Unit_Tests
             Assert.Equal(expectedOutput, actualOutput);
         }
 
-        // [Fact]
-        // public void CodeGenerationProducesCorrectWhileLoops()
-        // {
-        //     GLexer lexer = new GLexer(new AntlrInputStream(@"number A2 = 10\n while A2 == 10\n A2 = 11 endwhile"));
+         [Fact]
+         public void CodeGenerationProducesCorrectWhileLoops()
+         {
+             GLexer lexer = new GLexer(new AntlrInputStream(@"number A2 = 10\n while A2 == 10\n do A2 = 11 endwhile"));
 
-        //     // ACT
-        //     CommonTokenStream tokens = new CommonTokenStream(lexer);
-        //     GrammarParser parser = new GrammarParser(tokens);
-        //     var visitor = new Visitors();
-        //     visitor.Visit(parser.program());
+             // ACT
+             CommonTokenStream tokens = new CommonTokenStream(lexer);
+             GrammarParser parser = new GrammarParser(tokens);
+             var visitor = new Visitors();
+             visitor.Visit(parser.program());
 
-        //     var expectedOutput = "Dim A2 As Double\nA2 = 10\nDo While A2 == 10\nA2 = 11\nLoop";
-        //     string actualOutput = visitor.codeG.Code;
+             var expectedOutput = "Dim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10\nDo while A2 == 10\nA2 = 11\nLoop\n";
+             string actualOutput = visitor.codeG.Code;
 
-        //     //ASSERT
-        //     Assert.Equal(expectedOutput, actualOutput);
-        // }
+             //ASSERT
+             Assert.Equal(expectedOutput, actualOutput);
+         }
     }
 }
