@@ -24,10 +24,12 @@ namespace ProjectP4
                     if (value is int)
                     {
                         break;
-                    } else if (value is float)
+                    }
+                    else if (value is float)
                     {
                         break;
-                    } else
+                    }
+                    else
                     {
                         throw new Exception(String.Format("{0} is not a number", name));
                     }
@@ -41,13 +43,14 @@ namespace ProjectP4
                         throw new Exception(String.Format("{0} is not a text (remember \" around the text", name));
                     }
                 case "bool":
-                    if (value is bool)
+                    if (EvaluateOperation(value.Item1, value.Item2, value.Item3) is bool val)
                     {
+                        value = val;
                         break;
                     }
                     else
                     {
-                        throw new Exception(String.Format("{0} is not a boolean", name));
+                        throw new Exception(String.Format("{0} is not a boolean", value));
                     }
                 default:
                     break;
@@ -81,13 +84,12 @@ namespace ProjectP4
                 throw new Exception("type is not valid");
             }
 
-            codeG.AssignVariable(name,value);
+            codeG.DeclareVariable(name, value);
 
             return null;
         }
         public override object VisitAssigndec([NotNull] GrammarParser.AssigndecContext context)
         {
-            Console.WriteLine(context.GetText());
             dynamic varname = context.VAR().GetText();
 
             dynamic value = Visit(context.expression());
@@ -109,8 +111,8 @@ namespace ProjectP4
             var.value = value;
 
             symbolTable.updateSymbol(varname, var);
-            
 
+            codeG.AssignVariable(varname, value);
             return null;
         }
         public override object? VisitConstant([NotNull] GrammarParser.ConstantContext context)
@@ -164,36 +166,126 @@ namespace ProjectP4
                     rightValue = symbolTable.getSymbol(s2).value;
                 }
             }
-            
 
-            return Op(operatorValue, leftValue, rightValue);
+
+            return EvaluateOperation(operatorValue, leftValue, rightValue);
 
         }
+
+        public override object VisitBooleanexpression([NotNull] GrammarParser.BooleanexpressionContext context)
+        {
+            dynamic operatorValue = context.op.Text;
+            dynamic leftValue = Visit(context.expression(0));
+            dynamic rightValue = Visit(context.expression(1));
+            if (leftValue is string s)
+            {
+                if (s.Contains('"'))
+                {
+                    leftValue = s.Trim(new char[] { '"' });
+                }
+                else
+                {
+                    leftValue = symbolTable.getSymbol(s).value;
+                }
+            }
+            if (rightValue is string s2)
+            {
+                if (s2.Contains('"'))
+                {
+                    rightValue = s2.Trim(new char[] { '"' });
+                }
+                else
+                {
+                    rightValue = symbolTable.getSymbol(s2).value;
+                }
+            }
+            if (leftValue is int)
+            {
+                leftValue = (float)Convert.ToDouble(leftValue);
+            }
+            if (rightValue is int)
+            {
+                rightValue = (float)Convert.ToDouble(rightValue);
+            }
+
+            if (leftValue is string && rightValue.GetType() == leftValue.GetType() && (operatorValue is "==" or "!="))
+                return (leftValue, operatorValue, rightValue);
+            else if (leftValue is bool && rightValue.GetType() == leftValue.GetType() && (operatorValue is "AND" or "OR" or "==" or "!="))
+                return (leftValue, operatorValue, rightValue);
+            else if ((leftValue is int || leftValue is float) && (rightValue is int || rightValue is float) && (operatorValue is "<" or ">" or "<=" or ">=" or "==" or "!="))
+                return (leftValue, operatorValue, rightValue);
+            else
+                throw new Exception("Invalid Comparison");
+        }
+
+        public override object VisitCondexpression([NotNull] GrammarParser.CondexpressionContext context)
+        {
+            dynamic operatorValue = context.op.Text;
+            dynamic leftValue = Visit(context.expression(0));
+            dynamic rightValue = Visit(context.expression(1));
+            if (leftValue is string s)
+            {
+                if (s.Contains('"'))
+                {
+                    leftValue = s.Trim(new char[] { '"' });
+                }
+                else
+                {
+                    leftValue = symbolTable.getSymbol(s).value;
+                }
+            }
+            if (rightValue is string s2)
+            {
+                if (s2.Contains('"'))
+                {
+                    rightValue = s2.Trim(new char[] { '"' });
+                }
+                else
+                {
+                    rightValue = symbolTable.getSymbol(s2).value;
+                }
+            }
+            if (leftValue is int)
+            {
+                leftValue = (float)Convert.ToDouble(leftValue);
+            }
+            if (rightValue is int)
+            {
+                rightValue = (float)Convert.ToDouble(rightValue);
+            }
+            if (leftValue is string && rightValue.GetType() == leftValue.GetType() && (operatorValue is "==" or "!="))
+                return EvaluateOperation(leftValue, operatorValue, rightValue);
+            else if (leftValue is bool && rightValue.GetType() == leftValue.GetType() && (operatorValue is "AND" or "OR" or "==" or "!="))
+                return EvaluateOperation(leftValue, operatorValue, rightValue);
+            else if ((leftValue is int || leftValue is float) && (rightValue is int || rightValue is float) && (operatorValue is "<" or ">" or "<=" or ">=" or "==" or "!="))
+                return EvaluateOperation(leftValue, operatorValue, rightValue);
+            else
+                throw new Exception("Invalid Comparison");
+        }
+
 
         public override object VisitVarexpression([NotNull] GrammarParser.VarexpressionContext context)
         {
             string var = context.VAR().GetText();
-
             return var;
 
         }
         public override object VisitIfthen([NotNull] GrammarParser.IfthenContext context)
         {
-            dynamic? compare = Visit(context.expression());
-            if (compare)
-            {
-                symbolTable.scope++;
-                symbolTable.openScope();
-                Visit(context.block());
-                symbolTable.closeScope();
-                symbolTable.scope--;
-            }
+            codeG.startIf(context.conditionalexpression());
+            symbolTable.scope++;
+            symbolTable.openScope();
+            Visit(context.block());
+            symbolTable.closeScope();
+            symbolTable.scope--;
+            codeG.endIf();
+
             return null;
         }
 
         public override object VisitWhilestmt([NotNull] GrammarParser.WhilestmtContext context)
         {
-            dynamic? compare = Visit(context.expression());
+            dynamic compare = Visit(context.conditionalexpression());
             while (compare)
             {
                 symbolTable.scope++;
@@ -201,31 +293,31 @@ namespace ProjectP4
                 Visit(context.declaration());
                 symbolTable.closeScope();
                 symbolTable.scope--;
-                compare = Visit(context.expression());
+                compare = Visit(context.conditionalexpression());
             }
             return null;
         }
 
         public override object VisitIfelse([NotNull] GrammarParser.IfelseContext context)
         {
-            dynamic compare = Visit(context.expression());
+            dynamic compare = Visit(context.conditionalexpression());
 
-            if (compare)
-            {
-                symbolTable.scope++;
-                symbolTable.openScope();
-                Visit(context.block(0));
-                symbolTable.closeScope();
-                symbolTable.scope--;
+            codeG.startIf(compare);
+            symbolTable.scope++;
+            symbolTable.openScope();
+            Visit(context.block(0));
+            symbolTable.closeScope();
+            symbolTable.scope--;
 
-            } else
-            {
-                symbolTable.scope++;
-                symbolTable.openScope();
-                Visit(context.block(1));
-                symbolTable.closeScope();
-                symbolTable.scope--;
-            }
+
+
+            codeG.elseStatement();
+            symbolTable.scope++;
+            symbolTable.openScope();
+            Visit(context.block(1));
+            symbolTable.closeScope();
+            symbolTable.scope--;
+            codeG.endIf();
             return null;
         }
 
@@ -445,7 +537,8 @@ namespace ProjectP4
                 result.value = sortArray.ToArray();
                 symbolTable.addSymbol(context.VAR(2).GetText(), result);
                 return true;
-            } else
+            }
+            else
             {
                 result.value = sortArray.ToArray();
                 symbolTable.addSymbol(context.VAR(2).GetText(), result);
@@ -455,7 +548,7 @@ namespace ProjectP4
         }
 
 
-        private dynamic Op(string opr,dynamic lv,dynamic rv)
+        private dynamic EvaluateOperation(dynamic lv, string opr, dynamic rv)
         {
             switch (opr)
             {
@@ -471,12 +564,13 @@ namespace ProjectP4
                 case ">=": return lv <= rv;
                 case "%": return lv % rv;
                 case "==": return lv == rv;
+                case "!=": return lv != rv;
                 default:
                     throw new Exception("Does not fungo");
                     break;
             }
         }
     }
-    
+
 
 }
