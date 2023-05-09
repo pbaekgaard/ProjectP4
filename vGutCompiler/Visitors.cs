@@ -383,6 +383,9 @@ namespace ProjectP4
                     }
                 }
             }
+
+            codeG.sum(startVar, endVar);
+
             return result;
         }
 
@@ -423,6 +426,7 @@ namespace ProjectP4
                 }
             }
             result = result / index;
+            codeG.average(startVar, endVar);
             return result;
         }
 
