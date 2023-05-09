@@ -540,7 +540,7 @@ namespace ProjectP4
             var startVar = context.VAR(0).GetText();
             var endVar = context.VAR(1).GetText();
             var destVar = context.VAR(2).GetText();
-            var order = context.BOOL(0).GetText();
+            var order = context.BOOL().GetText();
 
             var result = symbolTable.getSymbol(context.VAR(2).GetText());
 
