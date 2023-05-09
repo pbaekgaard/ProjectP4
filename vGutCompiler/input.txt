@@ -1,6 +1,6 @@
-number A2 = 10
+number A2 = 5
 number A3 = 0
-while A2 > 5
+while A2 == 5
 do
 A2 = A2 - 1
 A3 = A3 + 5

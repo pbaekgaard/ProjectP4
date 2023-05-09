@@ -295,7 +295,7 @@ namespace ProjectP4
             dynamic compare = Visit(context.conditionalexpression());
 
 
-            while (EvaluateOperation(compare.Item1, compare.Item2, compare.Item3))
+            while (compare)
             {
                 symbolTable.scope++;
                 symbolTable.openScope();
