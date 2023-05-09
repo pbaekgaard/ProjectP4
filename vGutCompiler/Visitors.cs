@@ -340,9 +340,6 @@ namespace ProjectP4
 
         public override object VisitSum([NotNull] GrammarParser.SumContext context)
         {
-            //var test = context.Start.InputStream.GetText(Interval.Of(context.Parent().Start.StartIndex, decl.Stop.StopIndex)));
-
-            var test = context.Parent.Parent.GetText();
 
             var startVar = context.VAR(0).GetText();
             var endVar = context.VAR(1).GetText();
