@@ -5,10 +5,10 @@ using ProjectP4;
 
 namespace Unit_Tests
 {
-    public class CodeGenerationOutputsVBA
+    public class BuiltinFunctionsTests
     {
         [Fact]
-        public void CodeGeneratorOutputsCorrectVBA()
+        public void MinProducesTheCorrectMinForVBA()
         {
             //ARRANGE
             GLexer lexer = new GLexer(new AntlrInputStream(@"number A2 = 10\n bool A3 = A2 < 20"));
@@ -25,7 +25,7 @@ namespace Unit_Tests
         }
 
         [Fact]
-        public void CodeGenerationProducesCorrectIfStatements()
+        public void MaxProducesTheCorrectMaxForVBA()
         {
             // ARRANGE
             GLexer lexer = new GLexer(new AntlrInputStream(@"number A2 = 10\n number A1 = 5\n if A2 > A1 then A2 = 20 endif"));
