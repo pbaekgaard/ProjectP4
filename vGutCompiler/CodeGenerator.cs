@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Antlr4.Runtime.Misc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -72,13 +73,13 @@ namespace ProjectP4
         }
 
         //Bare et eksempel
-        public void While(dynamic compare, dynamic declation)
+        public void While(dynamic compare, dynamic context)
         {
             this.Code += string.Format("Do while {0}\n",compare);
 
-            foreach (dynamic decl in declation)
+            foreach (dynamic decl in context.declaration())
             {
-                this.Code += string.Format("{0}\n", decl.GetText());
+                this.Code += string.Format("{0}\n", context.Start.InputStream.GetText(Interval.Of(decl.Start.StartIndex, decl.Stop.StopIndex)));
             }
 
             this.Code += string.Format("Loop\n");

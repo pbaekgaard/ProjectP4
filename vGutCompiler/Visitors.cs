@@ -1,4 +1,5 @@
-﻿using Antlr4.Runtime.Misc;
+﻿using Antlr4.Runtime;
+using Antlr4.Runtime.Misc;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -90,6 +91,7 @@ namespace ProjectP4
         }
         public override object VisitAssigndec([NotNull] GrammarParser.AssigndecContext context)
         {
+
             dynamic varname = context.VAR().GetText();
 
             dynamic value = Visit(context.expression());
@@ -112,7 +114,7 @@ namespace ProjectP4
 
             symbolTable.updateSymbol(varname, var);
 
-            codeG.AssignVariable(varname, value);
+            //codeG.AssignVariable(varname, value);
             return null;
         }
         public override object? VisitConstant([NotNull] GrammarParser.ConstantContext context)
@@ -168,7 +170,7 @@ namespace ProjectP4
             }
 
 
-            return EvaluateOperation(operatorValue, leftValue, rightValue);
+            return EvaluateOperation(leftValue,operatorValue, rightValue);
 
         }
 
@@ -201,7 +203,7 @@ namespace ProjectP4
             }
             if (leftValue is int)
             {
-                leftValue = (float)Convert.ToDouble(leftValue);
+                leftValue = (float)leftValue;
             }
             if (rightValue is int)
             {
@@ -290,9 +292,8 @@ namespace ProjectP4
         {
             dynamic compare = Visit(context.conditionalexpression());
 
-            codeG.While(context.conditionalexpression().GetText(), context.declaration());
 
-            while (compare)
+            while (EvaluateOperation(compare.Item1, compare.Item2, compare.Item3))
             {
                 symbolTable.scope++;
                 symbolTable.openScope();
@@ -304,6 +305,10 @@ namespace ProjectP4
                 symbolTable.scope--;
                 compare = Visit(context.conditionalexpression());
             }
+
+            var test = context.Start.InputStream.GetText(Interval.Of(context.conditionalexpression().Start.StartIndex, context.conditionalexpression().Stop.StopIndex));
+
+            codeG.While(test, context);
 
             return null;
         }
@@ -333,6 +338,10 @@ namespace ProjectP4
 
         public override object VisitSum([NotNull] GrammarParser.SumContext context)
         {
+            //var test = context.Start.InputStream.GetText(Interval.Of(context.Parent().Start.StartIndex, decl.Stop.StopIndex)));
+
+            var test = context.Parent.Parent.GetText();
+
             var startVar = context.VAR(0).GetText();
             var endVar = context.VAR(1).GetText();
 
