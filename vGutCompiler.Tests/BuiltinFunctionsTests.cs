@@ -43,6 +43,23 @@ namespace Unit_Tests
             Assert.Equal(expectedOutput, actualOutput);
         }
 
+        [Fact]
+        public void CodeGenAverage(){
+            //Arrange
+            GLexer lexer = new GLexer(new AntlrInputStream(@"number B2 = 2\n number B3 = 6\n number A2 = AVERAGE(B2:B3)"));
+
+            //Act
+            CommonTokenStream Tokens = new CommonTokenStream(lexer);
+            GrammarParser parser = new GrammarParser(Tokens);
+            var visitor = new Visitors();
+            visitor.Visit(parser.program());
+
+            string expected = "Dim B2 As Double\nB2 = 2\nRange(\"B2\").Value = 2\nDim B3 As Double\nB3 = 6\nRange(\"B3\").Value = 6\nApplication.WorksheetFunction.AVERAGE(Range(\"B2:B3\"))\nDim A2 As Double\nA2 = 4\nRange(\"A2\").Value = 4\n";
+            string actual = visitor.codeG.Code;
+            
+            //Assert
+            Assert.Equal(expected, actual);
+        }
         // [Fact]
         // public void CodeGenerationProducesCorrectWhileLoops()
         // {

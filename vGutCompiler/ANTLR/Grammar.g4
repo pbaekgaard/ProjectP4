@@ -24,6 +24,7 @@ block: declaration*;
 expression: 
 	sum #sumexpression
 	| average #averageexpression
+  | vlookup #vlookupexpression
 	| min #minexpression
 	| max #maxexpression
 	| sort #sortexpression
@@ -56,6 +57,7 @@ min: MIN LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 max: MAX LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 count: COUNT LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 sort: SORT LPARENTHESIS VAR COLON VAR COMMA VAR RPARENTHESIS;
+vlookup: VLOOKUP LPARENTHESIS STRING COMMA VAR COLON VAR COMMA INTEGER COMMA BOOL RPARENTHESIS;
 
 constant: INTEGER | FLOAT | BOOL | STRING | NULL;
 types: NUMBERDCL | BOOLDCL | TEXTDCL;

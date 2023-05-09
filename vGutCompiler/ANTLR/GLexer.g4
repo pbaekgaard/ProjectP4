@@ -21,6 +21,7 @@ DO: 'do';
 AND: 'AND';
 SUM: 'SUM';
 AVERAGE: 'AVERAGE';
+VLOOKUP: 'VLOOKUP';
 MIN: 'MIN';
 MAX: 'MAX';
 SORT : 'SORT';

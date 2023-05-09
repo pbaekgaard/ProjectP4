@@ -119,5 +119,9 @@ namespace ProjectP4
         public void MaxFunction(string first, string last){
           this.Code += string.Format("MAX({0}:{1})\n",first,last);
         }
+
+        public void VLookUpFunction(string search, string start, string end, int column_index, bool exact_match=true){
+            this.Code += string.Format("Application.WorksheetFunction.VLOOKUP({0},Range(\"{1}:{2}\"),{3},{4})",search,start,end,column_index,exact_match);
+        }
     }
 }
