@@ -458,6 +458,7 @@ namespace ProjectP4
                     }
                 }
             }
+            codeG.MinFunction(startVar, endVar);
             return result;
         }
 
@@ -538,6 +539,8 @@ namespace ProjectP4
         {
             var startVar = context.VAR(0).GetText();
             var endVar = context.VAR(1).GetText();
+            var destVar = context.VAR(2).GetText();
+            var order = context.BOOL(0).GetText();
 
             var result = symbolTable.getSymbol(context.VAR(2).GetText());
 
@@ -570,15 +573,14 @@ namespace ProjectP4
                 result = new Symbol();
                 result.value = sortArray.ToArray();
                 symbolTable.addSymbol(context.VAR(2).GetText(), result);
-                return true;
             }
             else
             {
                 result.value = sortArray.ToArray();
                 symbolTable.addSymbol(context.VAR(2).GetText(), result);
-                return true;
             }
-
+            codeG.SortFunction(startVar, endVar, destVar, order);
+            return true;
         }
 
 

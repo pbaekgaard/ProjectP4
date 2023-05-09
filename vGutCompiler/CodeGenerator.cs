@@ -82,11 +82,11 @@ namespace ProjectP4
         public void sum(string start, string end)
         {
 
-            this.Code += string.Format("Application.WorksheetFunction.sum(Range(\"{0}:{1}\"))\n", start, end);
+            this.Code += string.Format("WorksheetFunction.Sum(Range(\"{0}:{1}\"))\n", start, end);
         } 
      
         public void average(dynamic start, dynamic end) {
-            this.Code += string.Format("Application.WorksheetFunction.AVERAGE(Range(\"{0}:{1}\"))\n", start, end);
+            this.Code += string.Format("WorksheetFunction.Average(Range(\"{0}:{1}\"))\n", start, end);
         }
         //Bare et eksempel
         public void While(dynamic compare, dynamic context)
@@ -120,7 +120,28 @@ namespace ProjectP4
         }
 
         public void MaxFunction(string first, string last){
-          this.Code += string.Format("MAX({0}:{1})\n",first,last);
+          this.Code += string.Format("WorksheetFunction.Max(Range(\"{0}:{1}\"))\n",first,last);
         }
+        public void MinFunction(string first, string last){
+          this.Code += string.Format("WorksheetFunction.Min(Range(\"{0}:{1}\"))\n",first,last);
+        }
+
+        public void SortFunction(string first, string last, string dest, string order) {
+          string sortedDestLetter = new String(dest.Where(c => Char.IsLetter(c) && Char.IsUpper(c)).ToArray());
+          int sortedDestDigit = int.Parse(new String(dest.Where(c => Char.IsDigit(c)).ToArray()));
+          string sortedLastLetter = new String(last.Where(c => Char.IsLetter(c) && Char.IsUpper(c)).ToArray());
+          int LastDigit = int.Parse(new String(last.Where(c => Char.IsDigit(c)).ToArray()));
+          int sortedLastDigit = sortedDestDigit + LastDigit - 1;
+          string sortedLast = string.Format("{0}{1}", sortedDestLetter,sortedLastDigit);
+          
+          if(order == "Ascending") {
+          this.Code += string.Format("Range(\"{0}:{1}\").Copy Destination:=Range(\"{2}\")", first, last, dest);
+          this.Code += string.Format("Range(\"{0}:{1}\").Sort Key1:=Range(\"{0}\"), Order1:=xlAscending, Header:=xlNo", dest, sortedLast);
+          }
+          else {
+          this.Code += string.Format("Range(\"{0}:{1}\").Sort Key1:=Range(\"{0}\"), Order1:=xlAscending, Header:=xlNo", dest, sortedLast);
+          }
+        }
+
     }
 }
