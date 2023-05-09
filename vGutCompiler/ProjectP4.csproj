@@ -14,7 +14,7 @@
     <Antlr4 Include="ANTLR/Grammar.g4" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="input.txt">
+    <None Update="input.vGut">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

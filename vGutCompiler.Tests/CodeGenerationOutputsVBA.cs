@@ -19,7 +19,8 @@ namespace Unit_Tests
             visitor.Visit(parser.program());
 
             var expectedOutput = "Dim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A3 As Boolean\nA3 = True\nRange(\"A3\").Value = True\n";
-            string actualOutput = visitor.codeG.Code;
+
+          string actualOutput = visitor.codeG.Code;
             //ASSERT
             Assert.Equal(expectedOutput, actualOutput);
         }
@@ -37,7 +38,8 @@ namespace Unit_Tests
             visitor.Visit(parser.program());
 
             var expectedOutput = "Dim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A1 As Double\nA1 = 5.0\nRange(\"A1\").Value = 5.0\nIf A2 > A1 Then\nRange(\"A2\").Value = 20.0\nEnd If";
-            string actualOutput = visitor.codeG.Code;
+
+          string actualOutput = visitor.codeG.Code;
 
             //ASSERT
             Assert.Equal(expectedOutput, actualOutput);
@@ -55,7 +57,8 @@ namespace Unit_Tests
              visitor.Visit(parser.program());
 
              var expectedOutput = "Dim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDo while A2 == 10\nA2 = 11\nLoop\n";
-             string actualOutput = visitor.codeG.Code;
+
+           string actualOutput = visitor.codeG.Code;
 
               //ASSERT
               Assert.Equal(expectedOutput, actualOutput);
@@ -73,7 +76,7 @@ namespace Unit_Tests
             var visitor = new Visitors();
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Dim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A3 As Double\nA3 = 10.0\nRange(\"A3\").Value = 10.0\nDim A4 As Double\nA4 = 10.0\nRange(\"A4\").Value = 10.0\nDim A6 As Double\nA6 = 0.0\nRange(\"A6\").Value = 0.0\nRange(\"A6\").Value = Application.WorksheetFunction.sum(Range(\"A2:A4\"))\n";
+            var expectedOutput = "Dim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A3 As Double\nA3 = 10.0\nRange(\"A3\").Value = 10.0\nDim A4 As Double\nA4 = 10.0\nRange(\"A4\").Value = 10.0\nDim A6 As Double\nA6 = 0.0\nRange(\"A6\").Value = 0.0\nRange(\"A6\").Value = Application.WorksheetFunction.Sum(Range(\"A2:A4\"))\n";
             string actualOutput = visitor.codeG.Code;
 
             //ASSERT
