@@ -1,4 +1,12 @@
 number A2 = 5
 number A3 = 0
+number A4 = 0
 A3 = 10
 A3 = MAX(A2:A3)
+A4 = SUM(A2:A3)
+A3 = AVERAGE(A2:A3)
+number A5 = 10
+while A5 > 5 
+do
+A5 = A5 - 1
+endwhile

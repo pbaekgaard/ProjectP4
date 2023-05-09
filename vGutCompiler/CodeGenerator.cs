@@ -116,7 +116,7 @@ namespace ProjectP4
         }
 
         public void MaxFunction(string first, string last){
-          this.Code += string.Format("MAX({0}:{1})",first,last);
+          this.Code += string.Format("MAX({0}:{1})\n",first,last);
         }
     }
 }
