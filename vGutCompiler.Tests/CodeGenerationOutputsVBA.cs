@@ -18,7 +18,7 @@ namespace Unit_Tests
             var visitor = new Visitors();
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Dim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10\nDim A3 As Boolean\nA3 = True\nRange(\"A3\").Value = True\n";
+            var expectedOutput = "Dim A2 As Double\nA2 = 10\nRange(\"A2\").Value = 10\nDim A3 As Boolean\nA3 = True\nRange(\"A3\").Value = True\n";
             string actualOutput = visitor.codeG.Code;
             //ASSERT
             Assert.Equal(expectedOutput, actualOutput);
@@ -36,7 +36,7 @@ namespace Unit_Tests
             var visitor = new Visitors();
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Dim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10\nDim A1 As Double\nA1 = 5.0\nRange(\"A1\").Value = 5\nIf A2 > A1 Then\nA2 = 20.0\nRange(\"A2\").Value = 20\nEnd If";
+            var expectedOutput = "Dim A2 As Double\nA2 = 10\nRange(\"A2\").Value = 10\nDim A1 As Double\nA1 = 5\nRange(\"A1\").Value = 5\nIf A2 > A1 Then\nRange(\"A2\").Value = 20\nEnd If";
             string actualOutput = visitor.codeG.Code;
 
             //ASSERT
@@ -54,7 +54,7 @@ namespace Unit_Tests
              var visitor = new Visitors();
              visitor.Visit(parser.program());
 
-             var expectedOutput = "Dim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10\nDo while A2 == 10\nA2 = 11\nLoop\n";
+             var expectedOutput = "Dim A2 As Double\nA2 = 10\nRange(\"A2\").Value = 10\nDo while A2 == 10\nA2 = 11\nLoop\n";
              string actualOutput = visitor.codeG.Code;
 
               //ASSERT
