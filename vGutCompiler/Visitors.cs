@@ -581,6 +581,10 @@ namespace ProjectP4
 
         }
 
+        public override object VisitVlookup(GrammarParser.VlookupContext context){
+            
+            return null;
+        }
 
         private dynamic EvaluateOperation(dynamic lv, string opr, dynamic rv)
         {
