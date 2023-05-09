@@ -76,6 +76,14 @@ namespace ProjectP4
             this.Code += string.Format("End If");
         }
 
+        public void sum(string start, string end)
+        {
+            this.Code += string.Format("Application.WorksheetFunction.SUM(\"{0}:{1}\")\n", start, end);
+        } 
+     
+        public void average(dynamic start, dynamic end) {
+            this.Code += string.Format("Application.WorksheetFunction.Average(Range(\"{0}:{1}\"))\n", start, end);
+        }
         //Bare et eksempel
         public void While(dynamic compare, dynamic context)
         {
