@@ -1,2 +1,3 @@
 number A2 = 10
-bool A3 = A2 < 20
+number A3 = 5
+if A2 > A3 AND A2 == 10 AND A3 == 5 then A3 = 11 endif
