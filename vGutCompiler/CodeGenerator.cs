@@ -53,20 +53,10 @@ namespace ProjectP4
                 this.Code += string.Format("{0} = {1}.0\n", name, i);
                 this.Code += string.Format("Range(\"{0}\").Value = {1}\n", name, i);
             }
-            else if (value is float f)
+            else 
             {
-                this.Code += string.Format("{0} = {1}\n", name, f);
-                this.Code += string.Format("Range(\"{0}\").Value = {1}\n", name,f);
-            }
-            else if (value is bool b)
-            {
-                this.Code += string.Format("{0} = {1}\n", name, b);
-                this.Code += string.Format("Range(\"{0}\").Value = {1}\n", name, b);
-            }
-            else if (value is string s)
-            {
-                this.Code += string.Format("{0} = {1}\n", name, s);
-                this.Code += string.Format("Range(\"{0}\").Value = {1}\n", name, s);
+                this.Code += string.Format("{0} = {1}\n", name, value);
+                this.Code += string.Format("Range(\"{0}\").Value = {1}\n", name,value);
             }
         }
 

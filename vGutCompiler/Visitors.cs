@@ -118,8 +118,13 @@ namespace ProjectP4
             {
                 return null;
             }
+            if(context.expression().GetType().FullName == "GrammarParser+ConstantexpressionContext")
+            {
+                codeG.AssignVariable(varname, value);
+            }
 
-            codeG.AssignVariable(varname, value);
+            //codeG.AssignVariable(varname, value);
+
             return null;
         }
         public override object? VisitConstant([NotNull] GrammarParser.ConstantContext context)

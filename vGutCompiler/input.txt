@@ -1,5 +1,6 @@
 number A2 = 5
 number A3 = 0
+A3 = 10
 while A2 == 5
 do
 A2 = A2 - 1
