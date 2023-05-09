@@ -1,0 +1,5 @@
+number A2 = 10
+number A3 = 10
+number A4 = 10
+number A6 = 0
+A6 = SUM(A2:A4)
