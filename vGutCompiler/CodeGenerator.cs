@@ -73,6 +73,23 @@ namespace ProjectP4
         {
             this.Code += string.Format("End If");
         }
+        public void While(dynamic compare, dynamic context)
+        {
+            string condition = "";
+            List<string> conditions = new();
+            GetChildrenFromConditional(compare, conditions);
+            foreach (string cond in conditions)
+            {
+                condition += string.Format("{0} ", cond);
+            }
+            this.Code += string.Format("Do while {0}\n",condition);
+
+            foreach (dynamic decl in context.declaration())
+            {
+                this.Code += string.Format("{0}\n", context.Start.InputStream.GetText(Interval.Of(decl.Start.StartIndex, decl.Stop.StopIndex)));
+            }
+            this.Code += string.Format("Loop\n");
+        }
 
         public void sum(string start, string end)
         {
@@ -83,17 +100,7 @@ namespace ProjectP4
         public void average(dynamic start, dynamic end) {
             this.Code += string.Format("Application.WorksheetFunction.AVERAGE(Range(\"{0}:{1}\"))\n", start, end);
         }
-        //Bare et eksempel
-        public void While(dynamic compare, dynamic context)
-        {
-            this.Code += string.Format("Do while {0}\n",compare);
-
-            foreach (dynamic decl in context.declaration())
-            {
-                this.Code += string.Format("{0}\n", context.Start.InputStream.GetText(Interval.Of(decl.Start.StartIndex, decl.Stop.StopIndex)));
-            }
-            this.Code += string.Format("Loop\n");
-        }
+        
 
         public void GetChildrenFromConditional(IParseTree child, List<string> childlist)
         {

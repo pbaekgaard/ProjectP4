@@ -321,7 +321,7 @@ namespace ProjectP4
 
             var test = context.Start.InputStream.GetText(Interval.Of(context.conditionalexpression().Start.StartIndex, context.conditionalexpression().Stop.StopIndex));
 
-            codeG.While(test, context);
+            codeG.While(context.conditionalexpression(), context);
 
             return null;
         }

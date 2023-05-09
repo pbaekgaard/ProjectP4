@@ -7,7 +7,9 @@ A4 = SUM(A2:A3)
 A3 = AVERAGE(A2:A3)
 number A5 = 10
 
-while A5 < 5
+if A5 == 5 then A4=A4+1 endif
+
+while A5 == 5
 do
 A5 = A5 - 1
 endwhile
