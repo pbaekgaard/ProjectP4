@@ -78,7 +78,8 @@ namespace ProjectP4
 
         public void sum(string start, string end)
         {
-            this.Code += string.Format("Application.WorksheetFunction.SUM(\"{0}:{1}\")\n", start, end);
+
+            this.Code += string.Format("Application.WorksheetFunction.sum(Range(\"{0}:{1}\"))\n", start, end);
         } 
      
         public void average(dynamic start, dynamic end) {
@@ -116,7 +117,7 @@ namespace ProjectP4
         }
 
         public void MaxFunction(string first, string last){
-          this.Code += string.Format("MAX({0}:{1})",first,last);
+          this.Code += string.Format("MAX({0}:{1})\n",first,last);
         }
     }
 }

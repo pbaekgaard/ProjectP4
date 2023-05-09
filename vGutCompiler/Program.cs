@@ -7,7 +7,7 @@ namespace vGutCompiler
     {
         public static void Main(string[] args)
         {
-            StreamReader InputFile = new("input.txt");
+            StreamReader InputFile = new("input.vGut");
             AntlrInputStream inputStream = new AntlrInputStream(InputFile.ReadToEnd());
 
             //ICharStream stream = CharStreams.fromString(InputFile.ReadToEnd());
@@ -18,7 +18,7 @@ namespace vGutCompiler
             visitor.Visit(parser.program());
             Console.WriteLine("\n\n");
             Console.WriteLine("INPUT CODE:\n--------------------------\n");
-            Console.WriteLine(new StreamReader("input.txt").ReadToEnd());
+            Console.WriteLine(new StreamReader("input.vGut").ReadToEnd());
             Console.WriteLine("\n\nOUTPUT CODE:\n--------------------------\n");
             Console.WriteLine(visitor.codeG.Code);
             Console.ReadLine();

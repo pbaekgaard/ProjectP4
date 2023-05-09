@@ -1,4 +1,0 @@
-number A2 = 5
-number A3 = 0
-A3 = 10
-A3 = MAX(A2:A3)
