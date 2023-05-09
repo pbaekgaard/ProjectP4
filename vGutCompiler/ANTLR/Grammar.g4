@@ -8,7 +8,8 @@ program: declaration* EOF;
 declaration:
 	ifstmt 
 	| whilestmt
-	| assignment;
+	| assignment
+	| sortingexpression;
 
 assignment: types VAR ASSIGN expression #assignnew
             | VAR ASSIGN expression #assigndec;
@@ -21,12 +22,14 @@ whilestmt: WHILE conditionalexpression DO declaration* ENDWHILE;
 
 block: declaration*;
 
+sortingexpression: 
+	sort #sortexpression;
+
 expression: 
 	sum #sumexpression
 	| average #averageexpression
 	| min #minexpression
 	| max #maxexpression
-	| sort #sortexpression
 	| expression operator expression #operatorexpression
   | expression op=LESSTHAN expression #booleanexpression
   | expression op=GREATERTHAN expression #booleanexpression
