@@ -216,17 +216,17 @@ namespace ProjectP4
             }
 
             if (leftValue is string && rightValue.GetType() == leftValue.GetType() && (operatorValue is "==" or "!="))
-              return (leftValue, operatorValue, rightValue);
+                return (leftValue, operatorValue, rightValue);
             else if (leftValue is bool && rightValue.GetType() == leftValue.GetType() && (operatorValue is "AND" or "OR" or "==" or "!="))
-              return (leftValue, operatorValue, rightValue);
+                return (leftValue, operatorValue, rightValue);
             else if ((leftValue is int || leftValue is float) && (rightValue is int || rightValue is float) && (operatorValue is "<" or ">" or "<=" or ">=" or "==" or "!="))
-              return (leftValue, operatorValue, rightValue);
+                return (leftValue, operatorValue, rightValue);
             else
                 throw new Exception("Invalid Comparison");
         }
 
-            public override object VisitCondexpression([NotNull] GrammarParser.CondexpressionContext context)
-            {
+        public override object VisitCondexpression([NotNull] GrammarParser.CondexpressionContext context)
+        {
             dynamic operatorValue = context.op.Text;
             dynamic leftValue = Visit(context.expression(0));
             dynamic rightValue = Visit(context.expression(1));
@@ -260,13 +260,12 @@ namespace ProjectP4
             {
                 rightValue = (float)Convert.ToDouble(rightValue);
             }
-
             if (leftValue is string && rightValue.GetType() == leftValue.GetType() && (operatorValue is "==" or "!="))
-              return (leftValue, operatorValue, rightValue);
+                return EvaluateOperation(leftValue, operatorValue, rightValue);
             else if (leftValue is bool && rightValue.GetType() == leftValue.GetType() && (operatorValue is "AND" or "OR" or "==" or "!="))
-              return (leftValue, operatorValue, rightValue);
+                return EvaluateOperation(leftValue, operatorValue, rightValue);
             else if ((leftValue is int || leftValue is float) && (rightValue is int || rightValue is float) && (operatorValue is "<" or ">" or "<=" or ">=" or "==" or "!="))
-              return (leftValue, operatorValue, rightValue);
+                return EvaluateOperation(leftValue, operatorValue, rightValue);
             else
                 throw new Exception("Invalid Comparison");
         }
@@ -275,21 +274,19 @@ namespace ProjectP4
         public override object VisitVarexpression([NotNull] GrammarParser.VarexpressionContext context)
         {
             string var = context.VAR().GetText();
-
             return var;
 
         }
         public override object VisitIfthen([NotNull] GrammarParser.IfthenContext context)
         {
-            dynamic compare = Visit(context.conditionalexpression());
-              codeG.startIf(compare);
-                symbolTable.scope++;
-                symbolTable.openScope();
-                Visit(context.block());
-                symbolTable.closeScope();
-                symbolTable.scope--;
-              codeG.endIf();
-            
+            codeG.startIf(context.conditionalexpression());
+            symbolTable.scope++;
+            symbolTable.openScope();
+            Visit(context.block());
+            symbolTable.closeScope();
+            symbolTable.scope--;
+            codeG.endIf();
+
             return null;
         }
 
@@ -323,20 +320,20 @@ namespace ProjectP4
             dynamic compare = Visit(context.conditionalexpression());
 
             codeG.startIf(compare);
-                symbolTable.scope++;
-                symbolTable.openScope();
-                Visit(context.block(0));
-                symbolTable.closeScope();
-                symbolTable.scope--;
+            symbolTable.scope++;
+            symbolTable.openScope();
+            Visit(context.block(0));
+            symbolTable.closeScope();
+            symbolTable.scope--;
 
-            
-            
-            codeG.elseStatement(); 
-                symbolTable.scope++;
-                symbolTable.openScope();
-                Visit(context.block(1));
-                symbolTable.closeScope();
-                symbolTable.scope--;
+
+
+            codeG.elseStatement();
+            symbolTable.scope++;
+            symbolTable.openScope();
+            Visit(context.block(1));
+            symbolTable.closeScope();
+            symbolTable.scope--;
             codeG.endIf();
             return null;
         }
