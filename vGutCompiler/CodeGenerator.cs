@@ -55,16 +55,11 @@ namespace ProjectP4
         public void startIf(GrammarParser.ConditionalexpressionContext compare)
         {
             string condition = "";
-            List<IParseTree> conditions = new();
+            List<string> conditions = new();
             GetChildrenFromConditional(compare, conditions);
-            foreach (IParseTree cond in conditions)
+            foreach (string cond in conditions)
             {
-                if (cond.GetText() == "AND")
-                {
-                    condition += string.Format("And ");
-                }
-                else
-                    condition += string.Format("{0} ", cond.GetText());
+                    condition += string.Format("{0} ", cond);
             }
             this.Code += string.Format("If {0}Then\n", condition);
         }
@@ -100,15 +95,35 @@ namespace ProjectP4
             this.Code += string.Format("Loop\n");
         }
 
-        public void GetChildrenFromConditional(IParseTree child, List<IParseTree> childlist)
+        public void GetChildrenFromConditional(IParseTree child, List<string> childlist)
         {
             if (child.ChildCount == 1)
             {
-                childlist.Add(child.GetChild(0));
+                Console.WriteLine(child.GetChild(0).GetText() + " Childcount 1");
+                childlist.Add(child.GetChild(0).GetText());
             }
             else if (child.ChildCount == 0)
             {
-                childlist.Add(child);
+                if(child.GetText() == "AND")
+                {
+                    childlist.Add("And");
+                }
+                else if(child.GetText() == "OR")
+                {
+                    childlist.Add("Or");
+                }
+                else if(child.GetText() == "!=")
+                {
+                    childlist.Add("<>");
+                }
+                else if(child.GetText() == "==")
+                {
+                    childlist.Add("=");
+                }
+                else
+                {
+                    childlist.Add(child.GetText());
+                }
             }
             else
             {

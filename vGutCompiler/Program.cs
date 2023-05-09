@@ -18,7 +18,7 @@ namespace vGutCompiler
             visitor.Visit(parser.program());
             Console.WriteLine("\n\n");
             Console.WriteLine("INPUT CODE:\n--------------------------\n");
-            Console.WriteLine(new StreamReader("input.vGut").ReadToEnd());
+            Console.WriteLine(new StreamReader("./input.vGut").ReadToEnd());
             Console.WriteLine("\n\nOUTPUT CODE:\n--------------------------\n");
             Console.WriteLine(visitor.codeG.Code);
             Console.ReadLine();
