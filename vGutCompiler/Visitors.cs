@@ -90,6 +90,7 @@ namespace ProjectP4
         }
         public override object VisitAssigndec([NotNull] GrammarParser.AssigndecContext context)
         {
+
             dynamic varname = context.VAR().GetText();
 
             dynamic value = Visit(context.expression());
@@ -106,13 +107,24 @@ namespace ProjectP4
                 }
             }
 
+
             Symbol var = symbolTable.getSymbol(varname);
 
             var.value = value;
 
             symbolTable.updateSymbol(varname, var);
 
-            codeG.AssignVariable(varname, value);
+            if (context.Parent.Parent.GetType().FullName == "GrammarParser+WhilestmtContext")
+            {
+                return null;
+            }
+            if(context.expression().GetType().FullName == "GrammarParser+ConstantexpressionContext")
+            {
+                codeG.AssignVariable(varname, value);
+            }
+
+            //codeG.AssignVariable(varname, value);
+
             return null;
         }
         public override object? VisitConstant([NotNull] GrammarParser.ConstantContext context)
@@ -168,7 +180,7 @@ namespace ProjectP4
             }
 
 
-            return EvaluateOperation(operatorValue, leftValue, rightValue);
+            return EvaluateOperation(leftValue,operatorValue, rightValue);
 
         }
 
@@ -201,7 +213,7 @@ namespace ProjectP4
             }
             if (leftValue is int)
             {
-                leftValue = (float)Convert.ToDouble(leftValue);
+                leftValue = (float)leftValue;
             }
             if (rightValue is int)
             {
@@ -286,15 +298,25 @@ namespace ProjectP4
         public override object VisitWhilestmt([NotNull] GrammarParser.WhilestmtContext context)
         {
             dynamic compare = Visit(context.conditionalexpression());
+
+
             while (compare)
             {
                 symbolTable.scope++;
                 symbolTable.openScope();
-                Visit(context.declaration());
+                foreach (var declaration in context.declaration())
+                {
+                    Visit(declaration);
+                }
                 symbolTable.closeScope();
                 symbolTable.scope--;
                 compare = Visit(context.conditionalexpression());
             }
+
+            var test = context.Start.InputStream.GetText(Interval.Of(context.conditionalexpression().Start.StartIndex, context.conditionalexpression().Stop.StopIndex));
+
+            codeG.While(test, context);
+
             return null;
         }
 
@@ -323,6 +345,7 @@ namespace ProjectP4
 
         public override object VisitSum([NotNull] GrammarParser.SumContext context)
         {
+
             var startVar = context.VAR(0).GetText();
             var endVar = context.VAR(1).GetText();
 
@@ -349,6 +372,9 @@ namespace ProjectP4
                     }
                 }
             }
+
+            codeG.sum(startVar, endVar);
+
             return result;
         }
 
@@ -389,6 +415,7 @@ namespace ProjectP4
                 }
             }
             result = result / index;
+            codeG.average(startVar, endVar);
             return result;
         }
 
