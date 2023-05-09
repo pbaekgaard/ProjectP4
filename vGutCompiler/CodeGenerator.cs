@@ -47,6 +47,9 @@ namespace ProjectP4
         }
 
         public void AssignValue(dynamic value) {
+          if (value is int) {
+            this.Code+= string.Format("{0}.0\n", value);
+          } else
           this.Code += string.Format("{0}\n", value);
         }
         public void startIf(GrammarParser.ConditionalexpressionContext compare)
