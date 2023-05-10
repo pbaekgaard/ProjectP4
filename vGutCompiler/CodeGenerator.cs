@@ -139,17 +139,18 @@ namespace ProjectP4
             int sortedDestDigit = int.Parse(new String(dest.Where(c => Char.IsDigit(c)).ToArray()));
             string sortedLastLetter = new String(last.Where(c => Char.IsLetter(c) && Char.IsUpper(c)).ToArray());
             int LastDigit = int.Parse(new String(last.Where(c => Char.IsDigit(c)).ToArray()));
-            int sortedLastDigit = sortedDestDigit + LastDigit - 1;
+            int FirstDigit = int.Parse(new String(first.Where(c => Char.IsDigit(c)).ToArray()));
+            int sortedLastDigit = sortedDestDigit + LastDigit - FirstDigit;
             string sortedLast = string.Format("{0}{1}", sortedDestLetter, sortedLastDigit);
 
+            this.Code += string.Format("Range(\"{0}:{1}\").Copy Destination:=Range(\"{2}\")\n", first, last, dest);
             if (order == "true")
             {
-                this.Code += string.Format("Range(\"{0}:{1}\").Copy Destination:=Range(\"{2}\")", first, last, dest);
-                this.Code += string.Format("Range(\"{0}:{1}\").Sort Key1:=Range(\"{0}\"), Order1:=xlAscending, Header:=xlNo", dest, sortedLast);
+                this.Code += string.Format("Range(\"{0}:{1}\").Sort Key1:=Range(\"{0}\"), Order1:=xlAscending, Header:=xlNo\n", dest, sortedLast);
             }
             else if (order == "false")
             {
-                this.Code += string.Format("Range(\"{0}:{1}\").Sort Key1:=Range(\"{0}\"), Order1:=xlAscending, Header:=xlNo", dest, sortedLast);
+                this.Code += string.Format("Range(\"{0}:{1}\").Sort Key1:=Range(\"{0}\"), Order1:=xlDescending, Header:=xlNo", dest, sortedLast);
             }
         }
 

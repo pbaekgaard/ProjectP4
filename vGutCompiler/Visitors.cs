@@ -110,7 +110,8 @@ namespace ProjectP4
             {
                 codeG.SetCell(varname);
                 value = Visit(context.expression());
-            } else
+            }
+            else
             {
                 value = Visit(context.expression());
             }
@@ -186,7 +187,7 @@ namespace ProjectP4
             }
 
 
-            return EvaluateOperation(leftValue,operatorValue, rightValue);
+            return EvaluateOperation(leftValue, operatorValue, rightValue);
 
         }
 
@@ -577,7 +578,7 @@ namespace ProjectP4
             else
             {
                 result.value = sortArray.ToArray();
-                symbolTable.addSymbol(context.VAR(2).GetText(), result);
+                symbolTable.updateSymbol(context.VAR(2).GetText(), result);
             }
             codeG.SortFunction(startVar, endVar, destVar, order);
             return true;

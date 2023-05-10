@@ -6,3 +6,4 @@ A3 = MAX(A2:A3)
 A4 = SUM(A2:A3)
 A3 = AVERAGE(A2:A3)
 number A5 = 10
+SORT(A3:A5, A2, true)

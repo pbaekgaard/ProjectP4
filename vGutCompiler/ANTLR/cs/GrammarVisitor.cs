@@ -84,6 +84,13 @@ public interface IGrammarVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitBlock([NotNull] GrammarParser.BlockContext context);
 	/// <summary>
+	/// Visit a parse tree produced by the <c>sortexpression</c>
+	/// labeled alternative in <see cref="GrammarParser.sortingexpression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSortexpression([NotNull] GrammarParser.SortexpressionContext context);
+	/// <summary>
 	/// Visit a parse tree produced by the <c>maxexpression</c>
 	/// labeled alternative in <see cref="GrammarParser.expression"/>.
 	/// </summary>
@@ -139,13 +146,6 @@ public interface IGrammarVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitMinexpression([NotNull] GrammarParser.MinexpressionContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>sortexpression</c>
-	/// labeled alternative in <see cref="GrammarParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitSortexpression([NotNull] GrammarParser.SortexpressionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>countexpression</c>
 	/// labeled alternative in <see cref="GrammarParser.expression"/>.
