@@ -13,9 +13,10 @@ namespace ProjectP4
         public string Code { get; set; }
 
 
-        public CodeGenerator()
+        public CodeGenerator(string fname)
         {
             Code = string.Empty;
+            Code += string.Format("Sub {0}()\n", fname);
         }
 
         public void startSub(string sourceName)
@@ -54,20 +55,24 @@ namespace ProjectP4
             }
         }
 
-        public void SetCell(string variable) {
-          this.Code += string.Format("Range(\"{0}\").Value = ", variable);
+        public void SetCell(string variable)
+        {
+            this.Code += string.Format("Range(\"{0}\").Value = ", variable);
         }
 
         public void AssignVariable(string name)
         {
-                this.Code += string.Format("{0} = ", name);
+            this.Code += string.Format("{0} = ", name);
         }
 
-        public void AssignValue(dynamic value) {
-          if (value is int) {
-            this.Code+= string.Format("{0}.0\n", value);
-          } else
-          this.Code += string.Format("{0}\n", value);
+        public void AssignValue(dynamic value)
+        {
+            if (value is int)
+            {
+                this.Code += string.Format("{0}.0\n", value);
+            }
+            else
+                this.Code += string.Format("{0}\n", value);
         }
         public void startIf(GrammarParser.ConditionalexpressionContext compare)
         {
@@ -89,6 +94,41 @@ namespace ProjectP4
         public void endIf()
         {
             this.Code += string.Format("End If\n");
+        }
+
+        public void OperatorExp(GrammarParser.ExpressionContext leftv, GrammarParser.ExpressionContext rightv, string op)
+        {
+            if (leftv.GetType().Name == "VarexpressionContext")
+            {
+                this.Code += string.Format("Range(\"{0}\").Value ",leftv.GetText());
+            }
+            else
+            {
+                this.Code += string.Format("{0} ", leftv.GetText());
+            }
+
+            this.Code += string.Format("{0} ", op);
+
+            if (rightv.GetType().Name == "VarexpressionContext")
+            {
+                this.Code += string.Format("Range(\"{0}\").Value\n", rightv.GetText());
+            }
+            else
+            {
+                this.Code += string.Format("{0}\n", rightv.GetText());
+            }
+        }
+
+        public void sum(string start, string end)
+        {
+
+            this.Code += string.Format("Application.WorksheetFunction.Sum(Range(\"{0}:{1}\"))\n", start, end);
+        }
+
+        public void average(dynamic start, dynamic end)
+        {
+            this.Code += string.Format("WorksheetFunction.Average(Range(\"{0}:{1}\"))\n", start, end);
+
         }
         public void While(dynamic compare, dynamic context)
         {
@@ -158,17 +198,34 @@ namespace ProjectP4
             }
         }
 
-        public void MaxFunction(string first, string last){
-          this.Code += string.Format("WorksheetFunction.Max(Range(\"{0}:{1}\"))\n",first,last);
-        }
-        //Following code may be unnesecary after all
-        /*public string FirstCharToUpper(string input)
+        public void MaxFunction(string first, string last)
         {
-            if (string.IsNullOrEmpty(input))
+            this.Code += string.Format("WorksheetFunction.Max(Range(\"{0}:{1}\"))\n", first, last);
+        }
+        public void MinFunction(string first, string last)
+        {
+            this.Code += string.Format("WorksheetFunction.Min(Range(\"{0}:{1}\"))\n", first, last);
+        }
+
+        public void SortFunction(string first, string last, string dest, string order)
+        {
+            string sortedDestLetter = new String(dest.Where(c => Char.IsLetter(c) && Char.IsUpper(c)).ToArray());
+            int sortedDestDigit = int.Parse(new String(dest.Where(c => Char.IsDigit(c)).ToArray()));
+            string sortedLastLetter = new String(last.Where(c => Char.IsLetter(c) && Char.IsUpper(c)).ToArray());
+            int LastDigit = int.Parse(new String(last.Where(c => Char.IsDigit(c)).ToArray()));
+            int FirstDigit = int.Parse(new String(first.Where(c => Char.IsDigit(c)).ToArray()));
+            int sortedLastDigit = sortedDestDigit + LastDigit - FirstDigit;
+            string sortedLast = string.Format("{0}{1}", sortedDestLetter, sortedLastDigit);
+
+            this.Code += string.Format("Range(\"{0}:{1}\").Copy Destination:=Range(\"{2}\")\n", first, last, dest);
+            if (order == "true")
             {
-                return string.Empty;
+                this.Code += string.Format("Range(\"{0}:{1}\").Sort Key1:=Range(\"{0}\"), Order1:=xlAscending, Header:=xlNo\n", dest, sortedLast);
             }
-            return $"{input[0].ToString().ToUpper()}{input.Substring(1)}";
-        }*/
+            else if (order == "false")
+            {
+                this.Code += string.Format("Range(\"{0}:{1}\").Sort Key1:=Range(\"{0}\"), Order1:=xlDescending, Header:=xlNo", dest, sortedLast);
+            }
+        }
     }
 }
