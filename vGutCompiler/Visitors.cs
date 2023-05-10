@@ -10,11 +10,11 @@ namespace ProjectP4
     {
         public SymTable symbolTable = new();
         public CodeGenerator codeG = new();
-        public string fileName { get; set; }  
+        public string fileName { get; set; }
 
-        public Visitors(string FileName) 
+        public Visitors(string FileName)
         {
-            fileName = FileName;        
+            fileName = FileName;
         }
 
         public override object VisitProgram([NotNull] GrammarParser.ProgramContext context)
@@ -47,7 +47,8 @@ namespace ProjectP4
                 if (context.expression().GetType().Name == "BooleanexpressionContext")
                 {
                     tvalue = true;
-                } else
+                }
+                else
                 {
                     tvalue = 1;
                 }
@@ -127,7 +128,7 @@ namespace ProjectP4
                 throw new Exception("type is not valid");
             }
 
-            
+
 
             return null;
         }
@@ -149,6 +150,8 @@ namespace ProjectP4
             }
             else if (context.Parent.Parent.GetType().FullName != "GrammarParser+WhilestmtContext")
             {
+                codeG.AssignVariable(varname);
+                value = Visit(context.expression());
                 codeG.SetCell(varname);
                 value = Visit(context.expression());
             }
@@ -227,7 +230,7 @@ namespace ProjectP4
                 }
             }
 
-            codeG.OperatorExp(context.expression(0), context.expression(1),operatorValue);
+            codeG.OperatorExp(context.expression(0), context.expression(1), operatorValue);
 
             return EvaluateOperation(leftValue, operatorValue, rightValue);
 
