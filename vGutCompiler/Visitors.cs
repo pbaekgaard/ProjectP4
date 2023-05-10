@@ -1,15 +1,30 @@
 ﻿using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using vGutCompiler;
 
 namespace ProjectP4
 {
     public class Visitors : GrammarBaseVisitor<object?>
     {
         public SymTable symbolTable = new();
+        public CodeGenerator codeG = new();
+        public string fileName { get; set; }  
 
-        public CodeGenerator codeG = new ();
+        public Visitors(string FileName) 
+        {
+            fileName = FileName;        
+        }
 
+        public override object VisitProgram([NotNull] GrammarParser.ProgramContext context)
+        {
+            string sourceName = this.fileName;
+            codeG.startSub(sourceName);
+            VisitChildren(context);
+            codeG.endSub();
+            return null;
+        }
         public override object VisitAssignnew([NotNull] GrammarParser.AssignnewContext context)
         {
             var name = context.VAR().GetText();
@@ -120,6 +135,7 @@ namespace ProjectP4
         {
 
             dynamic varname = context.VAR().GetText();
+
 
             Symbol var = symbolTable.getSymbol(varname);
 
@@ -348,7 +364,7 @@ namespace ProjectP4
 
             var test = context.Start.InputStream.GetText(Interval.Of(context.conditionalexpression().Start.StartIndex, context.conditionalexpression().Stop.StopIndex));
 
-            codeG.While(test, context);
+            codeG.While(context.conditionalexpression(), context);
 
             return null;
         }
