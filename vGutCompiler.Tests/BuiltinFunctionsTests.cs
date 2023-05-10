@@ -7,23 +7,6 @@ namespace Unit_Tests
 {
     public class BuiltinFunctionsTests
     {
-        /*[Fact]
-        public void MinProducesTheCorrectMinForVBA()
-        {
-            //ARRANGE
-            GLexer lexer = new GLexer(new AntlrInputStream(@"number A2 = 10\n number A3 = A2"));
-            //ACT
-            CommonTokenStream tokens = new CommonTokenStream(lexer);
-            GrammarParser parser = new GrammarParser(tokens);
-            var visitor = new Visitors();
-            visitor.Visit(parser.program());
-
-            var expectedOutput = "Dim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A3 As Double\nA3 = A2\nRange(\"A3\").Value = A2\n";
-
-            string actualOutput = visitor.codeG.Code;
-            //ASSERT
-            Assert.Equal(expectedOutput, actualOutput);
-        }*/
         [Fact]
         public void CodeGenerationProducesCorrectSum()
         {
@@ -43,10 +26,10 @@ namespace Unit_Tests
             Assert.Equal(expectedOutput, actualOutput);
         }
         [Fact]
-        public void MaxProducesTheCorrectMaxForVBA()
+        public void CodeGenerationProducesCorrectMin()
         {
             // ARRANGE
-            GLexer lexer = new GLexer(new AntlrInputStream(@"number A2 = 10\n number A1 = 5\n if A2 > A1 then A2 = 20 endif\n"));
+            GLexer lexer = new GLexer(new AntlrInputStream("number A2 = 10\nnumber A3 = 10\nnumber A4 = 10\nnumber A6 = 0\nA6 = MIN(A2:A4)"));
 
             // ACT
             CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -54,14 +37,31 @@ namespace Unit_Tests
             var visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Sub test ()\nDim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A1 As Double\nA1 = 5.0\nRange(\"A1\").Value = 5.0\nIf A2 > A1 Then\nRange(\"A2\").Value = 20.0\nEnd If\nEnd Sub\n";
-
+            var expectedOutput = "Sub test ()\nDim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A3 As Double\nA3 = 10.0\nRange(\"A3\").Value = 10.0\nDim A4 As Double\nA4 = 10.0\nRange(\"A4\").Value = 10.0\nDim A6 As Double\nA6 = 0.0\nRange(\"A6\").Value = 0.0\nA6 = WorksheetFunction.Min(Range(\"A2:A4\"))\nRange(\"A6\").Value = WorksheetFunction.Min(Range(\"A2:A4\"))\nEnd Sub\n";
             string actualOutput = visitor.codeG.Code;
 
             //ASSERT
             Assert.Equal(expectedOutput, actualOutput);
         }
 
+        [Fact]
+        public void CodeGenerationProducesCorrectMax()
+        {
+            // ARRANGE
+            GLexer lexer = new GLexer(new AntlrInputStream("number A2 = 10\nnumber A3 = 10\nnumber A4 = 10\nnumber A6 = 0\nA6 = MAX(A2:A4)"));
+
+            // ACT
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            GrammarParser parser = new GrammarParser(tokens);
+            var visitor = new Visitors("test");
+            visitor.Visit(parser.program());
+
+            var expectedOutput = "Sub test ()\nDim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A3 As Double\nA3 = 10.0\nRange(\"A3\").Value = 10.0\nDim A4 As Double\nA4 = 10.0\nRange(\"A4\").Value = 10.0\nDim A6 As Double\nA6 = 0.0\nRange(\"A6\").Value = 0.0\nA6 = WorksheetFunction.Max(Range(\"A2:A4\"))\nRange(\"A6\").Value = WorksheetFunction.Max(Range(\"A2:A4\"))\nEnd Sub\n";
+            string actualOutput = visitor.codeG.Code;
+
+            //ASSERT
+            Assert.Equal(expectedOutput, actualOutput);
+        }
 
         [Fact]
         public void SortCopysTheDataRangeAndSortsTheCopiedAtDestination()
