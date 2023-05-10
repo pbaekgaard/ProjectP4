@@ -8,6 +8,7 @@ namespace vGutCompiler
     {
         public static void Main(string[] args)
         {
+            string fileName = "";
             string file = "";
             #if DEBUG
             file = "input";
@@ -54,20 +55,21 @@ namespace vGutCompiler
                 return;
             }
             #endif
-
+            fileName += string.Format("{0}.vGut",file);
             StreamReader InputFile = new(string.Format("{0}.vGut",file));
-            AntlrInputStream inputStream = new AntlrInputStream(InputFile.ReadToEnd());
 
+            AntlrInputStream inputStream = new AntlrInputStream(InputFile.ReadToEnd());
             //ICharStream stream = CharStreams.fromString(InputFile.ReadToEnd());
             GLexer lexer = new GLexer(inputStream);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             GrammarParser parser = new GrammarParser(tokens);
-            var visitor = new Visitors();
+            Visitors visitor = new Visitors(fileName);
             visitor.codeG = new(file);
+
             visitor.Visit(parser.program());
             Console.WriteLine("\n\n");
             Console.WriteLine("INPUT CODE:\n--------------------------\n");
-            Console.WriteLine(new StreamReader("input.vGut").ReadToEnd());
+            Console.WriteLine(new StreamReader("./input.vGut").ReadToEnd());
             Console.WriteLine("\n\nOUTPUT CODE:\n--------------------------\n");
             Console.WriteLine(visitor.codeG.Code);
             Console.ReadLine();
