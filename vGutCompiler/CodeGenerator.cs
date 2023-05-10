@@ -13,10 +13,10 @@ namespace ProjectP4
         public string Code { get; set; }
 
 
-        public CodeGenerator()
+        public CodeGenerator(string fname)
         {
             Code = string.Empty;
-            
+            Code += string.Format("Sub {0}()\n", fname);
         }
 
         public void DeclareVariable(string name, dynamic value)
@@ -90,8 +90,8 @@ namespace ProjectP4
             {
                 this.Code += string.Format("{0} ", leftv.GetText());
             }
-            this.Code += string.Format("{0} ", op);
 
+            this.Code += string.Format("{0} ", op);
 
             if (rightv.GetType().Name == "VarexpressionContext")
             {
