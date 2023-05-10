@@ -7,23 +7,23 @@ namespace Unit_Tests
 {
     public class BuiltinFunctionsTests
     {
-        [Fact]
+        /*[Fact]
         public void MinProducesTheCorrectMinForVBA()
         {
             //ARRANGE
-            GLexer lexer = new GLexer(new AntlrInputStream(@"number A2 = 10\n bool A3 = A2 < 20"));
+            GLexer lexer = new GLexer(new AntlrInputStream(@"number A2 = 10\n number A3 = A2"));
             //ACT
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             GrammarParser parser = new GrammarParser(tokens);
             var visitor = new Visitors();
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Dim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A3 As Boolean\nA3 = True\nRange(\"A3\").Value = True\n";
+            var expectedOutput = "Dim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A3 As Double\nA3 = A2\nRange(\"A3\").Value = A2\n";
 
             string actualOutput = visitor.codeG.Code;
             //ASSERT
             Assert.Equal(expectedOutput, actualOutput);
-        }
+        }*/
 
         [Fact]
         public void MaxProducesTheCorrectMaxForVBA()

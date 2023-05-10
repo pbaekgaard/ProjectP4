@@ -12,11 +12,9 @@ namespace ProjectP4
     {
         public string Code { get; set; }
 
-
-        public CodeGenerator(string fname)
+        public CodeGenerator()
         {
             Code = string.Empty;
-            Code += string.Format("Sub {0}()\n", fname);
         }
 
         public void DeclareVariable(string name, dynamic value)

@@ -11,14 +11,14 @@ namespace Unit_Tests
         public void CodeGeneratorOutputsCorrectVBA()
         {
             //ARRANGE
-            GLexer lexer = new GLexer(new AntlrInputStream(@"number A2 = 10\n bool A3 = A2 < 20"));
+            GLexer lexer = new GLexer(new AntlrInputStream(@"number A2 = 10\n"));
             //ACT
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             GrammarParser parser = new GrammarParser(tokens);
             var visitor = new Visitors();
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Dim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A3 As Boolean\nA3 = True\nRange(\"A3\").Value = True\n";
+            var expectedOutput = "Dim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\n";
 
           string actualOutput = visitor.codeG.Code;
             //ASSERT

@@ -63,7 +63,6 @@ namespace vGutCompiler
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             GrammarParser parser = new GrammarParser(tokens);
             var visitor = new Visitors();
-            visitor.codeG = new(file);
             visitor.Visit(parser.program());
             Console.WriteLine("\n\n");
             Console.WriteLine("INPUT CODE:\n--------------------------\n");

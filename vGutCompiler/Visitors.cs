@@ -8,7 +8,7 @@ namespace ProjectP4
     {
         public SymTable symbolTable = new();
 
-        public CodeGenerator codeG;
+        public CodeGenerator codeG = new ();
 
         public override object VisitAssignnew([NotNull] GrammarParser.AssignnewContext context)
         {
@@ -16,7 +16,35 @@ namespace ProjectP4
 
             var type = context.types().GetText();
 
-            dynamic value = Visit(context.expression());
+            dynamic value;
+
+            if (context.expression().GetType().FullName == "GrammarParser+ConstantexpressionContext" && context.Parent.Parent.GetType().FullName != "GrammarParser+WhilestmtContext")
+            {
+                value = Visit(context.expression());
+                codeG.DeclareVariable(name, value);
+                codeG.AssignValue(value);
+                codeG.SetCell(name);
+                codeG.AssignValue(value);
+            }
+            else if (context.Parent.Parent.GetType().FullName != "GrammarParser+WhilestmtContext")
+            {
+                dynamic tvalue;
+                if (context.expression().GetType().Name == "BooleanexpressionContext")
+                {
+                    tvalue = true;
+                } else
+                {
+                    tvalue = 1;
+                }
+                codeG.DeclareVariable(name, tvalue);
+                value = Visit(context.expression());
+                codeG.SetCell(name);
+                value = Visit(context.expression());
+            }
+            else
+            {
+                value = Visit(context.expression());
+            }
 
             switch (type)
             {
@@ -84,10 +112,7 @@ namespace ProjectP4
                 throw new Exception("type is not valid");
             }
 
-            codeG.DeclareVariable(name, value);
-            codeG.AssignValue(value);
-            codeG.SetCell(name);
-            codeG.AssignValue(value);
+            
 
             return null;
         }
