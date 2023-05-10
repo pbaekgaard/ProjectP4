@@ -21,11 +21,12 @@ namespace ProjectP4
         {
             //Sub procedures cannot contain "."
             sourceName = sourceName.Trim('.');
-            if (sourceName.Contains(".")){
+            if (sourceName.Contains("."))
+            {
                 int pos = sourceName.IndexOf(".");
                 sourceName = sourceName.Remove(pos, 1);
             }
-            
+
             this.Code += string.Format("Sub {0} ()\n", sourceName);
         }
 
@@ -79,7 +80,7 @@ namespace ProjectP4
             GetChildrenFromConditional(compare, conditions);
             foreach (string cond in conditions)
             {
-                    condition += string.Format("{0} ", cond);
+                condition += string.Format("{0} ", cond);
             }
             this.Code += string.Format("If {0}Then\n", condition);
         }
@@ -98,7 +99,7 @@ namespace ProjectP4
         {
             if (leftv.GetType().Name == "VarexpressionContext")
             {
-                this.Code += string.Format("Range(\"{0}\").Value ",leftv.GetText());
+                this.Code += string.Format("Range(\"{0}\").Value ", leftv.GetText());
             }
             else
             {
@@ -126,7 +127,7 @@ namespace ProjectP4
             {
                 condition += string.Format("{0} ", cond);
             }
-            this.Code += string.Format("Do while {0}\n",condition);
+            this.Code += string.Format("Do while {0}\n", condition);
 
             foreach (dynamic decl in context.declaration())
             {
@@ -139,12 +140,13 @@ namespace ProjectP4
         {
 
             this.Code += string.Format("WorksheetFunction.Sum(Range(\"{0}:{1}\"))\n", start, end);
-        } 
-     
-        public void average(dynamic start, dynamic end) {
+        }
+
+        public void average(dynamic start, dynamic end)
+        {
             this.Code += string.Format("WorksheetFunction.AVERAGE(Range(\"{0}:{1}\"))\n", start, end);
         }
-        
+
 
         public void GetChildrenFromConditional(IParseTree child, List<string> childlist)
         {
@@ -155,19 +157,19 @@ namespace ProjectP4
             }
             else if (child.ChildCount == 0)
             {
-                if(child.GetText() == "AND")
+                if (child.GetText() == "AND")
                 {
                     childlist.Add("And");
                 }
-                else if(child.GetText() == "OR")
+                else if (child.GetText() == "OR")
                 {
                     childlist.Add("Or");
                 }
-                else if(child.GetText() == "!=")
+                else if (child.GetText() == "!=")
                 {
                     childlist.Add("<>");
                 }
-                else if(child.GetText() == "==")
+                else if (child.GetText() == "==")
                 {
                     childlist.Add("=");
                 }
@@ -213,6 +215,16 @@ namespace ProjectP4
             {
                 this.Code += string.Format("Range(\"{0}:{1}\").Sort Key1:=Range(\"{0}\"), Order1:=xlDescending, Header:=xlNo", dest, sortedLast);
             }
+        }
+
+        public void Count(string first, string last)
+        {
+            this.Code += string.Format("WorksheetFunction.Count(Range(\"{0}:{1}\"))\n", first, last);
+        }
+
+        public void Count(string first, string last, int specific)
+        {
+            this.Code += string.Format("WorksheetFunction.CountIf(Range(\"{0}:{1}\"), {2})\n", first, last, specific);
         }
     }
 }

@@ -578,8 +578,48 @@ namespace ProjectP4
                     }
                 }
             }
+            codeG.Count(startVar, endVar);
             return index;
         }
+
+        public override object VisitCountif([NotNull] GrammarParser.CountifContext context)
+        {
+            var startVar = context.VAR(0).GetText();
+            var endVar = context.VAR(1).GetText();
+            int specific = int.Parse(context.specific.Text);
+
+            var startVarNumber = Regex.Replace(startVar, "[^0-9]", "");
+            int startVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(startVar, "[^A-Z]", ""), 0);
+
+            var endVarNumber = Regex.Replace(endVar, "[^0-9]", "");
+            int endVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(endVar, "[^A-Z]", ""), 0);
+
+
+            dynamic index = 0;
+            for (int j = startVarLetterUnicode; j <= endVarLetterUnicode; j++)
+            {
+                for (int i = int.Parse(startVarNumber); i <= int.Parse(endVarNumber); i++)
+                {
+                    dynamic val = symbolTable.getSymbol(char.ConvertFromUtf32(j) + i);
+
+                    if ((object)val == null)
+                    {
+                        continue;
+                    }
+                    if (val.value is int k)
+                    {
+                        index++;
+                    }
+                    else if (val.value is float kf)
+                    {
+                        index++;
+                    }
+                }
+            }
+            codeG.Count(startVar, endVar, specific);
+            return index;
+        }
+
 
         public override object VisitSort([NotNull] GrammarParser.SortContext context)
         {
