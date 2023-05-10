@@ -150,6 +150,8 @@ namespace ProjectP4
             }
             else if (context.Parent.Parent.GetType().FullName != "GrammarParser+WhilestmtContext")
             {
+                codeG.AssignVariable(varname);
+                value = Visit(context.expression());
                 codeG.SetCell(varname);
                 value = Visit(context.expression());
             }

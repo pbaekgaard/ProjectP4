@@ -76,7 +76,7 @@ namespace Unit_Tests
             var visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Sub test ()\nDim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A3 As Double\nA3 = 10.0\nRange(\"A3\").Value = 10.0\nDim A4 As Double\nA4 = 10.0\nRange(\"A4\").Value = 10.0\nDim A6 As Double\nA6 = 0.0\nRange(\"A6\").Value = 0.0\nRange(\"A6\").Value = WorksheetFunction.Sum(Range(\"A2:A4\"))\nEnd Sub\n";
+            var expectedOutput = "Sub test ()\nDim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A3 As Double\nA3 = 10.0\nRange(\"A3\").Value = 10.0\nDim A4 As Double\nA4 = 10.0\nRange(\"A4\").Value = 10.0\nDim A6 As Double\nA6 = 0.0\nRange(\"A6\").Value = 0.0\nA6 = WorksheetFunction.Sum(Range(\"A2:A4\"))\nRange(\"A6\").Value = WorksheetFunction.Sum(Range(\"A2:A4\"))\nEnd Sub\n";
             string actualOutput = visitor.codeG.Code;
 
             //ASSERT
