@@ -8,7 +8,7 @@ namespace ProjectP4
     {
         public SymTable symbolTable = new();
 
-        public CodeGenerator codeG = new();
+        public CodeGenerator codeG;
 
         public override object VisitAssignnew([NotNull] GrammarParser.AssignnewContext context)
         {
@@ -186,6 +186,7 @@ namespace ProjectP4
                 }
             }
 
+            codeG.OperatorExp(context.expression(0), context.expression(1),operatorValue);
 
             return EvaluateOperation(leftValue, operatorValue, rightValue);
 
