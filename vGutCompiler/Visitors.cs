@@ -1,6 +1,8 @@
 ﻿using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using vGutCompiler;
 
 namespace ProjectP4
 {
@@ -9,7 +11,21 @@ namespace ProjectP4
         public SymTable symbolTable = new();
 
         public CodeGenerator codeG = new();
+        public string fileName { get; set; }  
 
+        public Visitors(string FileName) 
+        {
+            fileName = FileName;        
+        }
+
+        public override object VisitProgram([NotNull] GrammarParser.ProgramContext context)
+        {
+            string sourceName = this.fileName;
+            codeG.startSub(sourceName);
+            VisitChildren(context);
+            codeG.endSub();
+            return null;
+        }
         public override object VisitAssignnew([NotNull] GrammarParser.AssignnewContext context)
         {
             var name = context.VAR().GetText();
@@ -95,6 +111,7 @@ namespace ProjectP4
         {
 
             dynamic varname = context.VAR().GetText();
+
 
             Symbol var = symbolTable.getSymbol(varname);
 

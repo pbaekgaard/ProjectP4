@@ -7,14 +7,14 @@ namespace vGutCompiler
     {
         public static void Main(string[] args)
         {
-            StreamReader InputFile = new("input.vGut");
+            string fileName = "input.vGut";
+            StreamReader InputFile = new(fileName);
             AntlrInputStream inputStream = new AntlrInputStream(InputFile.ReadToEnd());
-
             //ICharStream stream = CharStreams.fromString(InputFile.ReadToEnd());
             GLexer lexer = new GLexer(inputStream);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             GrammarParser parser = new GrammarParser(tokens);
-            var visitor = new Visitors();
+            Visitors visitor = new Visitors(fileName);
             visitor.Visit(parser.program());
             Console.WriteLine("\n\n");
             Console.WriteLine("INPUT CODE:\n--------------------------\n");

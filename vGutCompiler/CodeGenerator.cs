@@ -18,6 +18,23 @@ namespace ProjectP4
             Code = string.Empty;
         }
 
+        public void startSub(string sourceName)
+        {
+            //Sub procedures cannot contain "."
+            sourceName = sourceName.Trim('.');
+            if (sourceName.Contains(".")){
+                int pos = sourceName.IndexOf(".");
+                sourceName = sourceName.Remove(pos, 1);
+            }
+            
+            this.Code += string.Format("Sub {0} ()\n", sourceName);
+        }
+
+        public void endSub()
+        {
+            this.Code += string.Format("End Sub\n");
+        }
+
         public void DeclareVariable(string name, dynamic value)
         {
             if (value is int i)
@@ -71,7 +88,7 @@ namespace ProjectP4
 
         public void endIf()
         {
-            this.Code += string.Format("End If");
+            this.Code += string.Format("End If\n");
         }
         public void While(dynamic compare, dynamic context)
         {
@@ -94,11 +111,11 @@ namespace ProjectP4
         public void sum(string start, string end)
         {
 
-            this.Code += string.Format("Application.WorksheetFunction.Sum(Range(\"{0}:{1}\"))\n", start, end);
+            this.Code += string.Format("WorksheetFunction.Sum(Range(\"{0}:{1}\"))\n", start, end);
         } 
      
         public void average(dynamic start, dynamic end) {
-            this.Code += string.Format("Application.WorksheetFunction.AVERAGE(Range(\"{0}:{1}\"))\n", start, end);
+            this.Code += string.Format("WorksheetFunction.AVERAGE(Range(\"{0}:{1}\"))\n", start, end);
         }
         
 
@@ -144,5 +161,14 @@ namespace ProjectP4
         public void MaxFunction(string first, string last){
           this.Code += string.Format("WorksheetFunction.Max(Range(\"{0}:{1}\"))\n",first,last);
         }
+        //Following code may be unnesecary after all
+        /*public string FirstCharToUpper(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return string.Empty;
+            }
+            return $"{input[0].ToString().ToUpper()}{input.Substring(1)}";
+        }*/
     }
 }
