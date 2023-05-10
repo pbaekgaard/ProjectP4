@@ -45,14 +45,15 @@ expression:
   | VAR #varexpression;
 
 conditionalexpression: 
-  expression op=LESSTHAN expression #condexpression
-  | expression op=GREATERTHAN expression #condexpression
-  | expression op=COMPEQUAL expression #condexpression
-  | expression op=LESSEQUAL expression #condexpression
-  | expression op=GREATEREQUAL expression #condexpression
-  | expression op=NOTEQUAL expression #condexpression
-  | expression op=AND expression #condexpression
-  | expression op=OR expression #condexpression;
+  conditionalexpression op=LESSTHAN conditionalexpression #condexpression
+  | conditionalexpression op=GREATERTHAN conditionalexpression #condexpression
+  | conditionalexpression op=COMPEQUAL conditionalexpression #condexpression
+  | conditionalexpression op=LESSEQUAL conditionalexpression #condexpression
+  | conditionalexpression op=GREATEREQUAL conditionalexpression #condexpression
+  | conditionalexpression op=NOTEQUAL conditionalexpression #condexpression
+  | conditionalexpression op=AND conditionalexpression #condexpression
+  | conditionalexpression op=OR conditionalexpression #condexpression
+  | expression #condexpression;
 
 sum: SUM LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 average: AVERAGE LPARENTHESIS VAR COLON VAR RPARENTHESIS;

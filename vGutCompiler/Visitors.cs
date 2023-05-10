@@ -241,6 +241,7 @@ namespace ProjectP4
             dynamic operatorValue = context.op.Text;
             dynamic leftValue = Visit(context.expression(0));
             dynamic rightValue = Visit(context.expression(1));
+            Console.WriteLine("Boolean Comparing {0} and {1}", leftValue, rightValue);
             if (leftValue is string s)
             {
                 if (s.Contains('"'))
@@ -273,58 +274,67 @@ namespace ProjectP4
             }
 
             if (leftValue is string && rightValue.GetType() == leftValue.GetType() && (operatorValue is "==" or "!="))
-                return (leftValue, operatorValue, rightValue);
+                return EvaluateOperation(leftValue, operatorValue, rightValue);
             else if (leftValue is bool && rightValue.GetType() == leftValue.GetType() && (operatorValue is "AND" or "OR" or "==" or "!="))
-                return (leftValue, operatorValue, rightValue);
+                return EvaluateOperation(leftValue, operatorValue, rightValue);
             else if ((leftValue is int || leftValue is float) && (rightValue is int || rightValue is float) && (operatorValue is "<" or ">" or "<=" or ">=" or "==" or "!="))
-                return (leftValue, operatorValue, rightValue);
+                return EvaluateOperation(leftValue, operatorValue, rightValue);
             else
                 throw new Exception("Invalid Comparison");
         }
 
         public override object VisitCondexpression([NotNull] GrammarParser.CondexpressionContext context)
         {
-            dynamic operatorValue = context.op.Text;
-            dynamic leftValue = Visit(context.expression(0));
-            dynamic rightValue = Visit(context.expression(1));
-            if (leftValue is string s)
+            if (context.op != null)
             {
-                if (s.Contains('"'))
+                dynamic operatorValue = context.op.Text;
+                dynamic leftValue = Visit(context.conditionalexpression(0));
+                dynamic rightValue = Visit(context.conditionalexpression(1));
+                Console.WriteLine("Comparing {0} and {1}", leftValue, rightValue);
+                Console.WriteLine("leftValue: {0}\nrightValue: {1}", leftValue, rightValue);
+                if (leftValue is string s)
                 {
-                    leftValue = s.Trim(new char[] { '"' });
+                    if (s.Contains('"'))
+                    {
+                        leftValue = s.Trim(new char[] { '"' });
+                    }
+                    else
+                    {
+                        leftValue = symbolTable.getSymbol(s).value;
+                    }
                 }
+                if (rightValue is string s2)
+                {
+                    if (s2.Contains('"'))
+                    {
+                        rightValue = s2.Trim(new char[] { '"' });
+                    }
+                    else
+                    {
+                        rightValue = symbolTable.getSymbol(s2).value;
+                    }
+                }
+                if (leftValue is int)
+                {
+                    leftValue = (float)Convert.ToDouble(leftValue);
+                }
+                if (rightValue is int)
+                {
+                    rightValue = (float)Convert.ToDouble(rightValue);
+                }
+                if (leftValue is string && rightValue.GetType() == leftValue.GetType() && (operatorValue is "==" or "!="))
+                    return EvaluateOperation(leftValue, operatorValue, rightValue);
+                else if (leftValue is bool && rightValue.GetType() == leftValue.GetType() && (operatorValue is "AND" or "OR" or "==" or "!="))
+                    return EvaluateOperation(leftValue, operatorValue, rightValue);
+                else if ((leftValue is int || leftValue is float) && (rightValue is int || rightValue is float) && (operatorValue is "<" or ">" or "<=" or ">=" or "==" or "!="))
+                    return EvaluateOperation(leftValue, operatorValue, rightValue);
                 else
-                {
-                    leftValue = symbolTable.getSymbol(s).value;
-                }
+                    throw new Exception("Invalid Comparison");
             }
-            if (rightValue is string s2)
-            {
-                if (s2.Contains('"'))
-                {
-                    rightValue = s2.Trim(new char[] { '"' });
-                }
-                else
-                {
-                    rightValue = symbolTable.getSymbol(s2).value;
-                }
-            }
-            if (leftValue is int)
-            {
-                leftValue = (float)Convert.ToDouble(leftValue);
-            }
-            if (rightValue is int)
-            {
-                rightValue = (float)Convert.ToDouble(rightValue);
-            }
-            if (leftValue is string && rightValue.GetType() == leftValue.GetType() && (operatorValue is "==" or "!="))
-                return EvaluateOperation(leftValue, operatorValue, rightValue);
-            else if (leftValue is bool && rightValue.GetType() == leftValue.GetType() && (operatorValue is "AND" or "OR" or "==" or "!="))
-                return EvaluateOperation(leftValue, operatorValue, rightValue);
-            else if ((leftValue is int || leftValue is float) && (rightValue is int || rightValue is float) && (operatorValue is "<" or ">" or "<=" or ">=" or "==" or "!="))
-                return EvaluateOperation(leftValue, operatorValue, rightValue);
-            else
-                throw new Exception("Invalid Comparison");
+            else {
+                dynamic lastValue = Visit(context.expression());
+                return lastValue;
+                    }
         }
 
 
