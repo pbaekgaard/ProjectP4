@@ -16,6 +16,7 @@ namespace ProjectP4
         public CodeGenerator()
         {
             Code = string.Empty;
+            
         }
 
         public void DeclareVariable(string name, dynamic value)
@@ -77,6 +78,29 @@ namespace ProjectP4
         public void endIf()
         {
             this.Code += string.Format("End If");
+        }
+
+        public void OperatorExp(GrammarParser.ExpressionContext leftv, GrammarParser.ExpressionContext rightv, string op)
+        {
+            if (leftv.GetType().Name == "VarexpressionContext")
+            {
+                this.Code += string.Format("Range(\"{0}\").Value ",leftv.GetText());
+            }
+            else
+            {
+                this.Code += string.Format("{0} ", leftv.GetText());
+            }
+            this.Code += string.Format("{0} ", op);
+
+
+            if (rightv.GetType().Name == "VarexpressionContext")
+            {
+                this.Code += string.Format("Range(\"{0}\").Value\n", rightv.GetText());
+            }
+            else
+            {
+                this.Code += string.Format("{0}\n", rightv.GetText());
+            }
         }
 
         public void sum(string start, string end)

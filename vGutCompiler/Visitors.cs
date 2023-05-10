@@ -185,6 +185,7 @@ namespace ProjectP4
                 }
             }
 
+            codeG.OperatorExp(context.expression(0), context.expression(1),operatorValue);
 
             return EvaluateOperation(leftValue,operatorValue, rightValue);
 
