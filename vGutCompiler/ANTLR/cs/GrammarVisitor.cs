@@ -191,6 +191,12 @@ public interface IGrammarVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitCount([NotNull] GrammarParser.CountContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="GrammarParser.countif"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitCountif([NotNull] GrammarParser.CountifContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="GrammarParser.sort"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>

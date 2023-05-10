@@ -40,6 +40,7 @@ expression:
   | expression op=AND expression #booleanexpression
   | expression op=OR expression #booleanexpression
 	| count #countexpression
+  | countif #countexpression
 	| constant #constantexpression
   | VAR #varexpression;
 
@@ -58,6 +59,7 @@ average: AVERAGE LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 min: MIN LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 max: MAX LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 count: COUNT LPARENTHESIS VAR COLON VAR RPARENTHESIS;
+countif: COUNT LPARENTHESIS VAR COLON VAR COMMA specific=(INTEGER | FLOAT) RPARENTHESIS;
 sort: SORT LPARENTHESIS VAR COLON VAR COMMA VAR COMMA BOOL RPARENTHESIS;
 
 constant: INTEGER | FLOAT | BOOL | STRING | NULL;

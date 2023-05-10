@@ -84,6 +84,24 @@ namespace Unit_Tests
             Assert.Equal(expectedOutput, actualOutput);
         }
 
+        [Fact]
+        public void CountIfProducesTheCorrectCountIfForVBA()
+        {
+            // ARRANGE
+            GLexer lexer = new GLexer(new AntlrInputStream(@"number A1 = 0\n number A2 = 1\n number A3 = 3\n number A4 = 2\n number A5 = COUNT(A1:A3, 2)\n"));
+
+            // ACT
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            GrammarParser parser = new GrammarParser(tokens);
+            Visitors visitor = new Visitors("test");
+            visitor.Visit(parser.program());
+
+            string expectedOutput = "Sub test ()\nDim A1 As Double\nA1 = 0.0\nRange(\"A1\").Value = 0.0\nDim A2 As Double\nA2 = 1.0\nRange(\"A2\").Value = 1.0\nDim A3 As Double\nA3 = 3.0\nRange(\"A3\").Value = 3.0\nDim A4 As Double\nA4 = 2.0\nRange(\"A4\").Value = 2.0\nDim A5 As Double\nA5 = WorksheetFunction.CountIf(Range(\"A1:A3\"), 2)\nRange(\"A5\").Value = WorksheetFunction.CountIf(Range(\"A1:A3\"), 2)\nEnd Sub\n";
+            string actualOutput = visitor.codeG.Code;
+
+            //ASSERT
+            Assert.Equal(expectedOutput, actualOutput);
+        }
 
 
     }
