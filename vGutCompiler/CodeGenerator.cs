@@ -152,7 +152,6 @@ namespace ProjectP4
         {
             if (child.ChildCount == 1)
             {
-                Console.WriteLine(child.GetChild(0).GetText() + " Childcount 1");
                 childlist.Add(child.GetChild(0).GetText());
             }
             else if (child.ChildCount == 0)
