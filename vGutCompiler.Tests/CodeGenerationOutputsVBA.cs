@@ -8,6 +8,24 @@ namespace Unit_Tests
     public class CodeGenerationOutputsVBA
     {
         [Fact]
+        public void CodeGeneratorOutputsCorrectProgram()
+        {
+            //ARRANGE
+            GLexer lexer = new GLexer(new AntlrInputStream(@"number A2 = 1"));
+            //ACT
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            GrammarParser parser = new GrammarParser(tokens);
+            var visitor = new Visitors("test");
+            visitor.Visit(parser.program());
+
+            var expectedOutput = "Sub test ()\nDim A2 As Double\nA2 = 1.0\nRange(\"A2\").Value = 1.0\nEnd Sub\n";
+
+            string actualOutput = visitor.codeG.Code;
+            //ASSERT
+            Assert.Equal(expectedOutput, actualOutput);
+        }
+
+        [Fact]
         public void CodeGeneratorOutputsCorrectVBA()
         {
             //ARRANGE
