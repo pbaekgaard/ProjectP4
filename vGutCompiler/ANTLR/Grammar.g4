@@ -28,6 +28,7 @@ sortingexpression:
 expression: 
 	sum #sumexpression
 	| average #averageexpression
+  | vlookup #vlookupexpression
 	| min #minexpression
 	| max #maxexpression
 	| expression operator expression #operatorexpression
@@ -59,6 +60,7 @@ average: AVERAGE LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 min: MIN LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 max: MAX LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 count: COUNT LPARENTHESIS VAR COLON VAR RPARENTHESIS;
+vlookup: VLOOKUP LPARENTHESIS STRING COMMA VAR COLON VAR COMMA INTEGER COMMA BOOL RPARENTHESIS;
 countif: COUNT LPARENTHESIS VAR COLON VAR COMMA specific=(INTEGER | FLOAT) RPARENTHESIS;
 sort: SORT LPARENTHESIS VAR COLON VAR COMMA VAR COMMA BOOL RPARENTHESIS;
 

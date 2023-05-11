@@ -669,6 +669,37 @@ namespace ProjectP4
             return true;
         }
 
+        public override object VisitVlookup(GrammarParser.VlookupContext context){
+            var start = context.VAR(0).GetText();
+            var end = context.VAR(1).GetText();
+            
+            var startNumber = Regex.Replace(start, "[^0-9]", "");
+            var startLetter = Regex.Replace(start, "[^A-Z]", "");
+
+            var endNumber = Regex.Replace(end, "[^0-9]", "");
+            var endLetter = Regex.Replace(end, "[^A-Z]", "");
+
+            int columnSpan = ((int)Convert.ToChar(char.Parse(endLetter)) - (int)Convert.ToChar(char.Parse(startLetter)))+1;
+
+            if(columnSpan == 1){
+                throw new Exception("You need to select multiple columns");
+            }
+            else if(columnSpan < int.Parse(context.INTEGER().GetText())){
+                throw new Exception("Value column out of range");
+            }
+
+            var valColumn = (int)Convert.ToChar(char.Parse(startLetter)) + int.Parse(context.INTEGER().GetText()) - 1;
+
+            IDictionary<dynamic, dynamic> lookup = new Dictionary<dynamic, dynamic>();
+
+            for(int i = int.Parse(startNumber); i <= int.Parse(endNumber); i++){
+                Symbol? key = symbolTable.getSymbol(startLetter + i);
+                Symbol? val = symbolTable.getSymbol(char.ConvertFromUtf32(valColumn) + i);
+                lookup.Add(key, val);
+            }
+
+            return lookup[context.STRING().GetText()];
+        }
 
         private dynamic EvaluateOperation(dynamic lv, string opr, dynamic rv)
         {

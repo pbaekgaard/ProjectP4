@@ -225,5 +225,9 @@ namespace ProjectP4
         {
             this.Code += string.Format("WorksheetFunction.CountIf(Range(\"{0}:{1}\"), {2})\n", first, last, specific);
         }
+
+        public void VLookUpFunction(string search, string start, string end, int column_index, bool aprox_match=true){
+            this.Code += string.Format("WorksheetFunction.VLOOKUP({0},Range(\"{1}:{2}\"),{3},{4})",search,start,end,column_index,aprox_match);
+        }
     }
 }
