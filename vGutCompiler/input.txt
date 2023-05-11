@@ -1,0 +1,2 @@
+number A1 = 10
+number A2 = A1 + 5
