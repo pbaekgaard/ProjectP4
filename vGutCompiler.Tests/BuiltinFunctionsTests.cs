@@ -91,10 +91,10 @@ namespace Unit_Tests
             //Act
             CommonTokenStream Tokens = new CommonTokenStream(lexer);
             GrammarParser parser = new GrammarParser(Tokens);
-            var visitor = new Visitors();
+            var visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            string expected = "Dim B2 As Double\nB2 = 2\nRange(\"B2\").Value = 2\nDim B3 As Double\nB3 = 6\nRange(\"B3\").Value = 6\nApplication.WorksheetFunction.AVERAGE(Range(\"B2:B3\"))\nDim A2 As Double\nA2 = 4\nRange(\"A2\").Value = 4\n";
+            string expected = "Sub test ()\nDim B2 As Double\nB2 = 2.0\nRange(\"B2\").Value = 2.0\nDim B3 As Double\nB3 = 6.0\nRange(\"B3\").Value = 6.0\nDim A2 As Double\nA2 = WorksheetFunction.AVERAGE(Range(\"B2:B3\"))\nRange(\"A2\").Value = WorksheetFunction.AVERAGE(Range(\"B2:B3\"))\nEnd Sub\n";
             string actual = visitor.codeG.Code;
             
             //Assert
