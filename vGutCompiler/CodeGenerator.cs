@@ -73,20 +73,27 @@ namespace ProjectP4
             else
                 this.Code += string.Format("{0}\n", value);
         }
-        public void startIf(dynamic compare)
+        public void startIf()
         {
-            string condition = "";
-            List<string> conditions = new();
-            if(compare is Antlr4.Runtime.Tree.IParseTree)
+            this.Code += string.Format("If ");
+        }
+
+        public void thenIf()
+        {
+            this.Code += string.Format("Then\n");
+        }
+
+        public void conditional(dynamic cond)
+        {
+            if (cond is GrammarParser.ConditionalexpressionContext)
             {
-                GetChildrenFromConditional(compare, conditions);
-                foreach (string cond in conditions)
+                if (cond.ChildCount == 1 || cond.ChildCount == 0)
                 {
-                    condition += string.Format("{0} ", cond);
+                    this.Code += string.Format("{0} ", cond.GetText());
                 }
             }
-            condition += string.Format("{0}", compare);
-            this.Code += string.Format("If {0}Then\n", condition);
+            else
+                this.Code += string.Format("{0} ", cond.Text);
         }
 
         public void elseStatement()

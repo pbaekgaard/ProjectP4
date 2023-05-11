@@ -144,6 +144,9 @@ namespace ProjectP4
 
             if (context.expression().GetType().FullName == "GrammarParser+ConstantexpressionContext" && context.Parent.Parent.GetType().FullName != "GrammarParser+WhilestmtContext")
             {
+                codeG.AssignVariable(varname);
+                value = Visit(context.expression());
+                codeG.AssignValue(value);
                 codeG.SetCell(varname);
                 value = Visit(context.expression());
                 codeG.AssignValue(value);
@@ -241,7 +244,6 @@ namespace ProjectP4
             dynamic operatorValue = context.op.Text;
             dynamic leftValue = Visit(context.expression(0));
             dynamic rightValue = Visit(context.expression(1));
-            Console.WriteLine("Boolean Comparing {0} and {1}", leftValue, rightValue);
             if (leftValue is string s)
             {
                 if (s.Contains('"'))
@@ -290,8 +292,6 @@ namespace ProjectP4
                 dynamic operatorValue = context.op.Text;
                 dynamic leftValue = Visit(context.conditionalexpression(0));
                 dynamic rightValue = Visit(context.conditionalexpression(1));
-                Console.WriteLine("Comparing {0} and {1}", leftValue, rightValue);
-                Console.WriteLine("leftValue: {0}\nrightValue: {1}", leftValue, rightValue);
                 if (leftValue is string s)
                 {
                     if (s.Contains('"'))
@@ -323,18 +323,34 @@ namespace ProjectP4
                     rightValue = (float)Convert.ToDouble(rightValue);
                 }
                 if (leftValue is string && rightValue.GetType() == leftValue.GetType() && (operatorValue is "==" or "!="))
+                {
+                    codeG.conditional(context.conditionalexpression(0));
+                    codeG.conditional(context.op);
+                    codeG.conditional(context.conditionalexpression(1));
                     return EvaluateOperation(leftValue, operatorValue, rightValue);
+                }
                 else if (leftValue is bool && rightValue.GetType() == leftValue.GetType() && (operatorValue is "AND" or "OR" or "==" or "!="))
+                {
+                    codeG.conditional(context.conditionalexpression(0));
+                    codeG.conditional(context.op);
+                    codeG.conditional(context.conditionalexpression(1));
+                    Console.WriteLine(context.conditionalexpression(0));
+                    Console.WriteLine(context.op);
+                    Console.WriteLine(context.conditionalexpression(1));
                     return EvaluateOperation(leftValue, operatorValue, rightValue);
+                }
                 else if ((leftValue is int || leftValue is float) && (rightValue is int || rightValue is float) && (operatorValue is "<" or ">" or "<=" or ">=" or "==" or "!="))
+                {
+                    codeG.conditional(context.conditionalexpression(0));
+                    codeG.conditional(context.op);
+                    codeG.conditional(context.conditionalexpression(1));
                     return EvaluateOperation(leftValue, operatorValue, rightValue);
+                }
+                    
                 else
                     throw new Exception("Invalid Comparison");
             }
-            else {
-                dynamic lastValue = Visit(context.expression());
-                return lastValue;
-                    }
+            return true;
         }
 
 
@@ -346,7 +362,9 @@ namespace ProjectP4
         }
         public override object VisitIfthen([NotNull] GrammarParser.IfthenContext context)
         {
-            codeG.startIf(context.conditionalexpression());
+            codeG.startIf();
+            var conditions = Visit(context.conditionalexpression());
+            codeG.thenIf();
             symbolTable.scope++;
             symbolTable.openScope();
             Visit(context.block());
@@ -384,9 +402,10 @@ namespace ProjectP4
 
         public override object VisitIfelse([NotNull] GrammarParser.IfelseContext context)
         {
-            dynamic compare = Visit(context.conditionalexpression());
 
-            codeG.startIf(compare);
+            codeG.startIf();
+            var conditions = Visit(context.conditionalexpression());
+            codeG.thenIf();
             symbolTable.scope++;
             symbolTable.openScope();
             Visit(context.block(0));
