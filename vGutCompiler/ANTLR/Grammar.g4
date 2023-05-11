@@ -8,7 +8,8 @@ program: declaration* EOF;
 declaration:
 	ifstmt 
 	| whilestmt
-	| assignment;
+	| assignment
+	| sortingexpression;
 
 assignment: types VAR ASSIGN expression #assignnew
             | VAR ASSIGN expression #assigndec;
@@ -17,9 +18,12 @@ ifstmt:
 	IF conditionalexpression THEN block ELSE block ENDIF #ifelse
 	| IF conditionalexpression THEN block ENDIF #ifthen;
 
-whilestmt: WHILE conditionalexpression DO block ENDWHILE;
+whilestmt: WHILE conditionalexpression DO declaration* ENDWHILE;
 
 block: declaration*;
+
+sortingexpression: 
+	sort #sortexpression;
 
 expression: 
 	sum #sumexpression
@@ -27,7 +31,6 @@ expression:
   | vlookup #vlookupexpression
 	| min #minexpression
 	| max #maxexpression
-	| sort #sortexpression
 	| expression operator expression #operatorexpression
   | expression op=LESSTHAN expression #booleanexpression
   | expression op=GREATERTHAN expression #booleanexpression
@@ -38,6 +41,7 @@ expression:
   | expression op=AND expression #booleanexpression
   | expression op=OR expression #booleanexpression
 	| count #countexpression
+  | countif #countexpression
 	| constant #constantexpression
   | VAR #varexpression;
 
@@ -56,8 +60,9 @@ average: AVERAGE LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 min: MIN LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 max: MAX LPARENTHESIS VAR COLON VAR RPARENTHESIS;
 count: COUNT LPARENTHESIS VAR COLON VAR RPARENTHESIS;
-sort: SORT LPARENTHESIS VAR COLON VAR COMMA VAR RPARENTHESIS;
 vlookup: VLOOKUP LPARENTHESIS STRING COMMA VAR COLON VAR COMMA INTEGER COMMA BOOL RPARENTHESIS;
+countif: COUNT LPARENTHESIS VAR COLON VAR COMMA specific=(INTEGER | FLOAT) RPARENTHESIS;
+sort: SORT LPARENTHESIS VAR COLON VAR COMMA VAR COMMA BOOL RPARENTHESIS;
 
 constant: INTEGER | FLOAT | BOOL | STRING | NULL;
 types: NUMBERDCL | BOOLDCL | TEXTDCL;

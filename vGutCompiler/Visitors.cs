@@ -1,22 +1,66 @@
 ﻿using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using vGutCompiler;
 
 namespace ProjectP4
 {
     public class Visitors : GrammarBaseVisitor<object?>
     {
         public SymTable symbolTable = new();
-
         public CodeGenerator codeG = new();
+        public string fileName { get; set; }
 
+        public Visitors(string FileName)
+        {
+            fileName = FileName;
+        }
+
+        public override object VisitProgram([NotNull] GrammarParser.ProgramContext context)
+        {
+            string sourceName = this.fileName;
+            codeG.startSub(sourceName);
+            VisitChildren(context);
+            codeG.endSub();
+            return null;
+        }
         public override object VisitAssignnew([NotNull] GrammarParser.AssignnewContext context)
         {
             var name = context.VAR().GetText();
 
             var type = context.types().GetText();
 
-            dynamic value = Visit(context.expression());
+            dynamic value;
+
+            if (context.expression().GetType().FullName == "GrammarParser+ConstantexpressionContext" && context.Parent.Parent.GetType().FullName != "GrammarParser+WhilestmtContext")
+            {
+                value = Visit(context.expression());
+                codeG.DeclareVariable(name, value);
+                codeG.AssignValue(value);
+                codeG.SetCell(name);
+                codeG.AssignValue(value);
+            }
+            else if (context.Parent.Parent.GetType().FullName != "GrammarParser+WhilestmtContext")
+            {
+                dynamic tvalue;
+                if (context.expression().GetType().Name == "BooleanexpressionContext")
+                {
+                    tvalue = true;
+                }
+                else
+                {
+                    tvalue = 1;
+                }
+                codeG.DeclareVariable(name, tvalue);
+                value = Visit(context.expression());
+                codeG.SetCell(name);
+                value = Visit(context.expression());
+            }
+            else
+            {
+                value = Visit(context.expression());
+            }
 
             switch (type)
             {
@@ -84,10 +128,7 @@ namespace ProjectP4
                 throw new Exception("type is not valid");
             }
 
-            codeG.DeclareVariable(name, value);
-            codeG.AssignValue(value);
-            codeG.SetCell(name);
-            codeG.AssignValue(value);
+
 
             return null;
         }
@@ -95,6 +136,7 @@ namespace ProjectP4
         {
 
             dynamic varname = context.VAR().GetText();
+
 
             Symbol var = symbolTable.getSymbol(varname);
 
@@ -108,9 +150,12 @@ namespace ProjectP4
             }
             else if (context.Parent.Parent.GetType().FullName != "GrammarParser+WhilestmtContext")
             {
+                codeG.AssignVariable(varname);
+                value = Visit(context.expression());
                 codeG.SetCell(varname);
                 value = Visit(context.expression());
-            } else
+            }
+            else
             {
                 value = Visit(context.expression());
             }
@@ -185,8 +230,9 @@ namespace ProjectP4
                 }
             }
 
+            codeG.OperatorExp(context.expression(0), context.expression(1), operatorValue);
 
-            return EvaluateOperation(leftValue,operatorValue, rightValue);
+            return EvaluateOperation(leftValue, operatorValue, rightValue);
 
         }
 
@@ -321,7 +367,7 @@ namespace ProjectP4
 
             var test = context.Start.InputStream.GetText(Interval.Of(context.conditionalexpression().Start.StartIndex, context.conditionalexpression().Stop.StopIndex));
 
-            codeG.While(test, context);
+            codeG.While(context.conditionalexpression(), context);
 
             return null;
         }
@@ -458,6 +504,7 @@ namespace ProjectP4
                     }
                 }
             }
+            codeG.MinFunction(startVar, endVar);
             return result;
         }
 
@@ -531,13 +578,55 @@ namespace ProjectP4
                     }
                 }
             }
+            codeG.Count(startVar, endVar);
             return index;
         }
+
+        public override object VisitCountif([NotNull] GrammarParser.CountifContext context)
+        {
+            var startVar = context.VAR(0).GetText();
+            var endVar = context.VAR(1).GetText();
+            int specific = int.Parse(context.specific.Text);
+
+            var startVarNumber = Regex.Replace(startVar, "[^0-9]", "");
+            int startVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(startVar, "[^A-Z]", ""), 0);
+
+            var endVarNumber = Regex.Replace(endVar, "[^0-9]", "");
+            int endVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(endVar, "[^A-Z]", ""), 0);
+
+
+            dynamic index = 0;
+            for (int j = startVarLetterUnicode; j <= endVarLetterUnicode; j++)
+            {
+                for (int i = int.Parse(startVarNumber); i <= int.Parse(endVarNumber); i++)
+                {
+                    dynamic val = symbolTable.getSymbol(char.ConvertFromUtf32(j) + i);
+
+                    if ((object)val == null)
+                    {
+                        continue;
+                    }
+                    if (val.value is int k)
+                    {
+                        index++;
+                    }
+                    else if (val.value is float kf)
+                    {
+                        index++;
+                    }
+                }
+            }
+            codeG.Count(startVar, endVar, specific);
+            return index;
+        }
+
 
         public override object VisitSort([NotNull] GrammarParser.SortContext context)
         {
             var startVar = context.VAR(0).GetText();
             var endVar = context.VAR(1).GetText();
+            var destVar = context.VAR(2).GetText();
+            var order = context.BOOL().GetText();
 
             var result = symbolTable.getSymbol(context.VAR(2).GetText());
 
@@ -570,15 +659,14 @@ namespace ProjectP4
                 result = new Symbol();
                 result.value = sortArray.ToArray();
                 symbolTable.addSymbol(context.VAR(2).GetText(), result);
-                return true;
             }
             else
             {
                 result.value = sortArray.ToArray();
-                symbolTable.addSymbol(context.VAR(2).GetText(), result);
-                return true;
+                symbolTable.updateSymbol(context.VAR(2).GetText(), result);
             }
-
+            codeG.SortFunction(startVar, endVar, destVar, order);
+            return true;
         }
 
         public override object VisitVlookup(GrammarParser.VlookupContext context){

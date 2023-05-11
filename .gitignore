@@ -13,6 +13,11 @@ vGutCompiler/ANTLR/**/*
 *.vGut
 *.txt
 
+vGutCompiler/[Bb]in/
+vGutCompiler/[Oo]bj/
+vGutCompiler.Tests/[Oo]bj/
+vGutCompiler.Tests/[Bb]in/
+
 # User-specific files
 *.rsuser
 *.suo

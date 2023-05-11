@@ -12,10 +12,27 @@ namespace ProjectP4
     {
         public string Code { get; set; }
 
-
         public CodeGenerator()
         {
             Code = string.Empty;
+        }
+
+        public void startSub(string sourceName)
+        {
+            //Sub procedures cannot contain "."
+            sourceName = sourceName.Trim('.');
+            if (sourceName.Contains("."))
+            {
+                int pos = sourceName.IndexOf(".");
+                sourceName = sourceName.Remove(pos, 1);
+            }
+
+            this.Code += string.Format("Sub {0} ()\n", sourceName);
+        }
+
+        public void endSub()
+        {
+            this.Code += string.Format("End Sub\n");
         }
 
         public void DeclareVariable(string name, dynamic value)
@@ -37,31 +54,33 @@ namespace ProjectP4
             }
         }
 
-        public void SetCell(string variable) {
-          this.Code += string.Format("Range(\"{0}\").Value = ", variable);
+        public void SetCell(string variable)
+        {
+            this.Code += string.Format("Range(\"{0}\").Value = ", variable);
         }
 
         public void AssignVariable(string name)
         {
-                this.Code += string.Format("{0} = ", name);
+            this.Code += string.Format("{0} = ", name);
         }
 
-        public void AssignValue(dynamic value) {
-          this.Code += string.Format("{0}\n", value);
+        public void AssignValue(dynamic value)
+        {
+            if (value is int)
+            {
+                this.Code += string.Format("{0}.0\n", value);
+            }
+            else
+                this.Code += string.Format("{0}\n", value);
         }
         public void startIf(GrammarParser.ConditionalexpressionContext compare)
         {
             string condition = "";
-            List<IParseTree> conditions = new();
+            List<string> conditions = new();
             GetChildrenFromConditional(compare, conditions);
-            foreach (IParseTree cond in conditions)
+            foreach (string cond in conditions)
             {
-                if (cond.GetText() == "AND")
-                {
-                    condition += string.Format("And ");
-                }
-                else
-                    condition += string.Format("{0} ", cond.GetText());
+                condition += string.Format("{0} ", cond);
             }
             this.Code += string.Format("If {0}Then\n", condition);
         }
@@ -73,22 +92,42 @@ namespace ProjectP4
 
         public void endIf()
         {
-            this.Code += string.Format("End If");
+            this.Code += string.Format("End If\n");
         }
 
-        public void sum(string start, string end)
+        public void OperatorExp(GrammarParser.ExpressionContext leftv, GrammarParser.ExpressionContext rightv, string op)
         {
+            if (leftv.GetType().Name == "VarexpressionContext")
+            {
+                this.Code += string.Format("Range(\"{0}\").Value ", leftv.GetText());
+            }
+            else
+            {
+                this.Code += string.Format("{0} ", leftv.GetText());
+            }
 
-            this.Code += string.Format("Application.WorksheetFunction.sum(Range(\"{0}:{1}\"))\n", start, end);
-        } 
-     
-        public void average(dynamic start, dynamic end) {
-            this.Code += string.Format("Application.WorksheetFunction.AVERAGE(Range(\"{0}:{1}\"))\n", start, end);
+            this.Code += string.Format("{0} ", op);
+
+            if (rightv.GetType().Name == "VarexpressionContext")
+            {
+                this.Code += string.Format("Range(\"{0}\").Value\n", rightv.GetText());
+            }
+            else
+            {
+                this.Code += string.Format("{0}\n", rightv.GetText());
+            }
         }
-        //Bare et eksempel
+
         public void While(dynamic compare, dynamic context)
         {
-            this.Code += string.Format("Do while {0}\n",compare);
+            string condition = "";
+            List<string> conditions = new();
+            GetChildrenFromConditional(compare, conditions);
+            foreach (string cond in conditions)
+            {
+                condition += string.Format("{0} ", cond);
+            }
+            this.Code += string.Format("Do while {0}\n", condition);
 
             foreach (dynamic decl in context.declaration())
             {
@@ -97,15 +136,46 @@ namespace ProjectP4
             this.Code += string.Format("Loop\n");
         }
 
-        public void GetChildrenFromConditional(IParseTree child, List<IParseTree> childlist)
+        public void sum(string start, string end)
+        {
+
+            this.Code += string.Format("WorksheetFunction.Sum(Range(\"{0}:{1}\"))\n", start, end);
+        }
+
+        public void average(dynamic start, dynamic end)
+        {
+            this.Code += string.Format("WorksheetFunction.AVERAGE(Range(\"{0}:{1}\"))\n", start, end);
+        }
+
+
+        public void GetChildrenFromConditional(IParseTree child, List<string> childlist)
         {
             if (child.ChildCount == 1)
             {
-                childlist.Add(child.GetChild(0));
+                childlist.Add(child.GetChild(0).GetText());
             }
             else if (child.ChildCount == 0)
             {
-                childlist.Add(child);
+                if (child.GetText() == "AND")
+                {
+                    childlist.Add("And");
+                }
+                else if (child.GetText() == "OR")
+                {
+                    childlist.Add("Or");
+                }
+                else if (child.GetText() == "!=")
+                {
+                    childlist.Add("<>");
+                }
+                else if (child.GetText() == "==")
+                {
+                    childlist.Add("=");
+                }
+                else
+                {
+                    childlist.Add(child.GetText());
+                }
             }
             else
             {
@@ -116,8 +186,44 @@ namespace ProjectP4
             }
         }
 
-        public void MaxFunction(string first, string last){
-          this.Code += string.Format("MAX({0}:{1})\n",first,last);
+        public void MaxFunction(string first, string last)
+        {
+            this.Code += string.Format("WorksheetFunction.Max(Range(\"{0}:{1}\"))\n", first, last);
+        }
+        public void MinFunction(string first, string last)
+        {
+            this.Code += string.Format("WorksheetFunction.Min(Range(\"{0}:{1}\"))\n", first, last);
+        }
+
+        public void SortFunction(string first, string last, string dest, string order)
+        {
+            string sortedDestLetter = new String(dest.Where(c => Char.IsLetter(c) && Char.IsUpper(c)).ToArray());
+            int sortedDestDigit = int.Parse(new String(dest.Where(c => Char.IsDigit(c)).ToArray()));
+            string sortedLastLetter = new String(last.Where(c => Char.IsLetter(c) && Char.IsUpper(c)).ToArray());
+            int LastDigit = int.Parse(new String(last.Where(c => Char.IsDigit(c)).ToArray()));
+            int FirstDigit = int.Parse(new String(first.Where(c => Char.IsDigit(c)).ToArray()));
+            int sortedLastDigit = sortedDestDigit + LastDigit - FirstDigit;
+            string sortedLast = string.Format("{0}{1}", sortedDestLetter, sortedLastDigit);
+
+            this.Code += string.Format("Range(\"{0}:{1}\").Copy Destination:=Range(\"{2}\")\n", first, last, dest);
+            if (order == "true")
+            {
+                this.Code += string.Format("Range(\"{0}:{1}\").Sort Key1:=Range(\"{0}\"), Order1:=xlAscending, Header:=xlNo\n", dest, sortedLast);
+            }
+            else if (order == "false")
+            {
+                this.Code += string.Format("Range(\"{0}:{1}\").Sort Key1:=Range(\"{0}\"), Order1:=xlDescending, Header:=xlNo", dest, sortedLast);
+            }
+        }
+
+        public void Count(string first, string last)
+        {
+            this.Code += string.Format("WorksheetFunction.Count(Range(\"{0}:{1}\"))\n", first, last);
+        }
+
+        public void Count(string first, string last, int specific)
+        {
+            this.Code += string.Format("WorksheetFunction.CountIf(Range(\"{0}:{1}\"), {2})\n", first, last, specific);
         }
 
         public void VLookUpFunction(string search, string start, string end, int column_index, bool aprox_match=true){
