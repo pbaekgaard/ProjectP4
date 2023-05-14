@@ -37,7 +37,7 @@ NOTEQUAL: '!=';
 PLUS: '+';
 MINUS: '-';
 MULTIPLICATION: '*';
-DIVISON: '/';
+DIVISION: '/';
 MODULO: '%';
 LPARENTHESIS: '(';
 RPARENTHESIS: ')';

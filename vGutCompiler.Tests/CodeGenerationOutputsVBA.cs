@@ -18,7 +18,7 @@ namespace Unit_Tests
             var visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Sub test ()\nDim A2 As Double\nA2 = 1.0\nRange(\"A2\").Value = 1.0\nEnd Sub\n";
+            var expectedOutput = "Sub test ()\nRange(\"A2\").Value = 1.0 \nEnd Sub\n";
 
             string actualOutput = visitor.codeG.Code;
             //ASSERT
@@ -36,7 +36,7 @@ namespace Unit_Tests
             var visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Sub test ()\nDim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nEnd Sub\n";
+            var expectedOutput = "Sub test ()\nRange(\"A2\").Value = 10.0 \nEnd Sub\n";
 
             string actualOutput = visitor.codeG.Code;
             //ASSERT
@@ -55,7 +55,7 @@ namespace Unit_Tests
             var visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Sub test ()\nDim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A1 As Double\nA1 = 5.0\nRange(\"A1\").Value = 5.0\nIf A2 > A1 And A2 = 10 Then\nRange(\"A2\").Value = 20.0\nEnd If\nEnd Sub\n";
+            var expectedOutput = "Sub test ()\nRange(\"A2\").Value = 10.0 \nRange(\"A1\").Value = 5.0 \nIf Range(\"A2\").Value > Range(\"A1\").Value And Range(\"A2\").Value == 10.0 \nThen\nRange(\"A2\").Value = 20.0 \nEnd If\nEnd Sub\n";
 
             string actualOutput = visitor.codeG.Code;
 
@@ -74,7 +74,7 @@ namespace Unit_Tests
             var visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Sub test ()\nDim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDo while A2 = 10 \nA2 = 11\nLoop\nEnd Sub\n";
+            var expectedOutput = "Sub test ()\nRange(\"A2\").Value = 10.0 \nWhile Range(\"A2\").Value == 10.0 \nRange(\"A2\").Value = 11.0 \nWend\nEnd Sub\n";
 
             string actualOutput = visitor.codeG.Code;
 
@@ -94,7 +94,7 @@ namespace Unit_Tests
             var visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Sub test ()\nDim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A3 As Double\nA3 = 10.0\nRange(\"A3\").Value = 10.0\nDim A4 As Double\nA4 = 10.0\nRange(\"A4\").Value = 10.0\nDim A6 As Double\nA6 = 0.0\nRange(\"A6\").Value = 0.0\nA6 = WorksheetFunction.Sum(Range(\"A2:A4\"))\nRange(\"A6\").Value = WorksheetFunction.Sum(Range(\"A2:A4\"))\nEnd Sub\n";
+            var expectedOutput = "Sub test ()\nRange(\"A2\").Value = 10.0 \nRange(\"A3\").Value = 10.0 \nRange(\"A4\").Value = 10.0 \nRange(\"A6\").Value = 0.0 \nRange(\"A6\").Value = WorksheetFunction.Sum(Range(\"A2:A4\"))\nEnd Sub\n";
             string actualOutput = visitor.codeG.Code;
 
             //ASSERT

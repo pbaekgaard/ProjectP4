@@ -19,7 +19,7 @@ namespace Unit_Tests
             var visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Sub test ()\nDim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A3 As Double\nA3 = 10.0\nRange(\"A3\").Value = 10.0\nDim A4 As Double\nA4 = 10.0\nRange(\"A4\").Value = 10.0\nDim A6 As Double\nA6 = 0.0\nRange(\"A6\").Value = 0.0\nA6 = WorksheetFunction.Sum(Range(\"A2:A4\"))\nRange(\"A6\").Value = WorksheetFunction.Sum(Range(\"A2:A4\"))\nEnd Sub\n";
+            var expectedOutput = "Sub test ()\nRange(\"A2\").Value = 10.0 \nRange(\"A3\").Value = 10.0 \nRange(\"A4\").Value = 10.0 \nRange(\"A6\").Value = 0.0 \nRange(\"A6\").Value = WorksheetFunction.Sum(Range(\"A2:A4\"))\nEnd Sub\n";
             string actualOutput = visitor.codeG.Code;
 
             //ASSERT
@@ -37,7 +37,7 @@ namespace Unit_Tests
             var visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Sub test ()\nDim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A3 As Double\nA3 = 10.0\nRange(\"A3\").Value = 10.0\nDim A4 As Double\nA4 = 10.0\nRange(\"A4\").Value = 10.0\nDim A6 As Double\nA6 = 0.0\nRange(\"A6\").Value = 0.0\nA6 = WorksheetFunction.Min(Range(\"A2:A4\"))\nRange(\"A6\").Value = WorksheetFunction.Min(Range(\"A2:A4\"))\nEnd Sub\n";
+            var expectedOutput = "Sub test ()\nRange(\"A2\").Value = 10.0 \nRange(\"A3\").Value = 10.0 \nRange(\"A4\").Value = 10.0 \nRange(\"A6\").Value = 0.0 \nRange(\"A6\").Value = WorksheetFunction.Min(Range(\"A2:A4\"))\nEnd Sub\n";
             string actualOutput = visitor.codeG.Code;
 
             //ASSERT
@@ -56,7 +56,7 @@ namespace Unit_Tests
             var visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Sub test ()\nDim A2 As Double\nA2 = 10.0\nRange(\"A2\").Value = 10.0\nDim A3 As Double\nA3 = 10.0\nRange(\"A3\").Value = 10.0\nDim A4 As Double\nA4 = 10.0\nRange(\"A4\").Value = 10.0\nDim A6 As Double\nA6 = 0.0\nRange(\"A6\").Value = 0.0\nA6 = WorksheetFunction.Max(Range(\"A2:A4\"))\nRange(\"A6\").Value = WorksheetFunction.Max(Range(\"A2:A4\"))\nEnd Sub\n";
+            var expectedOutput = "Sub test ()\nRange(\"A2\").Value = 10.0 \nRange(\"A3\").Value = 10.0 \nRange(\"A4\").Value = 10.0 \nRange(\"A6\").Value = 0.0 \nRange(\"A6\").Value = WorksheetFunction.Max(Range(\"A2:A4\"))\nEnd Sub\n";
             string actualOutput = visitor.codeG.Code;
 
             //ASSERT
@@ -75,7 +75,7 @@ namespace Unit_Tests
             Visitors visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            string expectedOutput = "Sub test ()\nDim A1 As Double\nA1 = 0.0\nRange(\"A1\").Value = 0.0\nDim A2 As Double\nA2 = 1.0\nRange(\"A2\").Value = 1.0\nDim A3 As Double\nA3 = 3.0\nRange(\"A3\").Value = 3.0\nDim A4 As Double\nA4 = 2.0\nRange(\"A4\").Value = 2.0\nRange(\"A2:A4\").Copy Destination:=Range(\"A1\")\nRange(\"A1:A3\").Sort Key1:=Range(\"A1\"), Order1:=xlAscending, Header:=xlNo\nEnd Sub\n";
+            string expectedOutput = "Sub test ()\nRange(\"A1\").Value = 0.0 \nRange(\"A2\").Value = 1.0 \nRange(\"A3\").Value = 3.0 \nRange(\"A4\").Value = 2.0 \nRange(\"A2:A4\").Copy Destination:=Range(\"A1\")\nRange(\"A1:A3\").Sort Key1:=Range(\"A1\"), Order1:=xlAscending, Header:=xlNo\nEnd Sub\n";
             string actualOutput = visitor.codeG.Code;
 
             //ASSERT
@@ -94,7 +94,7 @@ namespace Unit_Tests
             var visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            string expected = "Sub test ()\nDim B2 As Double\nB2 = 2.0\nRange(\"B2\").Value = 2.0\nDim B3 As Double\nB3 = 6.0\nRange(\"B3\").Value = 6.0\nDim A2 As Double\nA2 = WorksheetFunction.AVERAGE(Range(\"B2:B3\"))\nRange(\"A2\").Value = WorksheetFunction.AVERAGE(Range(\"B2:B3\"))\nEnd Sub\n";
+            string expected = "Sub test ()\nRange(\"B2\").Value = 2.0 \nRange(\"B3\").Value = 6.0 \nRange(\"A2\").Value = WorksheetFunction.AVERAGE(Range(\"B2:B3\"))\nEnd Sub\n";
             string actual = visitor.codeG.Code;
             
             //Assert
@@ -118,7 +118,7 @@ namespace Unit_Tests
             Visitors visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            string expectedOutput = "Sub test ()\nDim A1 As Double\nA1 = 0.0\nRange(\"A1\").Value = 0.0\nDim A2 As Double\nA2 = 1.0\nRange(\"A2\").Value = 1.0\nDim A3 As Double\nA3 = 3.0\nRange(\"A3\").Value = 3.0\nDim A4 As Double\nA4 = 2.0\nRange(\"A4\").Value = 2.0\nDim A5 As Double\nA5 = WorksheetFunction.Count(Range(\"A2:A4\"))\nRange(\"A5\").Value = WorksheetFunction.Count(Range(\"A2:A4\"))\nEnd Sub\n";
+            string expectedOutput = "Sub test ()\nRange(\"A1\").Value = 0.0 \nRange(\"A2\").Value = 1.0 \nRange(\"A3\").Value = 3.0 \nRange(\"A4\").Value = 2.0 \nRange(\"A5\").Value = WorksheetFunction.Count(Range(\"A2:A4\"))\nEnd Sub\n";
             string actualOutput = visitor.codeG.Code;
 
             //ASSERT
@@ -137,7 +137,7 @@ namespace Unit_Tests
             Visitors visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            string expectedOutput = "Sub test ()\nDim A1 As Double\nA1 = 0.0\nRange(\"A1\").Value = 0.0\nDim A2 As Double\nA2 = 1.0\nRange(\"A2\").Value = 1.0\nDim A3 As Double\nA3 = 3.0\nRange(\"A3\").Value = 3.0\nDim A4 As Double\nA4 = 2.0\nRange(\"A4\").Value = 2.0\nDim A5 As Double\nA5 = WorksheetFunction.CountIf(Range(\"A1:A3\"), 2)\nRange(\"A5\").Value = WorksheetFunction.CountIf(Range(\"A1:A3\"), 2)\nEnd Sub\n";
+            string expectedOutput = "Sub test ()\nRange(\"A1\").Value = 0.0 \nRange(\"A2\").Value = 1.0 \nRange(\"A3\").Value = 3.0 \nRange(\"A4\").Value = 2.0 \nRange(\"A5\").Value = WorksheetFunction.CountIf(Range(\"A1:A3\"), 2)\nEnd Sub\n";
             string actualOutput = visitor.codeG.Code;
 
             //ASSERT
