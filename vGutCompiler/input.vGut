@@ -5,7 +5,7 @@ A1 = A2 - 2
 while A1 < 20 AND A2 < 20
 do
 A1 = A1 + 1
-A2 = A2 + 1
+A2 = A2 + 2
 endwhile
 
 if A2 > A1 AND A2 < 20 AND A1 < 20
