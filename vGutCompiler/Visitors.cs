@@ -12,8 +12,6 @@ namespace ProjectP4
         public CodeGenerator codeG = new();
         public string fileName { get; set; }
 
-        public string fileName { get; set; }
-
         public Visitors(string FileName)
         {
             fileName = FileName;
@@ -37,33 +35,6 @@ namespace ProjectP4
             codeG.AssignVariable(name);
 
             dynamic value = Visit(context.conditionalexpression());
-            {
-                value = Visit(context.expression());
-                codeG.DeclareVariable(name, value);
-                codeG.AssignValue(value);
-                codeG.SetCell(name);
-                codeG.AssignValue(value);
-            }
-            else if (context.Parent.Parent.GetType().FullName != "GrammarParser+WhilestmtContext")
-            {
-                dynamic tvalue;
-                if (context.expression().GetType().Name == "BooleanexpressionContext")
-                {
-                    tvalue = true;
-                }
-                else
-                {
-                    tvalue = 1;
-                }
-                codeG.DeclareVariable(name, tvalue);
-                value = Visit(context.expression());
-                codeG.SetCell(name);
-                value = Visit(context.expression());
-            }
-            else
-            {
-                value = Visit(context.expression());
-            }
 
             codeG.NewLine();
 
@@ -92,31 +63,31 @@ namespace ProjectP4
                         throw new Exception(String.Format("{0} is not a text (remember \" around the text", name));
                     }
                 case "bool":
-                    if (EvaluateOperation(value.Item1, value.Item2, value.Item3) is bool val)
+                    if (value is bool)
                     {
-                        value = val;
                         break;
                     }
                     else
                     {
-                        throw new Exception(String.Format("{0} is not a boolean", value));
+                        throw new Exception(String.Format("{0} is not a boolean", name));
                     }
                 default:
                     break;
             }
 
-
+            if (value is string s)
+            {
                 if (s.Contains('"'))
                 {
                     value = s.Trim(new char[] { '"' });
                 }
+                else
                 {
                     value = symbolTable.getSymbol(s).value;
-            codeG.UpdateVariable(varname);
+                }
+            }
 
-            dynamic value = Visit(context.conditionalexpression());
-
-            codeG.NewLine();
+            Symbol symbol = new();
 
             bool result = Enum.TryParse(type, out Symbol.symbolType sym);
 
@@ -131,8 +102,6 @@ namespace ProjectP4
                 throw new Exception("type is not valid");
             }
 
-
-
             return null;
         }
         public override object VisitAssigndec([NotNull] GrammarParser.AssigndecContext context)
@@ -140,10 +109,11 @@ namespace ProjectP4
 
             dynamic varname = context.VAR().GetText();
 
+            codeG.UpdateVariable(varname);
 
-            Symbol var = symbolTable.getSymbol(varname);
+            dynamic value = Visit(context.conditionalexpression());
 
-            dynamic value;
+            codeG.NewLine();
 
             if (value is string s)
             {
@@ -156,6 +126,8 @@ namespace ProjectP4
                     value = symbolTable.getSymbol(s).value;
                 }
             }
+
+            Symbol var = symbolTable.getSymbol(varname);
 
             var.value = value;
 
@@ -195,6 +167,33 @@ namespace ProjectP4
 
             dynamic leftValue = Visit(context.conditionalexpression(0));
 
+            if (leftValue is string s)
+            {
+                if (s.Contains('"'))
+                {
+                    leftValue = s.Trim(new char[] { '"' });
+                }
+                else
+                {
+                    leftValue = symbolTable.getSymbol(s).value;
+                }
+            }
+
+            codeG.Value(context.op.Text);
+
+            dynamic rightValue = Visit(context.conditionalexpression(1));
+
+            if (rightValue is string s1)
+            {
+                if (s1.Contains('"'))
+                {
+                    rightValue = s1.Trim(new char[] { '"' });
+                }
+                else
+                {
+                    rightValue = symbolTable.getSymbol(s1).value;
+                }
+            }
 
             switch (context.op.Type)
             {
@@ -211,9 +210,8 @@ namespace ProjectP4
                 default:
                     throw new Exception("Operator not found");
             }
-                if (s.Contains('"'))
-                }
-                else
+
+        }
         public override object VisitRelatExpr([NotNull] GrammarParser.RelatExprContext context)
         {
             dynamic leftValue = Visit(context.conditionalexpression(0));
@@ -376,17 +374,17 @@ namespace ProjectP4
             return leftValue || rightValue;
         }
 
-                {
-                    rightValue = s2.Trim(new char[] { '"' });
-                }
+        public override object VisitVarexpression([NotNull] GrammarParser.VarexpressionContext context)
+        {
+            string var = context.VAR().GetText();
 
             codeG.Variable(var);
 
-                else
-                {
-                    rightValue = symbolTable.getSymbol(s2).value;
-                }
-            }
+            return var;
+
+        }
+        public override object VisitIfthen([NotNull] GrammarParser.IfthenContext context)
+        {
             codeG.IfStart();
 
             Visit(context.conditionalexpression());
@@ -402,11 +400,11 @@ namespace ProjectP4
 
             codeG.endIf();
 
-            if (leftValue is string && rightValue.GetType() == leftValue.GetType() && (operatorValue is "==" or "!="))
-                return EvaluateOperation(leftValue, operatorValue, rightValue);
-            else if (leftValue is bool && rightValue.GetType() == leftValue.GetType() && (operatorValue is "AND" or "OR" or "==" or "!="))
-                return EvaluateOperation(leftValue, operatorValue, rightValue);
-            else if ((leftValue is int || leftValue is float) && (rightValue is int || rightValue is float) && (operatorValue is "<" or ">" or "<=" or ">=" or "==" or "!="))
+            return null;
+        }
+
+        public override object VisitIfelse([NotNull] GrammarParser.IfelseContext context)
+        {
             codeG.IfStart();
 
             Visit(context.conditionalexpression());
@@ -430,14 +428,13 @@ namespace ProjectP4
 
             codeG.endIf();
 
-            symbolTable.scope--;
-            codeG.endIf();
-
             return null;
         }
-        public override object VisitIfelse([NotNull] GrammarParser.IfelseContext context)
+
+        public override object VisitWhilestmt([NotNull] GrammarParser.WhilestmtContext context)
+        {
             codeG.WhilestmtStart();
-                symbolTable.scope++;
+
             Visit(context.conditionalexpression());
 
             codeG.NewLine();
@@ -453,34 +450,6 @@ namespace ProjectP4
 
             codeG.WhilestmtEnd();
 
-
-            var test = context.Start.InputStream.GetText(Interval.Of(context.conditionalexpression().Start.StartIndex, context.conditionalexpression().Stop.StopIndex));
-
-            codeG.While(context.conditionalexpression(), context);
-
-            return null;
-        }
-
-        public override object VisitWhilestmt([NotNull] GrammarParser.WhilestmtContext context)
-        {
-            dynamic compare = Visit(context.conditionalexpression());
-
-            codeG.startIf(compare);
-            symbolTable.scope++;
-            symbolTable.openScope();
-            Visit(context.block(0));
-            symbolTable.closeScope();
-            symbolTable.scope--;
-
-
-
-            codeG.elseStatement();
-            symbolTable.scope++;
-            symbolTable.openScope();
-            Visit(context.block(1));
-            symbolTable.closeScope();
-            symbolTable.scope--;
-            codeG.endIf();
             return null;
 
         }
@@ -529,8 +498,7 @@ namespace ProjectP4
             int startVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(startVar, "[^A-Z]", ""), 0);
 
             var endVarNumber = Regex.Replace(endVar, "[^0-9]", "");
-
-            codeG.average(startVar, endVar);
+            int endVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(endVar, "[^A-Z]", ""), 0);
 
 
             dynamic result = 0;
@@ -558,6 +526,7 @@ namespace ProjectP4
                 }
             }
             result = result / index;
+
             codeG.average(startVar, endVar);
 
             return result;
@@ -568,8 +537,7 @@ namespace ProjectP4
             var startVar = context.VAR(0).GetText();
             var endVar = context.VAR(1).GetText();
 
-
-            codeG.MinFunction(startVar, endVar);
+            var startVarNumber = Regex.Replace(startVar, "[^0-9]", "");
             int startVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(startVar, "[^A-Z]", ""), 0);
 
             var endVarNumber = Regex.Replace(endVar, "[^0-9]", "");
@@ -597,6 +565,7 @@ namespace ProjectP4
                     }
                 }
             }
+
             codeG.MinFunction(startVar, endVar);
 
             return result;
@@ -607,8 +576,7 @@ namespace ProjectP4
             var startVar = context.VAR(0).GetText();
             var endVar = context.VAR(1).GetText();
 
-
-            codeG.MaxFunction(startVar, endVar);
+            var startVarNumber = Regex.Replace(startVar, "[^0-9]", "");
             int startVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(startVar, "[^A-Z]", ""), 0);
 
             var endVarNumber = Regex.Replace(endVar, "[^0-9]", "");
@@ -636,6 +604,7 @@ namespace ProjectP4
                     }
                 }
             }
+
             codeG.MaxFunction(startVar, endVar);
 
             return result;
@@ -731,6 +700,34 @@ namespace ProjectP4
 
             var endVarNumber = Regex.Replace(endVar, "[^0-9]", "");
             int endVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(endVar, "[^A-Z]", ""), 0);
+
+            List<dynamic> sortArray = new List<dynamic>();
+            for (int j = startVarLetterUnicode; j <= endVarLetterUnicode; j++)
+            {
+                for (int i = int.Parse(startVarNumber); i <= int.Parse(endVarNumber); i++)
+                {
+                    Symbol? val = symbolTable.getSymbol(char.ConvertFromUtf32(j) + i);
+
+                    if (val == null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        sortArray.Add(val.value);
+                    }
+                }
+            }
+            sortArray.Sort();
+            if (result == null)
+            {
+                result = new Symbol();
+                result.value = sortArray.ToArray();
+                symbolTable.addSymbol(context.VAR(2).GetText(), result);
+            }
+            else
+            {
+                result.value = sortArray.ToArray();
                 symbolTable.updateSymbol(context.VAR(2).GetText(), result);
             }
             codeG.SortFunction(startVar, endVar, destVar, order);
@@ -759,7 +756,7 @@ namespace ProjectP4
             {
                 throw new Exception("Value column out of range");
             }
-                return true;
+
             var valColumn = (int)Convert.ToChar(char.Parse(startLetter)) + int.Parse(context.INTEGER().GetText()) - 1;
 
             IDictionary<dynamic, dynamic> lookup = new Dictionary<dynamic, dynamic>();
@@ -770,37 +767,8 @@ namespace ProjectP4
                 Symbol? val = symbolTable.getSymbol(char.ConvertFromUtf32(valColumn) + i);
                 lookup.Add(key, val);
             }
-        public override object VisitVlookup(GrammarParser.VlookupContext context){
-            return lookup[context.STRING().GetText()];
-        }
-            for(int i = int.Parse(startNumber); i <= int.Parse(endNumber); i++){
-                lookup.Add(key, val);
-            }
 
             return lookup[context.STRING().GetText()];
-        }
-
-        private dynamic EvaluateOperation(dynamic lv, string opr, dynamic rv)
-        {
-            switch (opr)
-            {
-                case "+": return lv + rv;
-                case "-": return lv - rv;
-                case "*": return lv * rv;
-                case "/": return lv / rv;
-                case "<": return lv < rv;
-                case ">": return lv > rv;
-                case "<=": return lv <= rv;
-                case "AND": return lv && rv;
-                case "OR": return lv || rv;
-                case ">=": return lv <= rv;
-                case "%": return lv % rv;
-                case "==": return lv == rv;
-                case "!=": return lv != rv;
-                default:
-                    throw new Exception("Does not fungo");
-                    break;
-            }
         }
     }
 
