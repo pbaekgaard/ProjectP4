@@ -737,6 +737,7 @@ namespace ProjectP4
         {
             var start = context.VAR(0).GetText();
             var end = context.VAR(1).GetText();
+            var index = context.INTEGER().GetText();
 
             var startNumber = Regex.Replace(start, "[^0-9]", "");
             var startLetter = Regex.Replace(start, "[^A-Z]", "");
@@ -754,12 +755,12 @@ namespace ProjectP4
             {
                 throw new Exception("You need to select multiple columns");
             }
-            else if (columnSpan < int.Parse(context.INTEGER().GetText()))
+            else if (columnSpan < int.Parse(index))
             {
                 throw new Exception("Value column out of range");
             }
 
-            var valColumn = (int)Convert.ToChar(char.Parse(startLetter)) + int.Parse(context.INTEGER().GetText()) - 1;
+            var valColumn = (int)Convert.ToChar(char.Parse(startLetter)) + int.Parse(index) - 1;
 
             IDictionary<dynamic, dynamic> lookup = new Dictionary<dynamic, dynamic>();
 
@@ -769,6 +770,7 @@ namespace ProjectP4
                 Symbol? val = symbolTable.getSymbol(char.ConvertFromUtf32(valColumn) + i);
                 lookup.Add(key, val);
             }
+            codeG.VLookUpFunction(searchTerm, start, end, int.Parse(index), bool.Parse(context.BOOL().GetText()));
             return string.Format("\"{0}\"", lookup[searchTerm].value);
         }
     }

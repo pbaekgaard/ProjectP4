@@ -18,8 +18,8 @@ else
 A2 = A1
 endif
 
-number A3 = SUM(A1:A2)
-number A4 = MIN(A1:A2)
+number A10 = SUM(A1:A2)
+number A11 = MIN(A1:A2)
 number A5 = MAX(A1:A2)
 number A6 = COUNT(A1:A2)
 number B7 = COUNT(A1:A2,2)

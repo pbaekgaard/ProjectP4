@@ -135,7 +135,7 @@ namespace ProjectP4
         }
         public void VLookUpFunction(string search, string start, string end, int column_index, bool aprox_match = false)
         {
-            this.Code += string.Format("WorksheetFunction.VLOOKUP({0},Range(\"{1}:{2}\"),{3},{4})", search, start, end, column_index, aprox_match);
+            this.Code += string.Format("WorksheetFunction.VLOOKUP(\"{0}\",Range(\"{1}:{2}\"),{3},{4})", search, start, end, column_index, aprox_match);
         }
 
     }
