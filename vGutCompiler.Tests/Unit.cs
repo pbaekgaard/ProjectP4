@@ -1,6 +1,7 @@
 using Antlr4.Runtime;
 using Xunit.Abstractions;
 using vGutCompiler;
+using ProjectP4;
 
 namespace Unit_Tests
 {
@@ -31,6 +32,54 @@ namespace Unit_Tests
             var actualTokens = tokens.Select(x => x.Type).ToList();
             //ASSERT
             Assert.Equal(expectedTokens, actualTokens);
+        }
+        [Fact]
+        public void SymbolTableCorrectlyAddstoSymbolTable()
+        {
+            //ARRANGE
+            SymTable SymbolTable = new SymTable();
+            //ACT
+            Symbol testSymbol = new();
+            testSymbol.value = "testValue";
+            testSymbol.type = Symbol.symbolType.text;
+            SymbolTable.addSymbol("TestSymbol", testSymbol);
+            //ASSERT
+            Assert.Equal(testSymbol.value, SymbolTable.getSymbol("TestSymbol").value);
+        }
+        [Fact]
+        public void SymbolTableCorrectlyUpdatesSymbol()
+        {
+            // ARRANGE
+            SymTable SymbolTable = new();
+            Symbol testSymbol = new();
+            testSymbol.value = "startValue";
+            testSymbol.type = Symbol.symbolType.text;
+            SymbolTable.addSymbol("test", testSymbol);
+            // ACT
+            testSymbol.value = "endValue";
+            SymbolTable.updateSymbol("test", testSymbol);
+
+            // ASSERT
+            Assert.Equal("endValue", SymbolTable.getSymbol("test").value);
+
+        }
+        [Fact]
+        public void SymbolTableCorrectlyThrowsErrorOnMissingSymbol()
+        {
+            // ARRANGE
+            SymTable SymbolTable = new();
+
+            // ACT
+            Symbol testSymbol = new();
+            testSymbol.value = "startValue";
+            testSymbol.type = Symbol.symbolType.text;
+            SymbolTable.addSymbol("existingSymbol", testSymbol);
+
+            // ASSERT
+            var exceptionGet = Assert.Throws<Exception>(() => SymbolTable.getSymbol("MissingSymbol"));
+            var exceptionUpdate = Assert.Throws<Exception>(() => SymbolTable.updateSymbol("MissingSymbol", testSymbol));
+            Assert.Equal(exceptionGet.Message, "MissingSymbol is not declared");
+            Assert.Equal(exceptionUpdate.Message, "MissingSymbol is not declared");
         }
     }
 }

@@ -5,7 +5,7 @@ using ProjectP4;
 
 namespace Unit_Tests
 {
-    public class BuiltinFunctionsTests
+    public class IntegrationTests
     {
         [Fact]
         public void CodeGeneratorOutputsCorrectProgram()
@@ -100,6 +100,24 @@ namespace Unit_Tests
             Assert.Equal(expectedOutput, actualOutput);
         }
         [Fact]
+        public void CodeGenerationProducesCorrectVLOOKUP()
+        {
+            // ARRANGE
+            GLexer lexer = new GLexer(new AntlrInputStream("number A2 = 10\nnumber A3 = 10\nnumber A4 = 10\nnumber A6 = 0\nA6 = VLOOKUP(10, A2:A4, 1, false)"));
+
+            // ACT
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            GrammarParser parser = new GrammarParser(tokens);
+            var visitor = new Visitors("test");
+            visitor.Visit(parser.program());
+
+            var expectedOutput = "Sub test ()\nRange(\"A2\").Value = 10.0 \nRange(\"A3\").Value = 10.0 \nRange(\"A4\").Value = 10.0 \nRange(\"A6\").Value = 0.0 \nRange(\"A6\").Value = WorksheetFunction.VLOOKUP(Range(\"A2:A4\"))\nEnd Sub\n";
+            string actualOutput = visitor.codeG.Code;
+
+            //ASSERT
+            Assert.Equal(expectedOutput, actualOutput);
+        }
+        [Fact]
         public void CodeGenerationProducesCorrectMin()
         {
             // ARRANGE
@@ -158,7 +176,8 @@ namespace Unit_Tests
 
 
         [Fact]
-        public void CodeGenAverage(){
+        public void CodeGenAverage()
+        {
             //Arrange
             GLexer lexer = new GLexer(new AntlrInputStream(@"number B2 = 2\n number B3 = 6\n number A2 = AVERAGE(B2:B3)"));
 
@@ -170,7 +189,7 @@ namespace Unit_Tests
 
             string expected = "Sub test ()\nRange(\"B2\").Value = 2.0 \nRange(\"B3\").Value = 6.0 \nRange(\"A2\").Value = WorksheetFunction.AVERAGE(Range(\"B2:B3\"))\nEnd Sub\n";
             string actual = visitor.codeG.Code;
-            
+
             //Assert
             Assert.Equal(expected, actual);
         }
