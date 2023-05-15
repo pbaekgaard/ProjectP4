@@ -3,9 +3,9 @@ using Xunit.Abstractions;
 using vGutCompiler;
 using ProjectP4;
 
-namespace Unit_Tests
+namespace Integration
 {
-    public class IntegrationTests
+    public class Tests
     {
         [Fact]
         public void CodeGeneratorOutputsCorrectProgram()

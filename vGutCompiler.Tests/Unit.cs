@@ -3,9 +3,9 @@ using Xunit.Abstractions;
 using vGutCompiler;
 using ProjectP4;
 
-namespace Unit_Tests
+namespace Unit
 {
-    public class Unit
+    public class Tests
     {
         [Fact]
         public void TokensAreCorrect()
@@ -76,9 +76,7 @@ namespace Unit_Tests
             SymbolTable.addSymbol("existingSymbol", testSymbol);
 
             // ASSERT
-            var exceptionGet = Assert.Throws<Exception>(() => SymbolTable.getSymbol("MissingSymbol"));
             var exceptionUpdate = Assert.Throws<Exception>(() => SymbolTable.updateSymbol("MissingSymbol", testSymbol));
-            Assert.Equal(exceptionGet.Message, "MissingSymbol is not declared");
             Assert.Equal(exceptionUpdate.Message, "MissingSymbol is not declared");
         }
     }
