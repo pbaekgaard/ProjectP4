@@ -22,3 +22,5 @@ number A6 = COUNT(A1:A2)
 number B7 = COUNT(A1:A2,2)
 number B8 = AVERAGE(A1:A2)
 SORT(A1:A2,B10,true)
+
+

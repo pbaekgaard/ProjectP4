@@ -55,7 +55,7 @@ namespace Unit_Tests
             var visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Sub test ()\nRange(\"A2\").Value = 10.0 \nRange(\"A1\").Value = 5.0 \nIf Range(\"A2\").Value > Range(\"A1\").Value And Range(\"A2\").Value == 10.0 \nThen\nRange(\"A2\").Value = 20.0 \nEnd If\nEnd Sub\n";
+            var expectedOutput = "Sub test ()\nRange(\"A2\").Value = 10.0 \nRange(\"A1\").Value = 5.0 \nIf Range(\"A2\").Value > Range(\"A1\").Value And Range(\"A2\").Value == 10.0 Then\nRange(\"A2\").Value = 20.0 \nEnd If\nEnd Sub\n";
 
             string actualOutput = visitor.codeG.Code;
 

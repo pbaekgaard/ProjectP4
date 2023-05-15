@@ -389,7 +389,6 @@ namespace ProjectP4
 
             Visit(context.conditionalexpression());
 
-            codeG.NewLine();
             codeG.IfThen();
 
             symbolTable.scope++;
@@ -409,7 +408,6 @@ namespace ProjectP4
 
             Visit(context.conditionalexpression());
 
-            codeG.NewLine();
             codeG.IfThen();
 
             symbolTable.scope++;
