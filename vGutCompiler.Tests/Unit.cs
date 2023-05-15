@@ -4,13 +4,8 @@ using vGutCompiler;
 
 namespace Unit_Tests
 {
-    public class LexerOutputsCorrectTokens
+    public class Unit
     {
-        private readonly ITestOutputHelper output;
-        public LexerOutputsCorrectTokens(ITestOutputHelper output)
-        {
-            this.output = output;
-        }
         [Fact]
         public void TokensAreCorrect()
         {
