@@ -1442,7 +1442,9 @@ public partial class GrammarParser : Parser {
 	public partial class VlookupContext : ParserRuleContext {
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode VLOOKUP() { return GetToken(GrammarParser.VLOOKUP, 0); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode LPARENTHESIS() { return GetToken(GrammarParser.LPARENTHESIS, 0); }
-		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode STRING() { return GetToken(GrammarParser.STRING, 0); }
+		[System.Diagnostics.DebuggerNonUserCode] public ConstantContext constant() {
+			return GetRuleContext<ConstantContext>(0);
+		}
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode[] COMMA() { return GetTokens(GrammarParser.COMMA); }
 		[System.Diagnostics.DebuggerNonUserCode] public ITerminalNode COMMA(int i) {
 			return GetToken(GrammarParser.COMMA, i);
@@ -1480,7 +1482,7 @@ public partial class GrammarParser : Parser {
 			State = 178;
 			Match(LPARENTHESIS);
 			State = 179;
-			Match(STRING);
+			constant();
 			State = 180;
 			Match(COMMA);
 			State = 181;
@@ -1748,8 +1750,8 @@ public partial class GrammarParser : Parser {
 		0,163,164,5,46,0,0,164,165,5,43,0,0,165,166,5,46,0,0,166,167,5,38,0,0,
 		167,27,1,0,0,0,168,169,5,23,0,0,169,170,5,37,0,0,170,171,5,46,0,0,171,
 		172,5,43,0,0,172,173,5,46,0,0,173,174,5,44,0,0,174,175,7,3,0,0,175,176,
-		5,38,0,0,176,29,1,0,0,0,177,178,5,19,0,0,178,179,5,37,0,0,179,180,5,4,
-		0,0,180,181,5,44,0,0,181,182,5,46,0,0,182,183,5,43,0,0,183,184,5,46,0,
+		5,38,0,0,176,29,1,0,0,0,177,178,5,19,0,0,178,179,5,37,0,0,179,180,3,34,
+		17,0,180,181,5,44,0,0,181,182,5,46,0,0,182,183,5,43,0,0,183,184,5,46,0,
 		0,184,185,5,44,0,0,185,186,5,5,0,0,186,187,5,44,0,0,187,188,5,7,0,0,188,
 		189,5,38,0,0,189,31,1,0,0,0,190,191,5,22,0,0,191,192,5,37,0,0,192,193,
 		5,46,0,0,193,194,5,43,0,0,194,195,5,46,0,0,195,196,5,44,0,0,196,197,5,

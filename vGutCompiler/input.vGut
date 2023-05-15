@@ -1,5 +1,8 @@
 number A1 = 10
 number A2 = 10 + 5
+text A4 = "test"
+text A3 = ""
+A3 = VLOOKUP("test", A1:B4, 1, false)
 A1 = A2 - 2
 
 while A1 < 20 AND A2 < 20
@@ -22,5 +25,7 @@ number A6 = COUNT(A1:A2)
 number B7 = COUNT(A1:A2,2)
 number B8 = AVERAGE(A1:A2)
 SORT(A1:A2,B10,true)
+
+
 
 

@@ -743,7 +743,11 @@ namespace ProjectP4
 
             var endNumber = Regex.Replace(end, "[^0-9]", "");
             var endLetter = Regex.Replace(end, "[^A-Z]", "");
-
+            var searchTerm = context.constant().GetText();
+            if (searchTerm is string)
+            {
+                searchTerm = searchTerm.Replace("\"", "");
+            }
             int columnSpan = ((int)Convert.ToChar(char.Parse(endLetter)) - (int)Convert.ToChar(char.Parse(startLetter))) + 1;
 
             if (columnSpan == 1)
@@ -761,12 +765,11 @@ namespace ProjectP4
 
             for (int i = int.Parse(startNumber); i <= int.Parse(endNumber); i++)
             {
-                Symbol? key = symbolTable.getSymbol(startLetter + i);
+                dynamic? key = symbolTable.getSymbol(startLetter + i).value;
                 Symbol? val = symbolTable.getSymbol(char.ConvertFromUtf32(valColumn) + i);
                 lookup.Add(key, val);
             }
-
-            return lookup[context.STRING().GetText()];
+            return string.Format("\"{0}\"", lookup[searchTerm].value);
         }
     }
 
