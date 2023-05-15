@@ -3,7 +3,8 @@ using Antlr4.Runtime.Tree;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using vGutCompiler;
-
+using System.Reflection;
+using System.ComponentModel;
 namespace ProjectP4
 {
     public class Visitors : GrammarBaseVisitor<object?>
@@ -744,11 +745,25 @@ namespace ProjectP4
 
             var endNumber = Regex.Replace(end, "[^0-9]", "");
             var endLetter = Regex.Replace(end, "[^A-Z]", "");
-            var searchTerm = context.constant().GetText();
-            if (searchTerm is string)
+            dynamic searchTerm = context.constant().GetText();
+
+            if (context.constant().STRING() != null)
             {
                 searchTerm = searchTerm.Replace("\"", "");
             }
+            else if (context.constant().INTEGER() != null)
+            {
+                searchTerm = Convert.ChangeType(searchTerm, typeof(int));
+            }
+            else if (context.constant().BOOL() != null)
+            {
+                searchTerm = Convert.ChangeType(searchTerm, typeof(bool));
+            }
+            else if (context.constant().FLOAT() != null)
+            {
+                searchTerm = Convert.ChangeType(searchTerm, typeof(float));
+            }
+            Console.WriteLine(searchTerm.GetType());
             int columnSpan = ((int)Convert.ToChar(char.Parse(endLetter)) - (int)Convert.ToChar(char.Parse(startLetter))) + 1;
 
             if (columnSpan == 1)
@@ -766,14 +781,20 @@ namespace ProjectP4
 
             for (int i = int.Parse(startNumber); i <= int.Parse(endNumber); i++)
             {
-                try{
-                dynamic? key = symbolTable.getSymbol(startLetter + i).value;
-                Symbol? val = symbolTable.getSymbol(char.ConvertFromUtf32(valColumn) + i);
-                lookup.Add(key, val);
+                try
+                {
+                    dynamic? key = symbolTable.getSymbol(startLetter + i).value;
+                    Symbol? val = symbolTable.getSymbol(char.ConvertFromUtf32(valColumn) + i);
+                    lookup.Add(key, val);
                 }
-                catch(Exception e){
+                catch (Exception e)
+                {
                     continue;
                 }
+            }
+            foreach (var v in lookup)
+            {
+                Console.WriteLine(v.Key);
             }
             codeG.VLookUpFunction(searchTerm, start, end, int.Parse(index), bool.Parse(context.BOOL().GetText()));
             return string.Format("\"{0}\"", lookup[searchTerm].value);

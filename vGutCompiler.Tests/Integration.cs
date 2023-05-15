@@ -103,7 +103,7 @@ namespace Integration
         public void CodeGenerationProducesCorrectVLOOKUP()
         {
             // ARRANGE
-            GLexer lexer = new GLexer(new AntlrInputStream("number A2 = 10\nnumber A3 = 10\nnumber A4 = 10\nnumber A6 = 0\nA6 = VLOOKUP(10, A2:A4, 1, false)"));
+            GLexer lexer = new GLexer(new AntlrInputStream("number A2 = 10\nnumber A3 = 10\nnumber A4 = 10\nnumber A6 = 0\nA6 = VLOOKUP(10, A2:B4, 1, false)"));
 
             // ACT
             CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -111,7 +111,7 @@ namespace Integration
             var visitor = new Visitors("test");
             visitor.Visit(parser.program());
 
-            var expectedOutput = "Sub test ()\nRange(\"A2\").Value = 10.0 \nRange(\"A3\").Value = 10.0 \nRange(\"A4\").Value = 10.0 \nRange(\"A6\").Value = 0.0 \nRange(\"A6\").Value = WorksheetFunction.VLOOKUP(Range(\"A2:A4\"))\nEnd Sub\n";
+            var expectedOutput = "Sub test ()\nRange(\"A2\").Value = 10.0 \nRange(\"A3\").Value = 10.0 \nRange(\"A4\").Value = 10.0 \nRange(\"A6\").Value = 0.0 \nRange(\"A6\").Value = WorksheetFunction.VLOOKUP(10, Range(\"A2:B4\"), 1, False)\nEnd Sub\n";
             string actualOutput = visitor.codeG.Code;
 
             //ASSERT

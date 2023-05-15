@@ -50,7 +50,8 @@ namespace ProjectP4
             if (value is int)
             {
                 this.Code += string.Format("{0}.0 ", value);
-            } else
+            }
+            else
             {
                 this.Code += string.Format("{0} ", value);
             }
@@ -133,9 +134,12 @@ namespace ProjectP4
                 this.Code += string.Format("Range(\"{0}:{1}\").Sort Key1:=Range(\"{0}\"), Order1:=xlDescending, Header:=xlNo", dest, sortedLast);
             }
         }
-        public void VLookUpFunction(string search, string start, string end, int column_index, bool aprox_match = false)
+        public void VLookUpFunction(dynamic search, string start, string end, int column_index, bool aprox_match = false)
         {
-            this.Code += string.Format("WorksheetFunction.VLOOKUP(\"{0}\",Range(\"{1}:{2}\"),{3},{4})", search, start, end, column_index, aprox_match);
+            if (search is string)
+                this.Code += string.Format("WorksheetFunction.VLOOKUP(\"{0}\", Range(\"{1}:{2}\"), {3}, {4})", search, start, end, column_index, aprox_match);
+            else
+                this.Code += string.Format("WorksheetFunction.VLOOKUP({0}, Range(\"{1}:{2}\"), {3}, {4})", search, start, end, column_index, aprox_match);
         }
 
     }
