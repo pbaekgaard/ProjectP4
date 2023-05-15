@@ -1,0 +1,31 @@
+number A1 = 10
+number A2 = 10 + 5
+number A4 = 10
+number A3 = 0
+A3 = VLOOKUP(10, A1:B4, 1, false)
+A1 = A2 - 2
+
+while A1 < 20 AND A2 < 20
+do
+A1 = A1 + 1
+A2 = A2 + 2
+endwhile
+
+if A2 > A1 AND A2 < 20 AND A1 < 20
+then
+A1 = A2
+else
+A2 = A1
+endif
+
+number A10 = SUM(A1:A2)
+number A11 = MIN(A1:A2)
+number A5 = MAX(A1:A2)
+number A6 = COUNT(A1:A2)
+number B7 = COUNT(A1:A2,2)
+number B8 = AVERAGE(A1:A2)
+SORT(A1:A2,B10,true)
+
+
+
+

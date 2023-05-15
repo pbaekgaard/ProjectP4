@@ -10,7 +10,6 @@
 vGutCompiler/ANTLR/**/*
 !vGutCompiler/ANTLR/Grammar.g4
 !vGutCompiler/ANTLR/GLexer.g4
-*.vGut
 *.txt
 
 vGutCompiler/[Bb]in/

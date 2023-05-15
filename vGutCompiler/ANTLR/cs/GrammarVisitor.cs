@@ -91,12 +91,12 @@ public interface IGrammarVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitSortexpression([NotNull] GrammarParser.SortexpressionContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>maxexpression</c>
+	/// Visit a parse tree produced by the <c>sumexpression</c>
 	/// labeled alternative in <see cref="GrammarParser.expression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitMaxexpression([NotNull] GrammarParser.MaxexpressionContext context);
+	Result VisitSumexpression([NotNull] GrammarParser.SumexpressionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>averageexpression</c>
 	/// labeled alternative in <see cref="GrammarParser.expression"/>.
@@ -104,6 +104,34 @@ public interface IGrammarVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitAverageexpression([NotNull] GrammarParser.AverageexpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>vlookupexpression</c>
+	/// labeled alternative in <see cref="GrammarParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitVlookupexpression([NotNull] GrammarParser.VlookupexpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>minexpression</c>
+	/// labeled alternative in <see cref="GrammarParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitMinexpression([NotNull] GrammarParser.MinexpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>maxexpression</c>
+	/// labeled alternative in <see cref="GrammarParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitMaxexpression([NotNull] GrammarParser.MaxexpressionContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>countexpression</c>
+	/// labeled alternative in <see cref="GrammarParser.expression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitCountexpression([NotNull] GrammarParser.CountexpressionContext context);
 	/// <summary>
 	/// Visit a parse tree produced by the <c>varexpression</c>
 	/// labeled alternative in <see cref="GrammarParser.expression"/>.
@@ -119,47 +147,47 @@ public interface IGrammarVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitConstantexpression([NotNull] GrammarParser.ConstantexpressionContext context);
 	/// <summary>
-	/// Visit a parse tree produced by the <c>operatorexpression</c>
-	/// labeled alternative in <see cref="GrammarParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitOperatorexpression([NotNull] GrammarParser.OperatorexpressionContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>sumexpression</c>
-	/// labeled alternative in <see cref="GrammarParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitSumexpression([NotNull] GrammarParser.SumexpressionContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>booleanexpression</c>
-	/// labeled alternative in <see cref="GrammarParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitBooleanexpression([NotNull] GrammarParser.BooleanexpressionContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>minexpression</c>
-	/// labeled alternative in <see cref="GrammarParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitMinexpression([NotNull] GrammarParser.MinexpressionContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>countexpression</c>
-	/// labeled alternative in <see cref="GrammarParser.expression"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitCountexpression([NotNull] GrammarParser.CountexpressionContext context);
-	/// <summary>
-	/// Visit a parse tree produced by the <c>condexpression</c>
+	/// Visit a parse tree produced by the <c>Expr</c>
 	/// labeled alternative in <see cref="GrammarParser.conditionalexpression"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitCondexpression([NotNull] GrammarParser.CondexpressionContext context);
+	Result VisitExpr([NotNull] GrammarParser.ExprContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>equaExpr</c>
+	/// labeled alternative in <see cref="GrammarParser.conditionalexpression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitEquaExpr([NotNull] GrammarParser.EquaExprContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>orExpr</c>
+	/// labeled alternative in <see cref="GrammarParser.conditionalexpression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitOrExpr([NotNull] GrammarParser.OrExprContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>relatExpr</c>
+	/// labeled alternative in <see cref="GrammarParser.conditionalexpression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitRelatExpr([NotNull] GrammarParser.RelatExprContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>arithExpr</c>
+	/// labeled alternative in <see cref="GrammarParser.conditionalexpression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitArithExpr([NotNull] GrammarParser.ArithExprContext context);
+	/// <summary>
+	/// Visit a parse tree produced by the <c>andExpr</c>
+	/// labeled alternative in <see cref="GrammarParser.conditionalexpression"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitAndExpr([NotNull] GrammarParser.AndExprContext context);
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="GrammarParser.sum"/>.
 	/// </summary>
@@ -197,6 +225,12 @@ public interface IGrammarVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <return>The visitor result.</return>
 	Result VisitCountif([NotNull] GrammarParser.CountifContext context);
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="GrammarParser.vlookup"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitVlookup([NotNull] GrammarParser.VlookupContext context);
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="GrammarParser.sort"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
@@ -214,10 +248,4 @@ public interface IGrammarVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitTypes([NotNull] GrammarParser.TypesContext context);
-	/// <summary>
-	/// Visit a parse tree produced by <see cref="GrammarParser.operator"/>.
-	/// </summary>
-	/// <param name="context">The parse tree.</param>
-	/// <return>The visitor result.</return>
-	Result VisitOperator([NotNull] GrammarParser.OperatorContext context);
 }
