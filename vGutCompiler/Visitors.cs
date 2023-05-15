@@ -766,9 +766,14 @@ namespace ProjectP4
 
             for (int i = int.Parse(startNumber); i <= int.Parse(endNumber); i++)
             {
+                try{
                 dynamic? key = symbolTable.getSymbol(startLetter + i).value;
                 Symbol? val = symbolTable.getSymbol(char.ConvertFromUtf32(valColumn) + i);
                 lookup.Add(key, val);
+                }
+                catch(Exception e){
+                    continue;
+                }
             }
             codeG.VLookUpFunction(searchTerm, start, end, int.Parse(index), bool.Parse(context.BOOL().GetText()));
             return string.Format("\"{0}\"", lookup[searchTerm].value);
