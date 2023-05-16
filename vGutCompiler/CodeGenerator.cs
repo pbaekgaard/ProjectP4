@@ -1,6 +1,7 @@
 using Antlr4.Runtime.Misc;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,11 +48,14 @@ namespace ProjectP4
 
         public void Value(dynamic value)
         {
-            if (value is int)
+            if (value.GetType() != typeof(string) && value % 1 == 0)
             {
                 this.Code += string.Format("{0}.0 ", value);
             }
-            else
+            else if (value is int || value is float || value is double)
+            {
+                this.Code += string.Format("{0} ", value.ToString(CultureInfo.InvariantCulture));
+            } else
             {
                 this.Code += string.Format("{0} ", value);
             }
