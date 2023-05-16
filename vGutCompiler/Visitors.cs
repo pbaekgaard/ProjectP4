@@ -156,8 +156,12 @@ namespace ProjectP4
             }
             if (context.STRING() != null)
             {
-                codeG.Value(context.STRING().GetText());
                 var input = context.STRING().GetText();
+                if (input.Contains('"'))
+                {
+                    input = input.Trim(new char[] { '"' });
+                }
+                codeG.Value(input);
                 return input;
             }
             return null;
