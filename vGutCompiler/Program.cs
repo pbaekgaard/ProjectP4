@@ -56,10 +56,9 @@ namespace vGutCompiler
             }
             #endif
             fileName += string.Format("{0}.vGut",file);
-            StreamReader InputFile = new(string.Format("{0}.vGut",file));
+            StreamReader InputFile = new(fileName);
 
             AntlrInputStream inputStream = new AntlrInputStream(InputFile.ReadToEnd());
-            //ICharStream stream = CharStreams.fromString(InputFile.ReadToEnd());
             GLexer lexer = new GLexer(inputStream);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             GrammarParser parser = new GrammarParser(tokens);
@@ -67,12 +66,11 @@ namespace vGutCompiler
             Visitors visitor = new Visitors(fileName);
 
             visitor.Visit(parser.program());
-            Console.WriteLine("\n\n");
-            Console.WriteLine("INPUT CODE:\n--------------------------\n");
-            Console.WriteLine(new StreamReader("./input.vGut").ReadToEnd());
-            Console.WriteLine("\n\nOUTPUT CODE:\n--------------------------\n");
-            Console.WriteLine(visitor.codeG.Code);
-            Console.ReadLine();
+
+            using (StreamWriter output = new StreamWriter("Output.bas"))
+            {
+                output.WriteLine(visitor.codeG.Code);
+            }
 
             IParseTree tree = parser.program();
             return;

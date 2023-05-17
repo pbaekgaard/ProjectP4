@@ -696,8 +696,6 @@ namespace ProjectP4
             var destVar = context.VAR(2).GetText();
             var order = context.BOOL().GetText();
 
-            var result = symbolTable.getSymbol(context.VAR(2).GetText());
-
             var startVarNumber = Regex.Replace(startVar, "[^0-9]", "");
             int startVarLetterUnicode = char.ConvertToUtf32(Regex.Replace(startVar, "[^A-Z]", ""), 0);
 
@@ -722,17 +720,7 @@ namespace ProjectP4
                 }
             }
             sortArray.Sort();
-            if (result == null)
-            {
-                result = new Symbol();
-                result.value = sortArray.ToArray();
-                symbolTable.addSymbol(context.VAR(2).GetText(), result);
-            }
-            else
-            {
-                result.value = sortArray.ToArray();
-                symbolTable.updateSymbol(context.VAR(2).GetText(), result);
-            }
+            
             codeG.SortFunction(startVar, endVar, destVar, order);
             return true;
 
@@ -767,7 +755,6 @@ namespace ProjectP4
             {
                 searchTerm = Convert.ChangeType(searchTerm, typeof(float));
             }
-            Console.WriteLine(searchTerm.GetType());
             int columnSpan = ((int)Convert.ToChar(char.Parse(endLetter)) - (int)Convert.ToChar(char.Parse(startLetter))) + 1;
 
             if (columnSpan == 1)
@@ -796,10 +783,7 @@ namespace ProjectP4
                     continue;
                 }
             }
-            foreach (var v in lookup)
-            {
-                Console.WriteLine(v.Key);
-            }
+
             codeG.VLookUpFunction(searchTerm, start, end, int.Parse(index), bool.Parse(context.BOOL().GetText()));
             return string.Format("\"{0}\"", lookup[searchTerm].value);
         }

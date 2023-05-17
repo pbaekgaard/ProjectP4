@@ -66,17 +66,7 @@ namespace ProjectP4
                     return value;
                 }
             }
-            /*foreach (var item in this.scopedSymbolTable)
-            {
-                if (item.ContainsKey(name))
-                {
-                    Symbol value;
-                    item.TryGetValue(name,out value);
-                    return value;
-                }
-            }*/
-            return null;
-            //throw new Exception(String.Format("{0} is not declared", name));
+            throw new Exception(String.Format("{0} is not declared", name));
         }
 
         public bool updateSymbol(string name, Symbol type)
