@@ -16,7 +16,7 @@ assignment: types VAR ASSIGN conditionalexpression #assignnew
 
 ifstmt:
 	IF conditionalexpression THEN block ELSE block ENDIF #ifelse
-	| IF conditionalexpression THEN block ENDIF #ifthen;
+	| IF conditionalexpression THEN declaration* ENDIF #ifthen;
 
 whilestmt: WHILE conditionalexpression DO declaration* ENDWHILE;
 

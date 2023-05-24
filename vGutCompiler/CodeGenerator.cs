@@ -48,6 +48,13 @@ namespace ProjectP4
 
         public void Value(dynamic value)
         {
+            if (value.GetType() == typeof(string))
+            {
+                if (value.Contains('"'))
+                {
+                    value = value.Trim(new char[] { '"' });
+                }
+            }
             if (value.GetType() != typeof(string) && value % 1 == 0)
             {
                 this.Code += string.Format("{0}.0 ", value);
@@ -135,7 +142,7 @@ namespace ProjectP4
             }
             else if (order == "false")
             {
-                this.Code += string.Format("Range(\"{0}:{1}\").Sort Key1:=Range(\"{0}\"), Order1:=xlDescending, Header:=xlNo", dest, sortedLast);
+                this.Code += string.Format("Range(\"{0}:{1}\").Sort Key1:=Range(\"{0}\"), Order1:=xlDescending, Header:=xlNo\n", dest, sortedLast);
             }
         }
         public void VLookUpFunction(dynamic search, string start, string end, int column_index, bool aprox_match = false)

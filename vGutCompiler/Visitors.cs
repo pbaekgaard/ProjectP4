@@ -157,10 +157,6 @@ namespace ProjectP4
             if (context.STRING() != null)
             {
                 var input = context.STRING().GetText();
-                if (input.Contains('"'))
-                {
-                    input = input.Trim(new char[] { '"' });
-                }
                 codeG.Value(input);
                 return input;
             }
@@ -398,7 +394,10 @@ namespace ProjectP4
 
             symbolTable.scope++;
             symbolTable.openScope();
-            Visit(context.block());
+            foreach (var item in context.declaration())
+            {
+                Visit(item);
+            }
             symbolTable.closeScope();
             symbolTable.scope--;
 
