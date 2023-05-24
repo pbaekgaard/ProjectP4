@@ -16,6 +16,9 @@
     <Antlr4 Include="ANTLR/Grammar.g4" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="input.SLE">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="input.vGut">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

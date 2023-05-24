@@ -49,13 +49,13 @@ namespace vGutCompiler
                     return;
                 }
             }
-            if (!File.Exists(String.Format("{0}\\{1}.vGut", Directory.GetCurrentDirectory(), file)))
+            if (!File.Exists(String.Format("{0}\\{1}.SLE", Directory.GetCurrentDirectory(), file)))
             {
                 Console.WriteLine("File does not exist, try again");
                 return;
             }
             #endif
-            fileName += string.Format("{0}.vGut",file);
+            fileName += string.Format("{0}.SLE",file);
             StreamReader InputFile = new(fileName);
 
             AntlrInputStream inputStream = new AntlrInputStream(InputFile.ReadToEnd());
@@ -67,11 +67,11 @@ namespace vGutCompiler
 
             visitor.Visit(parser.program());
 
-            using (StreamWriter output = new StreamWriter("Output.bas"))
+            using (StreamWriter output = new StreamWriter(string.Format("{0}.bas",file)))
             {
                 output.WriteLine(visitor.codeG.Code);
             }
-
+            Console.WriteLine(string.Format("Script has been compiled, output file is: {0}.bas",file));
             IParseTree tree = parser.program();
             return;
         }
