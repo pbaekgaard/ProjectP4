@@ -10,6 +10,7 @@ namespace vGutCompiler
         {
             string fileName = "";
             string file = "";
+            Console.Title = "SLE Compiler";
             #if DEBUG
             file = "input";
             #else
@@ -72,6 +73,7 @@ namespace vGutCompiler
                 output.WriteLine(visitor.codeG.Code);
             }
             Console.WriteLine(string.Format("Script has been compiled, output file is: {0}.bas",file));
+            Console.ReadLine();
             IParseTree tree = parser.program();
             return;
         }
