@@ -48,13 +48,6 @@ namespace ProjectP4
 
         public void Value(dynamic value)
         {
-            if (value.GetType() == typeof(string))
-            {
-                if (value.Contains('"'))
-                {
-                    value = value.Trim(new char[] { '"' });
-                }
-            }
             if (value.GetType() != typeof(string) && value % 1 == 0)
             {
                 this.Code += string.Format("{0}.0 ", value);
@@ -64,7 +57,13 @@ namespace ProjectP4
                 this.Code += string.Format("{0} ", value.ToString(CultureInfo.InvariantCulture));
             } else
             {
-                this.Code += string.Format("{0} ", value);
+                if (value == "==")
+                {
+                    this.Code += "= ";
+                } else
+                {
+                    this.Code += string.Format("{0} ", value);
+                }
             }
         }
 

@@ -66,6 +66,7 @@ namespace ProjectP4
                     return value;
                 }
             }
+            return new Symbol();
             throw new Exception(String.Format("{0} is not declared", name));
         }
 
