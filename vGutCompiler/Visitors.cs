@@ -527,7 +527,10 @@ namespace ProjectP4
                     }
                 }
             }
-            result = result / index;
+            if (result != 0) {
+                result = result / index;
+            }
+            
 
             codeG.average(startVar, endVar);
 
@@ -553,7 +556,7 @@ namespace ProjectP4
                 {
                     dynamic val = symbolTable.getSymbol(char.ConvertFromUtf32(j) + i);
 
-                    if ((object)val == null)
+                    if ((object)val.value == null)
                     {
                         continue;
                     }
@@ -592,7 +595,7 @@ namespace ProjectP4
                 {
                     dynamic val = symbolTable.getSymbol(char.ConvertFromUtf32(j) + i);
 
-                    if ((object)val == null)
+                    if ((object)val.value == null)
                     {
                         continue;
                     }

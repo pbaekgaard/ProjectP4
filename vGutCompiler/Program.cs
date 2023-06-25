@@ -66,14 +66,25 @@ namespace vGutCompiler
 
             Visitors visitor = new Visitors(fileName);
 
-            visitor.Visit(parser.program());
-
-            using (StreamWriter output = new StreamWriter(string.Format("{0}.bas",file)))
+            try
             {
-                output.WriteLine(visitor.codeG.Code);
+                visitor.Visit(parser.program());
+
+                using (StreamWriter output = new StreamWriter(string.Format("{0}.bas", file)))
+                {
+                    output.WriteLine(visitor.codeG.Code);
+                }
+                Console.WriteLine(string.Format("Script has been compiled, output file is: {0}.bas", file));
+                Console.ReadLine();
+
             }
-            Console.WriteLine(string.Format("Script has been compiled, output file is: {0}.bas",file));
-            Console.ReadLine();
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.ReadLine();
+            }
+
+           
             IParseTree tree = parser.program();
             return;
         }
