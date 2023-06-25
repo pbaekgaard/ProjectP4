@@ -61,8 +61,10 @@ namespace vGutCompiler
 
             AntlrInputStream inputStream = new AntlrInputStream(InputFile.ReadToEnd());
             GLexer lexer = new GLexer(inputStream);
+            lexer.RemoveErrorListeners();
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             GrammarParser parser = new GrammarParser(tokens);
+            parser.RemoveParseListeners();
 
             Visitors visitor = new Visitors(fileName);
 
