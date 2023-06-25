@@ -132,7 +132,7 @@ namespace ProjectP4
             int LastDigit = int.Parse(new String(last.Where(c => Char.IsDigit(c)).ToArray()));
             int FirstDigit = int.Parse(new String(first.Where(c => Char.IsDigit(c)).ToArray()));
             int sortedLastDigit = sortedDestDigit + LastDigit - FirstDigit;
-            string sortedLast = string.Format("{0}{1}", sortedDestLetter, sortedLastDigit);
+            string sortedLast = string.Format("{0}{1}", sortedLastLetter, sortedLastDigit);
 
             this.Code += string.Format("Range(\"{0}:{1}\").Copy Destination:=Range(\"{2}\")\n", first, last, dest);
             if (order == "true")
